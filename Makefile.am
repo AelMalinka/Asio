@@ -5,8 +5,21 @@ asioheadersdir = $(includedir)/Entropy/Asio
 asioheaders_HEADERS = \
 	src/Exception.hh
 
+check_PROGRAMS =
+
+if GTEST
+check_PROGRAMS = \
+	ios-buffer
+
+gtestLDADD = $(GTEST_LIBS)
+
+ios_buffer_SOURCES = test/ios/buffer.cc
+ios_buffer_LDADD = $(gtestLDADD)
+endif
+
 TESTSUITE = $(srcdir)/test/testsuite
-TESTSUITE_FILES =
+TESTSUITE_FILES = \
+	$(srcdir)/test/ios.at
 
 EXTRA_DIST = \
 	$(TESTSUITE_FILES) \
