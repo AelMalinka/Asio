@@ -12,23 +12,21 @@
 			template<typename charT> Buffer<charT>::Buffer() = default;
 			template<typename charT> Buffer<charT>::Buffer(const Buffer<charT> &) = default;
 			template<typename charT> Buffer<charT>::Buffer(Buffer<charT> &&) = default;
-			template<typename charT> Buffer<charT>::~Buffer() = default;
 
 			template<typename charT>
-			Buffer<charT>::Buffer(const std::size_t size, const std::size_t length, charT *data)
-				: _size(size), _length(length), _data(data)
+			Buffer<charT>::Buffer(const std::size_t capacity)
+				: _size(0), _capacity(capacity), _data(new charT[_size])
 			{}
 
 			template<typename charT>
-			std::size_t &Buffer<charT>::size()
-			{
-				return _size;
-			}
+			Buffer<charT>::Buffer(const std::size_t size, const std::size_t capacity, charT *data)
+				: _size(size), _capacity(capacity), _data(data)
+			{}
 
 			template<typename charT>
-			std::size_t &Buffer<charT>::length()
+			Buffer<charT>::~Buffer()
 			{
-				return _length;
+				delete[] _data;
 			}
 
 			template<typename charT>
@@ -46,7 +44,7 @@
 			template<typename charT>
 			charT *Buffer<charT>::end()
 			{
-				return _data + _length;
+				return _data + _capacity;
 			}
 
 			template<typename charT>
@@ -56,9 +54,9 @@
 			}
 
 			template<typename charT>
-			const std::size_t &Buffer<charT>::length() const
+			const std::size_t &Buffer<charT>::capacity() const
 			{
-				return _length;
+				return _capacity;
 			}
 
 			template<typename charT>
@@ -76,7 +74,7 @@
 			template<typename charT>
 			const charT *Buffer<charT>::end() const
 			{
-				return _data + _length;
+				return _data + _capacity;
 			}
 		}
 	}

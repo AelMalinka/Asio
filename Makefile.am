@@ -3,7 +3,9 @@ AM_CXXFLAGS := -I$(srcdir)/src $(AM_CXXFLAGS)
 
 asioheadersdir = $(includedir)/Entropy/Asio
 asioheaders_HEADERS = \
-	src/Exception.hh
+	src/Exception.hh \
+	src/Buffer.hh \
+	src/Buffer.impl.hh
 
 check_PROGRAMS =
 

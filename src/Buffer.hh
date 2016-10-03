@@ -18,23 +18,22 @@
 			{
 				public:
 					Buffer();
+					explicit Buffer(const std::size_t);
 					Buffer(const std::size_t, const std::size_t, charT *);
 					Buffer(const Buffer &);
 					Buffer(Buffer &&);
 					~Buffer();
-					std::size_t &size();
-					std::size_t &length();
 					charT *data();
 					charT *begin();
 					charT *end();
 					const std::size_t &size() const;
-					const std::size_t &length() const;
+					const std::size_t &capacity() const;
 					const charT *data() const;
 					const charT *begin() const;
 					const charT *end() const;
 				private:
 					std::size_t _size;
-					std::size_t _length;
+					std::size_t _capacity;
 					charT *_data;
 			};
 		}
