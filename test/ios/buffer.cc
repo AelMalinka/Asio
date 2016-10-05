@@ -86,4 +86,15 @@ namespace {
 		EXPECT_EQ(buff.data(), nullptr);
 		EXPECT_NE(nbuff.data(), nullptr);
 	}
+
+	TEST(Buffer, Write) {
+		Buffer<> buff(1024);
+
+		strcpy(buff.data(), "Hello World!");
+		buff.size() = 12;
+
+		EXPECT_EQ(buff.size(), 12);
+		EXPECT_EQ(memcmp(buff.data(), "Hello World!", buff.size()), 0);
+		EXPECT_EQ(buff.capacity(), 1024);
+	}
 }

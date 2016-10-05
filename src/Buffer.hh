@@ -24,6 +24,7 @@
 					Buffer(Buffer &&);
 					~Buffer();
 					bool operator == (const Buffer<charT> &);
+					std::size_t &size();
 					charT *data();
 					charT *begin();
 					charT *end();

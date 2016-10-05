@@ -48,6 +48,12 @@
 			}
 
 			template<typename charT>
+			std::size_t &Buffer<charT>::size()
+			{
+				return _size;
+			}
+
+			template<typename charT>
 			charT *Buffer<charT>::data()
 			{
 				return _data;
