@@ -3,6 +3,14 @@
 
 AT_BANNER([IOStream Tests])
 
+AT_SETUP([Basic Tests])
+AT_CHECK([ios-basic], [], [Buffer<>::Buffer()
+Buffer<>::position: 0 0 0
+Buffer<>::showmanyc()
+1024
+], [])
+AT_CLEANUP
+
 AT_SETUP([Buffer Tests])
 AT_SKIP_IF([test -z $GTEST])
 AT_CHECK([ios-buffer], [], [ignore], [ignore])

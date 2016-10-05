@@ -7,10 +7,13 @@ asioheaders_HEADERS = \
 	src/Buffer.hh \
 	src/Buffer.impl.hh
 
-check_PROGRAMS =
+check_PROGRAMS = \
+	ios-basic
+
+ios_basic_SOURCES = test/ios/basic.cc
 
 if GTEST
-check_PROGRAMS = \
+check_PROGRAMS += \
 	ios-buffer
 
 gtestLDADD = $(GTEST_LIBS)
