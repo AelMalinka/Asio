@@ -20,9 +20,10 @@
 					Buffer();
 					explicit Buffer(const std::size_t);
 					Buffer(const std::size_t, const std::size_t, charT *);
-					Buffer(const Buffer &);
+					Buffer(const Buffer &) = delete;
 					Buffer(Buffer &&);
 					~Buffer();
+					bool operator == (const Buffer<charT> &);
 					charT *data();
 					charT *begin();
 					charT *end();

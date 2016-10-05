@@ -10,8 +10,6 @@
 		namespace Asio
 		{
 			template<typename charT> Buffer<charT>::Buffer() = default;
-			template<typename charT> Buffer<charT>::Buffer(const Buffer<charT> &) = default;
-			template<typename charT> Buffer<charT>::Buffer(Buffer<charT> &&) = default;
 
 			template<typename charT>
 			Buffer<charT>::Buffer(const std::size_t capacity)
@@ -24,9 +22,29 @@
 			{}
 
 			template<typename charT>
+			Buffer<charT>::Buffer(Buffer<charT> &&o)
+				: Buffer()
+			{
+				using std::swap;
+
+				swap(_size, o._size);
+				swap(_capacity, o._capacity);
+				swap(_data, o._data);
+			}
+
+			template<typename charT>
 			Buffer<charT>::~Buffer()
 			{
 				delete[] _data;
+			}
+
+			template<typename charT>
+			bool Buffer<charT>::operator == (const Buffer<charT> &o)
+			{
+				return
+					_data == o._data &&
+					_size == o._size &&
+					_capacity == o._capacity;
 			}
 
 			template<typename charT>

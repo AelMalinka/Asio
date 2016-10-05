@@ -5,6 +5,9 @@
 #include "Buffer.hh"
 #include <gtest/gtest.h>
 
+#include <cstring>
+#include <cwchar>
+
 using namespace Entropy::Asio;
 using namespace testing;
 using namespace std;
@@ -12,30 +15,40 @@ using namespace std;
 namespace {
 	TEST(Buffer, Create) {
 		const char *data = "Hello World!";
-		size_t len = strlen(data);
+		size_t len = 12;
 
 		char *temp = new char[1024];
-		strcpy(temp, data);
+		memcpy(temp, data, len);
+
+		// 2016-10-05 AMR NOTE: not a \0
+		temp[13] = 'A';
 
 		Buffer<> buffer(len, 1024, temp);
 
 		EXPECT_EQ(buffer.size(), len);
 		EXPECT_EQ(buffer.capacity(), 1024);
 		EXPECT_EQ(buffer.data(), temp);
+		EXPECT_EQ(memcmp(temp, data, len), 0);
+		EXPECT_NE(strcmp(data, temp), 0);
 	}
 
 	TEST(Buffer, WCreate) {
 		const wchar_t *data = L"Hello World!";
-		size_t len = wcslen(data);
+		size_t len = 12;
 
 		wchar_t *temp = new wchar_t[1024];
 		memcpy(temp, data, len);
+
+		// 2016-10-05 AMR NOTE: not a \0
+		temp[13] = 'A';
 
 		Buffer<wchar_t> buffer(len, 1024, temp);
 
 		EXPECT_EQ(buffer.size(), len);
 		EXPECT_EQ(buffer.capacity(), 1024);
 		EXPECT_EQ(buffer.data(), temp);
+		EXPECT_EQ(memcmp(temp, data, len), 0);
+		EXPECT_NE(wcscmp(data, temp), 0);
 	}
 
 	TEST(Buffer, Iterate) {
@@ -61,11 +74,16 @@ namespace {
 		EXPECT_NE(strcmp(buffer.data(), data), 0);
 	}
 
-	TEST(Buffer, New) {
+	TEST(Buffer, Construct) {
 		Buffer<> buff(1024);
 
 		EXPECT_EQ(buff.size(), 0);
 		EXPECT_EQ(buff.capacity(), 1024);
 		EXPECT_NE(buff.data(), nullptr);
+
+		Buffer<> nbuff(move(buff));
+
+		EXPECT_EQ(buff.data(), nullptr);
+		EXPECT_NE(nbuff.data(), nullptr);
 	}
 }
