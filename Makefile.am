@@ -7,6 +7,10 @@ asioheaders_HEADERS = \
 	src/Buffer.hh \
 	src/Buffer.impl.hh
 
+lib_LTLIBRARIES = libentropy-asio.la
+libentropy_asio_la_SOURCES = \
+	src/Logger.cc
+
 check_PROGRAMS = \
 	ios-basic
 
@@ -16,7 +20,7 @@ if GTEST
 check_PROGRAMS += \
 	ios-buffer
 
-gtestLDADD = $(GTEST_LIBS)
+gtestLDADD = $(GTEST_LIBS) -lentropy-asio
 
 ios_buffer_SOURCES = test/ios/buffer.cc
 ios_buffer_LDADD = $(gtestLDADD)
