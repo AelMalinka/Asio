@@ -9,7 +9,9 @@
 	{
 		namespace Asio
 		{
-			template<typename charT> Buffer<charT>::Buffer() = default;
+			template<typename charT> Buffer<charT>::Buffer()
+				: _size(0), _capacity(0), _data(nullptr)
+			{}
 
 			template<typename charT>
 			Buffer<charT>::Buffer(const std::size_t capacity)
@@ -68,7 +70,7 @@
 			template<typename charT>
 			charT *Buffer<charT>::end()
 			{
-				return _data + _capacity;
+				return _data + _size;
 			}
 
 			template<typename charT>
@@ -98,7 +100,7 @@
 			template<typename charT>
 			const charT *Buffer<charT>::end() const
 			{
-				return _data + _capacity;
+				return _data + _size;
 			}
 		}
 	}

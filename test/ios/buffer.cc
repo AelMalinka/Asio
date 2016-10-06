@@ -58,7 +58,7 @@ namespace {
 		char *temp = new char[1024];
 		strcpy(temp, data);
 
-		Buffer<> buffer(1024, len, temp);
+		Buffer<> buffer(len, 1024, temp);
 
 		size_t x = 0;
 		for(auto &&c : buffer) {
