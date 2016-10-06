@@ -15,3 +15,9 @@ AT_SETUP([Buffer Tests])
 AT_SKIP_IF([test -z $GTEST])
 AT_CHECK([ios-buffer], [], [ignore], [ignore])
 AT_CLEANUP
+
+AT_SETUP([StreamBuffer Tests])
+AT_SKIP_IF([test -z $GTEST])
+AT_SKIP_IF([test -z $GMOCK])
+AT_CHECK([ios-stream-buffer], [], [ignore], [ignore])
+AT_CLEANUP

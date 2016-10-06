@@ -5,7 +5,9 @@ asioheadersdir = $(includedir)/Entropy/Asio
 asioheaders_HEADERS = \
 	src/Exception.hh \
 	src/Buffer.hh \
-	src/Buffer.impl.hh
+	src/Buffer.impl.hh \
+	src/StreamBuffer.hh \
+	src/StreamBuffer.impl.hh
 
 lib_LTLIBRARIES = libentropy-asio.la
 libentropy_asio_la_SOURCES = \
@@ -24,6 +26,15 @@ gtestLDADD = $(GTEST_LIBS) -lentropy-asio
 
 ios_buffer_SOURCES = test/ios/buffer.cc
 ios_buffer_LDADD = $(gtestLDADD)
+if GMOCK
+check_PROGRAMS += \
+	ios-stream-buffer
+
+gmockLDADD = $(GTEST_LIBS) $(GMOCK_LIBS) -lentropy-asio
+
+ios_stream_buffer_SOURCES = test/ios/stream-buffer.cc
+ios_stream_buffer_LDADD = $(gmockLDADD)
+endif
 endif
 
 TESTSUITE = $(srcdir)/test/testsuite
