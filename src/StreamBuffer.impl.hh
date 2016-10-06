@@ -17,14 +17,14 @@
 			StreamBuffer<Stream, charT, traits>::StreamBuffer(Stream &s)
 				: std::basic_streambuf<charT, traits>(), _stream(s), _buffers(), _current(_buffers.end()), _write(nullptr), _is_seek(false)
 			{
-				_stream.onRead([this](auto &&buffer) {
+				_stream.onRead([this](Buffer<charT> &&buffer) {
 					ENTROPY_LOG(Log, Severity::Debug) << "StreamBuffer<>: Adding newly read data";
 
 					_buffers.push_back(std::move(buffer));
 
 
 					for(auto &&i : _buffers) {
-						ENTROPY_LOG(Log, Severity::Debug) << "StreamBuffer<>: current buffers: '" << std::string(i.data(), i.size()) << "'";
+						ENTROPY_LOG(Log, Severity::Debug) << "StreamBuffer<>: current buffers: '" << std::basic_string<charT>(i.data(), i.size()) << "'";
 					}
 
 					if(_current == _buffers.end()) {
@@ -70,7 +70,7 @@
 				if(mode & std::ios_base::out)
 					return typename traits::pos_type(typename traits::off_type(-1));
 
-				char *pos;
+				charT *pos;
 
 				ENTROPY_LOG(Log, Severity::Debug) << "StreamBuffer<>::seek()";
 				switch(dir)
@@ -107,7 +107,7 @@
 				}
 				pos += dist;
 
-				ENTROPY_LOG(Log, Severity::Debug) << "StreamBuffer<>::seek(): setting position to 0 " << pos - _current->begin() << " " << _current->end() - _current->begin() << " on buffer: '" << std::string(_current->data(), _current->size()) << "'";
+				ENTROPY_LOG(Log, Severity::Debug) << "StreamBuffer<>::seek(): setting position to 0 " << pos - _current->begin() << " " << _current->end() - _current->begin() << " on buffer: '" << std::basic_string<charT>(_current->data(), _current->size()) << "'";
 				this->setg(_current->begin(), pos, _current->end());
 				if(pos == _current->end())
 					_is_seek = true;
