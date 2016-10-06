@@ -15,7 +15,7 @@
 
 			template<typename charT>
 			Buffer<charT>::Buffer(const std::size_t capacity)
-				: _size(0), _capacity(capacity), _data(new charT[_size])
+				: _size(0), _capacity(capacity), _data(new charT[_capacity])
 			{}
 
 			template<typename charT>
