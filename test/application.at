@@ -1,0 +1,15 @@
+# Copyright 2016 (c) Michael Thomas (malinka) <malinka@entropy-development.com>
+# Distributed under the terms of the GNU Affero General Public License v3
+
+AT_BANNER([Application Tests])
+
+AT_SETUP([Task Tests])
+AT_SKIP_IF([test -z $GTEST])
+AT_CHECK([application-task], [], [ignore], [ignore])
+AT_CLEANUP
+
+AT_SETUP([Application Tests])
+AT_SKIP_IF([test -z $GTEST])
+AT_SKIP_IF([test -z $LIBUV])
+AT_CHECK([application-application], [], [ignore], [ignore])
+AT_CLEANUP

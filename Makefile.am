@@ -4,6 +4,9 @@ AM_CXXFLAGS := -I$(srcdir)/src $(AM_CXXFLAGS)
 asioheadersdir = $(includedir)/Entropy/Asio
 asioheaders_HEADERS = \
 	src/Exception.hh \
+	src/Task.hh \
+	src/Loop.hh \
+	src/Application.hh \
 	src/Buffer.hh \
 	src/Buffer.impl.hh \
 	src/StreamBuffer.hh \
@@ -11,7 +14,19 @@ asioheaders_HEADERS = \
 
 lib_LTLIBRARIES = libentropy-asio.la
 libentropy_asio_la_SOURCES = \
-	src/Logger.cc
+	src/Logger.cc \
+	src/Task.cc \
+	src/Application.cc
+
+if LIBUV
+libuvheadersdir = $(includedir)/Entropy/Asio/UV
+libuvheaders_HEADERS = \
+	src/UV/Task.hh \
+	src/UV/Loop.hh
+
+libentropy_asio_la_SOURCES += \
+	src/UV/Loop.cc
+endif
 
 check_PROGRAMS = \
 	ios-basic
@@ -20,12 +35,29 @@ ios_basic_SOURCES = test/ios/basic.cc
 
 if GTEST
 check_PROGRAMS += \
+	application-application \
+	application-task \
 	ios-buffer
 
 gtestLDADD = $(GTEST_LIBS) -lentropy-asio
 
+application_application_SOURCES = test/application/application.cc
+application_application_LDADD = $(gtestLDADD)
+
+application_task_SOURCES = test/application/task.cc
+application_task_LDADD = $(gtestLDADD)
+
 ios_buffer_SOURCES = test/ios/buffer.cc
 ios_buffer_LDADD = $(gtestLDADD)
+
+if LIBUV
+check_PROGRAMS += \
+	uv-loop
+
+uv_loop_SOURCES = test/uv/loop.cc
+uv_loop_LDADD = $(gtestLDADD)
+endif
+
 if GMOCK
 check_PROGRAMS += \
 	ios-stream-buffer
@@ -39,7 +71,9 @@ endif
 
 TESTSUITE = $(srcdir)/test/testsuite
 TESTSUITE_FILES = \
-	$(srcdir)/test/ios.at
+	$(srcdir)/test/application.at \
+	$(srcdir)/test/ios.at \
+	$(srcdir)/test/uv.at
 
 EXTRA_DIST = \
 	$(TESTSUITE_FILES) \

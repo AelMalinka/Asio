@@ -1,0 +1,10 @@
+# Copyright 2016 (c) Michael Thomas (malinka) <malinka@entropy-development.com>
+# Distributed under the terms of the GNU Affero General Public License v3
+
+AT_BANNER([UV Tests])
+
+AT_SETUP([Loop Tests])
+AT_SKIP_IF([test -z $LIBUV])
+AT_SKIP_IF([test -z $GTEST])
+AT_CHECK([uv-loop], [], [ignore], [ignore])
+AT_CLEANUP
