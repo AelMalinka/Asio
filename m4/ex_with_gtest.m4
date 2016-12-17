@@ -17,7 +17,6 @@ AC_DEFUN([EX_WITH_GTEST], [
 				])
 			])
 			AC_CHECK_LIB([gtest_main], [main], [
-					GTEST_LIBS="-lgtest_main $GTEST_LIBS"
 				], [AS_IF([test "x$with_gtest" != xcheck], [
 					AC_MSG_FAILURE(["--with-gtest: gtest_main not found"])
 				])

@@ -39,7 +39,8 @@ check_PROGRAMS += \
 	application-task \
 	ios-buffer
 
-gtestLDADD = $(GTEST_LIBS) -lentropy-asio
+# 2016-12-17 AMR FIXME: gtest_main multiple definitions of main for gmock_main
+gtestLDADD = $(GTEST_LIBS) -lgtest_main -lentropy-asio
 
 application_application_SOURCES = test/application/application.cc
 application_application_LDADD = $(gtestLDADD)
