@@ -41,6 +41,10 @@ Application::Application(const int argc, char *argv[], const shared_ptr<Loop> &l
 	: Entropy::Application(argc, argv), _loop(loop)
 {}
 
+Application::Application(const int argc, char *argv[], shared_ptr<Loop> &&loop)
+	: Entropy::Application(argc, argv), _loop(move(loop))
+{}
+
 Application::~Application() = default;
 
 void Application::operator () ()
