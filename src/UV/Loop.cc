@@ -60,8 +60,7 @@ void work(uv_work_t *req)
 	}
 	catch(exception &e)
 	{
-		// 2016-10-07 AMR TODO: why can't I log the exception as is
-		ENTROPY_LOG(Log, Severity::Critical) << e.what();
+		Log << e;
 	}
 }
 
