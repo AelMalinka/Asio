@@ -47,8 +47,8 @@ const struct addrinfo *GetAddrInfo::Info() const
 
 void _entropy_asio_uv_getaddrinfo_cb(uv_getaddrinfo_t *req, int status, struct addrinfo *res)
 {
-	// 2017-03-23 AMR NOTE: not an error to be canceled
-	if(status == UV_ECANCELED) {
+	// 2017-03-23 AMR FIXME: which fucking cancel is which
+	if(status == UV_EAI_CANCELED) {
 		if(res != nullptr)
 			uv_freeaddrinfo(res);
 	} else {
