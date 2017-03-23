@@ -18,17 +18,17 @@
 				: std::basic_streambuf<charT, traits>(), _stream(s), _buffers(), _current(_buffers.end()), _write(nullptr), _is_seek(false)
 			{
 				_stream.onRead([this](Buffer<charT> &&buffer) {
-					ENTROPY_LOG(Log, Severity::Debug) << "StreamBuffer<>: Adding newly read data";
+					ENTROPY_LOG(Log, Severity::Debug) << "Adding newly read data";
 
 					_buffers.push_back(std::move(buffer));
 
 
 					for(auto &&i : _buffers) {
-						ENTROPY_LOG(Log, Severity::Debug) << "StreamBuffer<>: current buffers: '" << std::basic_string<charT>(i.data(), i.size()) << "'";
+						ENTROPY_LOG(Log, Severity::Debug) << "current buffers: '" << std::basic_string<charT>(i.data(), i.size()) << "'";
 					}
 
 					if(_current == _buffers.end()) {
-						ENTROPY_LOG(Log, Severity::Debug) << "StreamBuffer<>: New data is only data";
+						ENTROPY_LOG(Log, Severity::Debug) << "New data is only data";
 
 						_current = _buffers.begin();
 						this->setg(_current->begin(), _current->begin(), _current->end());
@@ -72,7 +72,7 @@
 
 				charT *pos;
 
-				ENTROPY_LOG(Log, Severity::Debug) << "StreamBuffer<>::seek()";
+				ENTROPY_LOG(Log, Severity::Debug) << "seek()";
 				switch(dir)
 				{
 					case std::ios_base::beg:
@@ -107,7 +107,7 @@
 				}
 				pos += dist;
 
-				ENTROPY_LOG(Log, Severity::Debug) << "StreamBuffer<>::seek(): setting position to 0 " << pos - _current->begin() << " " << _current->end() - _current->begin() << " on buffer: '" << std::basic_string<charT>(_current->data(), _current->size()) << "'";
+				ENTROPY_LOG(Log, Severity::Debug) << "seek(): setting position to 0 " << pos - _current->begin() << " " << _current->end() - _current->begin() << " on buffer: '" << std::basic_string<charT>(_current->data(), _current->size()) << "'";
 				this->setg(_current->begin(), pos, _current->end());
 				if(pos == _current->end())
 					_is_seek = true;
@@ -133,7 +133,7 @@
 					return traits::to_int_type(*this->gptr());
 				}
 
-				ENTROPY_LOG(Log, Severity::Debug) << "StreamBuffer<>::underflow()";
+				ENTROPY_LOG(Log, Severity::Debug) << "underflow()";
 
 				if(_current == _buffers.end())
 					return traits::eof();
