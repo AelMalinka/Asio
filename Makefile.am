@@ -22,11 +22,19 @@ if LIBUV
 libuvheadersdir = $(includedir)/Entropy/Asio/UV
 libuvheaders_HEADERS = \
 	src/UV/Task.hh \
-	src/UV/Loop.hh
+	src/UV/Loop.hh \
+	src/UV/GetAddrInfo.hh
 
 libentropy_asio_la_SOURCES += \
-	src/UV/Loop.cc
+	src/UV/Loop.cc \
+	src/UV/GetAddrInfo.cc
 endif
+
+noinst_PROGRAMS = \
+	getaddr
+
+getaddr_SOURCES = examples/getaddr.cc
+getaddr_LDADD = libentropy-asio.la
 
 check_PROGRAMS = \
 	ios-basic
@@ -40,7 +48,7 @@ check_PROGRAMS += \
 	ios-buffer
 
 # 2016-12-17 AMR FIXME: gtest_main multiple definitions of main for gmock_main
-gtestLDADD = $(GTEST_LIBS) -lgtest_main -lentropy-asio
+gtestLDADD = $(GTEST_LIBS) -lgtest_main libentropy-asio.la
 
 application_application_SOURCES = test/application/application.cc
 application_application_LDADD = $(gtestLDADD)
@@ -53,17 +61,21 @@ ios_buffer_LDADD = $(gtestLDADD)
 
 if LIBUV
 check_PROGRAMS += \
-	uv-loop
+	uv-loop \
+	uv-addr
 
 uv_loop_SOURCES = test/uv/loop.cc
 uv_loop_LDADD = $(gtestLDADD)
+
+uv_addr_SOURCES = test/uv/addr.cc
+uv_addr_LDADD = $(gtestLDADD)
 endif
 
 if GMOCK
 check_PROGRAMS += \
 	ios-stream-buffer
 
-gmockLDADD = $(GTEST_LIBS) $(GMOCK_LIBS) -lentropy-asio
+gmockLDADD = $(GTEST_LIBS) $(GMOCK_LIBS) libentropy-asio.la
 
 ios_stream_buffer_SOURCES = test/ios/stream-buffer.cc
 ios_stream_buffer_LDADD = $(gmockLDADD)

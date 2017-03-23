@@ -15,6 +15,8 @@
 		{
 			namespace UV
 			{
+				void ThrowIfError(const std::string &, const int);
+
 				class Loop :
 					public Asio::Loop
 				{

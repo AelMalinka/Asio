@@ -71,3 +71,23 @@ void work_after(uv_work_t *req, int status)
 
 	delete req;
 }
+
+namespace Entropy
+{
+	namespace Asio
+	{
+		namespace UV
+		{
+			void ThrowIfError(const string &what, const int status)
+			{
+				if(status < 0) {
+					ENTROPY_THROW(
+						Exception(what) <<
+						SystemErrorCode(error_code(-status, system_category())) <<
+						SystemError(uv_strerror(status))
+					);
+				}
+			}
+		}
+	}
+}
