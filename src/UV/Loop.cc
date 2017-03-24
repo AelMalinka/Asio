@@ -60,8 +60,7 @@ void work(uv_work_t *req)
 	}
 	catch(exception &e)
 	{
-		// 2016-10-07 AMR TODO: why can't I log the exception as is
-		ENTROPY_LOG(Log, Severity::Critical) << e.what();
+		Log << e;
 	}
 }
 
@@ -71,4 +70,24 @@ void work_after(uv_work_t *req, int status)
 		ENTROPY_LOG(Log, Severity::Error) << "Work failed: " << uv_strerror(status);
 
 	delete req;
+}
+
+namespace Entropy
+{
+	namespace Asio
+	{
+		namespace UV
+		{
+			void ThrowIfError(const string &what, const int status)
+			{
+				if(status < 0) {
+					ENTROPY_THROW(
+						Exception(what) <<
+						SystemErrorCode(error_code(-status, system_category())) <<
+						SystemError(uv_strerror(status))
+					);
+				}
+			}
+		}
+	}
 }

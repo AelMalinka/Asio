@@ -8,3 +8,9 @@ AT_SKIP_IF([test -z $LIBUV])
 AT_SKIP_IF([test -z $GTEST])
 AT_CHECK([uv-loop], [], [ignore], [ignore])
 AT_CLEANUP
+
+AT_SETUP([AddrInfo Tests])
+AT_SKIP_IF([test -z $LIBUV])
+AT_SKIP_IF([test -z $GTEST])
+AT_CHECK([uv-addr], [], [ignore], [ignore])
+AT_CLEANUP

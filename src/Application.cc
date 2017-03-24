@@ -5,7 +5,7 @@
 #include "Application.hh"
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#	include "config.h"
 #endif
 
 #ifdef HAVE_LIBUV
@@ -39,6 +39,10 @@ Application::Application(const int argc, char *argv[])
 
 Application::Application(const int argc, char *argv[], const shared_ptr<Loop> &loop)
 	: Entropy::Application(argc, argv), _loop(loop)
+{}
+
+Application::Application(const int argc, char *argv[], shared_ptr<Loop> &&loop)
+	: Entropy::Application(argc, argv), _loop(move(loop))
 {}
 
 Application::~Application() = default;
