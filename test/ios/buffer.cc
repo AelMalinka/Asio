@@ -26,7 +26,7 @@ namespace {
 		Buffer<> buffer(len, 1024, temp);
 
 		EXPECT_EQ(buffer.size(), len);
-		EXPECT_EQ(buffer.capacity(), 1024);
+		EXPECT_EQ(buffer.capacity(), 1024ul);
 		EXPECT_EQ(buffer.data(), temp);
 		EXPECT_EQ(memcmp(temp, data, len), 0);
 		EXPECT_NE(strcmp(data, temp), 0);
@@ -45,7 +45,7 @@ namespace {
 		Buffer<wchar_t> buffer(len, 1024, temp);
 
 		EXPECT_EQ(buffer.size(), len);
-		EXPECT_EQ(buffer.capacity(), 1024);
+		EXPECT_EQ(buffer.capacity(), 1024ul);
 		EXPECT_EQ(buffer.data(), temp);
 		EXPECT_EQ(memcmp(temp, data, len), 0);
 		EXPECT_NE(wcscmp(data, temp), 0);
@@ -77,8 +77,8 @@ namespace {
 	TEST(Buffer, Construct) {
 		Buffer<> buff(1024);
 
-		EXPECT_EQ(buff.size(), 0);
-		EXPECT_EQ(buff.capacity(), 1024);
+		EXPECT_EQ(buff.size(), 0ul);
+		EXPECT_EQ(buff.capacity(), 1024ul);
 		EXPECT_NE(buff.data(), nullptr);
 
 		Buffer<> nbuff(move(buff));
@@ -93,8 +93,8 @@ namespace {
 		strcpy(buff.data(), "Hello World!");
 		buff.size() = 12;
 
-		EXPECT_EQ(buff.size(), 12);
+		EXPECT_EQ(buff.size(), 12ul);
 		EXPECT_EQ(memcmp(buff.data(), "Hello World!", buff.size()), 0);
-		EXPECT_EQ(buff.capacity(), 1024);
+		EXPECT_EQ(buff.capacity(), 1024ul);
 	}
 }
