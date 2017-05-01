@@ -20,16 +20,11 @@ namespace {
 		char *temp = new char[1024];
 		memcpy(temp, data, len);
 
-		// 2016-10-05 AMR NOTE: not a \0
-		temp[13] = 'A';
-
 		Buffer<> buffer(len, 1024, temp);
 
 		EXPECT_EQ(buffer.size(), len);
 		EXPECT_EQ(buffer.capacity(), 1024ul);
 		EXPECT_EQ(buffer.data(), temp);
-		EXPECT_EQ(memcmp(temp, data, len), 0);
-		EXPECT_NE(strcmp(data, temp), 0);
 	}
 
 	TEST(Buffer, WCreate) {
@@ -39,16 +34,11 @@ namespace {
 		wchar_t *temp = new wchar_t[1024];
 		memcpy(temp, data, len);
 
-		// 2016-10-05 AMR NOTE: not a \0
-		temp[13] = 'A';
-
 		Buffer<wchar_t> buffer(len, 1024, temp);
 
 		EXPECT_EQ(buffer.size(), len);
 		EXPECT_EQ(buffer.capacity(), 1024ul);
 		EXPECT_EQ(buffer.data(), temp);
-		EXPECT_EQ(memcmp(temp, data, len), 0);
-		EXPECT_NE(wcscmp(data, temp), 0);
 	}
 
 	TEST(Buffer, Iterate) {

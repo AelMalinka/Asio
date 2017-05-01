@@ -5,6 +5,8 @@
 #if !defined ENTROPY_ASIO_BUFFER_IMPL
 #	define ENTROPY_ASIO_BUFFER_IMPL
 
+#	include <cstring>
+
 	namespace Entropy
 	{
 		namespace Asio
@@ -16,7 +18,9 @@
 			template<typename charT>
 			Buffer<charT>::Buffer(const std::size_t capacity)
 				: _size(0), _capacity(capacity), _data(new charT[_capacity])
-			{}
+			{
+				std::memset(_data, 0, _capacity);
+			}
 
 			template<typename charT>
 			Buffer<charT>::Buffer(const std::size_t size, const std::size_t capacity, charT *data)
