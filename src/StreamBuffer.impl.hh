@@ -27,6 +27,7 @@
 				});
 
 				_write = new Buffer<charT>(write_buffer_size);
+				this->setp(_write->begin(), _write->begin() + _write->capacity());
 			}
 
 			template<typename Stream, typename charT, typename traits>
@@ -50,13 +51,13 @@
 			}
 
 			template<typename Stream, typename charT, typename traits>
-			typename traits::pos_type StreamBuffer<Stream, charT, traits>::seekpos(typename traits::pos_type dist, std::ios_base::openmode mode)
+			typename StreamBuffer<Stream, charT, traits>::pos_type StreamBuffer<Stream, charT, traits>::seekpos(pos_type dist, std::ios_base::openmode mode)
 			{
 				return seekoff(dist, std::ios_base::beg, mode);
 			}
 
 			template<typename Stream, typename charT, typename traits>
-			typename traits::pos_type StreamBuffer<Stream, charT, traits>::seekoff(typename traits::off_type dist, std::ios_base::seekdir dir, std::ios_base::openmode mode)
+			typename StreamBuffer<Stream, charT, traits>::pos_type StreamBuffer<Stream, charT, traits>::seekoff(off_type dist, std::ios_base::seekdir dir, std::ios_base::openmode mode)
 			{
 				if(mode & std::ios_base::out)
 					return typename traits::pos_type(typename traits::off_type(-1));
@@ -115,7 +116,7 @@
 			}
 
 			template<typename Stream, typename charT, typename traits>
-			typename traits::int_type StreamBuffer<Stream, charT, traits>::underflow()
+			typename StreamBuffer<Stream, charT, traits>::int_type StreamBuffer<Stream, charT, traits>::underflow()
 			{
 				if(_is_seek) {
 					_is_seek = false;
@@ -131,6 +132,7 @@
 				if(_current == _buffers.end())
 					return traits::eof();
 
+				ENTROPY_LOG(Log, Severity::Debug) << "Underflow";
 				this->setg(_current->begin(), _current->begin(), _current->end());
 
 				return traits::to_int_type(*this->gptr());
@@ -140,6 +142,38 @@
 			std::streamsize StreamBuffer<Stream, charT, traits>::showmanyc()
 			{
 				return Available();
+			}
+
+			template<typename Stream, typename charT, typename traits>
+			typename StreamBuffer<Stream, charT, traits>::int_type StreamBuffer<Stream, charT, traits>::overflow(int_type c)
+			{
+				ENTROPY_LOG(Log, Severity::Debug) << "Overflow";
+
+				_write->size() = this->pptr() - this->pbase();
+				_stream.Write(std::move(*_write));
+
+				_write = new Buffer<charT>(write_buffer_size);
+				this->setp(_write->begin(), _write->begin() + _write->capacity());
+
+				*this->pptr() = c;
+				this->pbump(1);
+
+				return c;
+			}
+
+			template<typename Stream, typename charT, typename traits>
+			int StreamBuffer<Stream, charT, traits>::sync()
+			{
+				ENTROPY_LOG(Log, Severity::Debug) << "Sync";
+
+				_write->size() = this->pptr() - this->pbase();
+				_stream.Write(std::move(*_write));
+
+				_write = new Buffer<charT>(write_buffer_size);
+
+				this->setp(_write->begin(), _write->begin() + _write->capacity());
+
+				return 0;
 			}
 		}
 	}

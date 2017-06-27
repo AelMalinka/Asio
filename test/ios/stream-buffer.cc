@@ -23,9 +23,11 @@ namespace {
 			void onRead(const function<void(Buffer<charT> &&)> &);
 			void Read(Buffer<charT> &&);
 			void Write(Buffer<charT> &&);
+			const basic_string<charT> &Data() const;
 		private:
 			function<void(Buffer<charT> &&)> _on_read;
 			StreamBuffer<MockStream<charT>, charT> _buffer;
+			basic_string<charT> _data;
 	};
 
 	TEST(StreamBuffer, Create) {
@@ -57,6 +59,18 @@ namespace {
 		EXPECT_EQ(hello, "Hello World!"s);
 		EXPECT_EQ(goodbye, "Goodbye World!"s);
 		EXPECT_EQ(rest, "ThisIsALongStringThatWillDefinitelyBeOnMultipleBuffers"s);
+	}
+
+	TEST(StreamBuffer, Write) {
+		MockStream<> mock;
+
+		mock << "Hello Stream!" << endl;
+		EXPECT_EQ(mock.Data(), "Hello Stream!\n"s);
+
+		mock << "This is also some data, hopefully will be buffered";
+		EXPECT_EQ(mock.Data(), "Hello Stream!\n"s);
+		mock << flush;
+		EXPECT_EQ(mock.Data(), "Hello Stream!\nThis is also some data, hopefully will be buffered"s);
 	}
 
 	TEST(StreamBuffer, Seek) {
@@ -122,8 +136,15 @@ namespace {
 	}
 
 	template<typename charT>
-	void MockStream<charT>::Write(Buffer<charT> &&)
+	void MockStream<charT>::Write(Buffer<charT> &&buff)
 	{
+		_data += string(buff.data(), buff.size());
+	}
+
+	template<typename charT>
+	const basic_string<charT> &MockStream<charT>::Data() const
+	{
+		return _data;
 	}
 
 	template<typename charT>

@@ -27,15 +27,24 @@
 			class StreamBuffer :
 				public std::basic_streambuf<charT, traits>
 			{
+				private:
+					typedef std::basic_streambuf<charT, traits> base;
+				public:
+					typedef typename base::int_type int_type;
+					typedef typename base::traits_type traits_type;
+					typedef typename base::pos_type pos_type;
+					typedef typename base::off_type off_type;
 				public:
 					StreamBuffer(Stream &);
 					~StreamBuffer();
 					std::streamsize Available() const;
 				private:
-					typename traits::pos_type seekpos(typename traits::pos_type, std::ios_base::openmode = std::ios_base::in | std::ios_base::out);
-					typename traits::pos_type seekoff(typename traits::off_type, std::ios_base::seekdir, std::ios_base::openmode = std::ios_base::in | std::ios_base::out);
-					typename traits::int_type underflow();
+					pos_type seekpos(pos_type, std::ios_base::openmode = std::ios_base::in | std::ios_base::out);
+					pos_type seekoff(off_type, std::ios_base::seekdir, std::ios_base::openmode = std::ios_base::in | std::ios_base::out);
+					int_type underflow();
 					std::streamsize showmanyc();
+					int_type overflow(int_type = traits_type::eof());
+					int sync();
 				private:
 					Stream &_stream;
 					std::list<Buffer<charT>> _buffers;
