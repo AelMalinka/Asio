@@ -27,20 +27,6 @@ namespace {
 		EXPECT_EQ(buffer.data(), temp);
 	}
 
-	TEST(Buffer, WCreate) {
-		const wchar_t *data = L"Hello World!";
-		size_t len = 12;
-
-		wchar_t *temp = new wchar_t[1024];
-		memcpy(temp, data, len);
-
-		Buffer<wchar_t> buffer(len, 1024, temp);
-
-		EXPECT_EQ(buffer.size(), len);
-		EXPECT_EQ(buffer.capacity(), 1024ul);
-		EXPECT_EQ(buffer.data(), temp);
-	}
-
 	TEST(Buffer, Iterate) {
 		const char *data = "Hello World!";
 		size_t len = strlen(data);
