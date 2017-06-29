@@ -24,11 +24,13 @@ libuvheadersdir = $(includedir)/Entropy/Asio/UV
 libuvheaders_HEADERS = \
 	src/UV/Task.hh \
 	src/UV/Loop.hh \
-	src/UV/GetAddrInfo.hh
+	src/UV/GetAddrInfo.hh \
+	src/UV/Stream.hh
 
 libentropy_asio_la_SOURCES += \
 	src/UV/Loop.cc \
-	src/UV/GetAddrInfo.cc
+	src/UV/GetAddrInfo.cc \
+	src/UV/Stream.cc
 endif
 
 noinst_PROGRAMS = \
