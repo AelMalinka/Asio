@@ -17,6 +17,9 @@
 			{
 				void ThrowIfError(const std::string &, const int);
 
+				template<typename E>
+				typename ::Entropy::detail::WithErrorInfo<E>::type AttachUvInfo(const E &, const int);
+
 				class Loop :
 					public Asio::Loop
 				{
@@ -32,5 +35,7 @@
 			}
 		}
 	}
+
+#	include "Loop.impl.hh"
 
 #endif

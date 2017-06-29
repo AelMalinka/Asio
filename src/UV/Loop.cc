@@ -82,9 +82,7 @@ namespace Entropy
 			{
 				if(status < 0) {
 					ENTROPY_THROW(
-						Exception(what) <<
-						SystemErrorCode(error_code(-status, system_category())) <<
-						SystemError(uv_strerror(status))
+						AttachUvInfo(Exception(what), status)
 					);
 				}
 			}

@@ -6,6 +6,7 @@ asioheaders_HEADERS = \
 	src/Exception.hh \
 	src/Task.hh \
 	src/Loop.hh \
+	src/Loop.impl.hh \
 	src/Application.hh \
 	src/Buffer.hh \
 	src/Buffer.impl.hh \
