@@ -32,8 +32,8 @@ class Application :
 	private:
 		void display(const GetAddrInfo &);
 	private:
-		GetAddrInfo _addr;
-		Usage _usage;
+		shared_ptr<GetAddrInfo> _addr;
+		shared_ptr<Usage> _usage;
 };
 
 int main(int ArgC, char *ArgV[])
@@ -53,12 +53,24 @@ int main(int ArgC, char *ArgV[])
 }
 
 ::Application::Application(int argc, char *argv[])
-	: Asio::Application(argc, argv), _addr(ArgV()[1], ArgV()[2], SOCK_STREAM, [this](auto &res){this->display(res);}), _usage(argv[0])
+	: Asio::Application(argc, argv), _addr(), _usage()
 {
-	if(ArgC() != 3)
-		Add(_usage);
-	else 
-		Add(_addr);
+	if(ArgC() != 3) {
+		_usage = make_shared<Usage>(ArgV()[0]);
+
+		Add(*_usage);
+	} else {
+		_addr = make_shared<GetAddrInfo>(
+			ArgV()[1],
+			ArgV()[2],
+			SOCK_STREAM,
+			[this](auto &res) {
+				this->display(res);
+			}
+		);
+
+		Add(*_addr);
+	}
 }
 
 void ::Application::display(const GetAddrInfo &res)
