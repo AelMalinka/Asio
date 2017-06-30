@@ -7,7 +7,6 @@
 #include <gmock/gmock.h>
 
 #include <cstring>
-#include <cwchar>
 
 using namespace Entropy::Asio;
 using namespace testing;
