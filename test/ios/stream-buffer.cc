@@ -20,12 +20,10 @@ namespace {
 	{
 		public:
 			MockStream();
-			void onRead(const function<void(Buffer<charT> &&)> &);
 			void Read(Buffer<charT> &&);
 			void Write(Buffer<charT> &&);
 			const basic_string<charT> &Data() const;
 		private:
-			function<void(Buffer<charT> &&)> _on_read;
 			StreamBuffer<MockStream<charT>, charT> _buffer;
 			basic_string<charT> _data;
 	};
@@ -124,15 +122,9 @@ namespace {
 	// 2017-06-27 AMR TODO: test utf-32, maybe utf-16
 
 	template<typename charT>
-	void MockStream<charT>::onRead(const function<void(Buffer<charT> &&)> &f)
-	{
-		_on_read = f;
-	}
-
-	template<typename charT>
 	void MockStream<charT>::Read(Buffer<charT> &&buff)
 	{
-		_on_read(move(buff));
+		_buffer.AddData(move(buff));
 	}
 
 	template<typename charT>

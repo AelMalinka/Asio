@@ -28,7 +28,6 @@
 					public:
 						explicit Stream(uv_stream_t *);
 						virtual ~Stream();
-						void onRead(const std::function<void(Buffer<char> &&)> &);
 						void Write(Buffer<char> &&);
 					protected:
 						virtual void ReadStart();
@@ -42,7 +41,6 @@
 					private:
 						uv_stream_t *_handle;
 						StreamBuffer<Stream, char> _buffer;
-						std::function<void(Buffer<char> &&)> _read_cb;
 					friend void ::_entropy_asio_uv_stream_read_cb(uv_stream_t *, ssize_t, const uv_buf_t *);
 					friend void ::_entropy_asio_uv_stream_write_cb(uv_write_t *, int);
 				};

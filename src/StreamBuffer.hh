@@ -38,6 +38,7 @@
 					StreamBuffer(Stream &);
 					~StreamBuffer();
 					std::streamsize Available() const;
+					void AddData(Buffer<charT> &&);
 				private:
 					pos_type seekpos(pos_type, std::ios_base::openmode = std::ios_base::in | std::ios_base::out);
 					pos_type seekoff(off_type, std::ios_base::seekdir, std::ios_base::openmode = std::ios_base::in | std::ios_base::out);

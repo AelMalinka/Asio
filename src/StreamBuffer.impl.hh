@@ -17,15 +17,6 @@
 			StreamBuffer<Stream, charT, traits>::StreamBuffer(Stream &s)
 				: std::basic_streambuf<charT, traits>(), _stream(s), _buffers(), _current(_buffers.end()), _write(nullptr), _is_seek(false)
 			{
-				_stream.onRead([this](Buffer<charT> &&buffer) {
-					_buffers.push_back(std::move(buffer));
-
-					if(_current == _buffers.end()) {
-						_current = _buffers.begin();
-						this->setg(_current->begin(), _current->begin(), _current->end());
-					}
-				});
-
 				_write = new Buffer<charT>(write_buffer_size);
 				this->setp(_write->begin(), _write->begin() + _write->capacity());
 			}
@@ -48,6 +39,17 @@
 				}
 
 				return ret;
+			}
+
+			template<typename Stream, typename charT, typename traits>
+			void StreamBuffer<Stream, charT, traits>::AddData(Buffer<charT> &&buffer)
+			{
+				_buffers.push_back(std::move(buffer));
+
+				if(_current == _buffers.end()) {
+					_current = _buffers.begin();
+					this->setg(_current->begin(), _current->begin(), _current->end());
+				}
 			}
 
 			template<typename Stream, typename charT, typename traits>

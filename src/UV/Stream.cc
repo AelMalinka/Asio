@@ -22,7 +22,7 @@ void shutdown_cb(uv_shutdown_t *, int);
 void close_cb(uv_handle_t *);
 
 Stream::Stream(uv_stream_t *h)
-	: _handle(h), _buffer(*this), _read_cb([](auto){ ENTROPY_THROW(Exception("Read Callback not set")); })
+	: _handle(h), _buffer(*this)
 {}
 
 Stream::~Stream()
@@ -43,11 +43,6 @@ Stream::~Stream()
 	{
 		ENTROPY_LOG(Log, Severity::Error) << "~Stream failed: " << e.what();
 	}
-}
-
-void Stream::onRead(const function<void(Buffer<char> &&)> &cb)
-{
-	_read_cb = cb;
 }
 
 void Stream::Write(Buffer<char> &&b)
@@ -79,7 +74,7 @@ void Stream::ErrorCb(const Exception &e)
 
 void Stream::ReadCb(const uv_buf_t *buf, const ssize_t nread)
 {
-	_read_cb(Buffer<char>(buf->len, nread, buf->base));
+	_buffer.AddData(Buffer<char>(buf->len, nread, buf->base));
 }
 
 void _entropy_asio_uv_stream_read_cb(uv_stream_t *handle , ssize_t nread, const uv_buf_t *buf)
