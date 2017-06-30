@@ -6,7 +6,6 @@ asioheaders_HEADERS = \
 	src/Exception.hh \
 	src/Task.hh \
 	src/Loop.hh \
-	src/Loop.impl.hh \
 	src/Application.hh \
 	src/Buffer.hh \
 	src/Buffer.impl.hh \
@@ -24,6 +23,7 @@ libuvheadersdir = $(includedir)/Entropy/Asio/UV
 libuvheaders_HEADERS = \
 	src/UV/Task.hh \
 	src/UV/Loop.hh \
+	src/UV/Loop.impl.hh \
 	src/UV/GetAddrInfo.hh \
 	src/UV/Stream.hh
 
