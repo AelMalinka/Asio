@@ -33,7 +33,8 @@
 					protected:
 						virtual void ReadStart();
 					protected:
-						virtual void DoneCb() = 0;
+						// 2017-06-29 AMR TODO: what are we doing when the read side closes?
+						virtual void DoneCb() {}
 					protected:
 						virtual void ErrorCb(const Exception &);
 						// 2017-06-29 AMR NOTE: this is a POSIX type, hopefully defined by libuv
