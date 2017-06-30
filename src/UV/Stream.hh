@@ -22,22 +22,22 @@
 			namespace UV
 			{
 				class Stream :
-					public std::iostream,
+					public std::basic_iostream<char>,
 					public Task
 				{
 					public:
-						explicit Stream(uv_stream_t *);
+						Stream(uv_stream_t *);
 						virtual ~Stream();
 						void Write(Buffer<char> &&);
 					protected:
 						virtual void ReadStart();
 					protected:
+						virtual void onData() = 0;
+						virtual void onError(const Exception &);
 						// 2017-06-29 AMR TODO: what are we doing when the read side closes?
-						virtual void DoneCb() {}
-					protected:
-						virtual void ErrorCb(const Exception &);
-						// 2017-06-29 AMR NOTE: this is a POSIX type, hopefully defined by libuv
-						virtual void ReadCb(const uv_buf_t *, const ssize_t);
+						virtual void onDone() {}
+					private:
+						void ReadCb(const uv_buf_t *, const ssize_t);
 					private:
 						uv_stream_t *_handle;
 						StreamBuffer<Stream, char> _buffer;

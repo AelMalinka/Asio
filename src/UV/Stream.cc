@@ -22,7 +22,7 @@ void shutdown_cb(uv_shutdown_t *, int);
 void close_cb(uv_handle_t *);
 
 Stream::Stream(uv_stream_t *h)
-	: _handle(h), _buffer(*this)
+	: basic_iostream<char>(&_buffer), _handle(h), _buffer(*this)
 {}
 
 Stream::~Stream()
@@ -67,25 +67,25 @@ void Stream::ReadStart()
 	ThrowIfError("Failed to Start Read", uv_read_start(_handle, alloc_cb, _entropy_asio_uv_stream_read_cb));
 }
 
-void Stream::ErrorCb(const Exception &e)
+void Stream::onError(const Exception &e)
 {
 	throw e;
 }
 
 void Stream::ReadCb(const uv_buf_t *buf, const ssize_t nread)
 {
-	_buffer.AddData(Buffer<char>(buf->len, nread, buf->base));
+	_buffer.AddData(Buffer<char>(nread, buf->len, buf->base));
 }
 
 void _entropy_asio_uv_stream_read_cb(uv_stream_t *handle , ssize_t nread, const uv_buf_t *buf)
 {
 	Stream *stream = static_cast<Stream *>(handle->data);
 	if(nread == UV_EOF) {
-		stream->DoneCb();
+		stream->onDone();
 		delete [] buf->base;
 	} else if(nread < 0) {
 		delete [] buf->base;
-		stream->ErrorCb(AttachUvInfo(Exception("Read Failed"), nread));
+		stream->onError(AttachUvInfo(Exception("Read Failed"), nread));
 	} else {
 		stream->ReadCb(buf, nread);
 	}
@@ -102,7 +102,7 @@ void _entropy_asio_uv_stream_write_cb(uv_write_t *req, int status)
 	delete req;
 
 	if(status < 0) {
-		stream->ErrorCb(AttachUvInfo(Exception("Write Failed"), status));
+		stream->onError(AttachUvInfo(Exception("Write Failed"), status));
 	}
 }
 
