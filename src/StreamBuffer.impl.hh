@@ -166,8 +166,6 @@
 			template<typename Stream, typename charT, typename traits>
 			int StreamBuffer<Stream, charT, traits>::sync()
 			{
-				ENTROPY_LOG(Log, Severity::Debug) << "Sync";
-
 				_write->size() = this->pptr() - this->pbase();
 				_stream.Write(std::move(*_write));
 
