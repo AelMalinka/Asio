@@ -15,17 +15,13 @@
 		{
 			template<typename Stream, typename charT, typename traits>
 			StreamBuffer<Stream, charT, traits>::StreamBuffer(Stream &s)
-				: std::basic_streambuf<charT, traits>(), _stream(s), _buffers(), _current(_buffers.end()), _write(nullptr), _is_seek(false)
+				: std::basic_streambuf<charT, traits>(), _stream(s), _buffers(), _current(_buffers.end()), _write(), _is_seek(false)
 			{
-				_write = new Buffer<charT>(write_buffer_size);
+				_write = std::make_shared<Buffer<charT>>(write_buffer_size);
 				this->setp(_write->begin(), _write->begin() + _write->capacity());
 			}
 
-			template<typename Stream, typename charT, typename traits>
-			StreamBuffer<Stream, charT, traits>::~StreamBuffer()
-			{
-				delete _write;
-			}
+			template<typename Stream, typename charT, typename traits> StreamBuffer<Stream, charT, traits>::~StreamBuffer() = default;
 
 			template<typename Stream, typename charT, typename traits>
 			std::streamsize StreamBuffer<Stream, charT, traits>::Available() const
@@ -44,10 +40,11 @@
 			template<typename Stream, typename charT, typename traits>
 			void StreamBuffer<Stream, charT, traits>::AddData(Buffer<charT> &&buffer)
 			{
-				_buffers.push_back(std::move(buffer));
+				_buffers.emplace_back(std::move(buffer));
 
 				if(_current == _buffers.end()) {
-					_current = _buffers.begin();
+					--_current;
+
 					this->setg(_current->begin(), _current->begin(), _current->end());
 				}
 			}
@@ -154,7 +151,7 @@
 				_write->size() = this->pptr() - this->pbase();
 				_stream.Write(std::move(*_write));
 
-				_write = new Buffer<charT>(write_buffer_size);
+				_write = std::make_shared<Buffer<charT>>(write_buffer_size);
 				this->setp(_write->begin(), _write->begin() + _write->capacity());
 
 				*this->pptr() = c;
@@ -169,8 +166,7 @@
 				_write->size() = this->pptr() - this->pbase();
 				_stream.Write(std::move(*_write));
 
-				_write = new Buffer<charT>(write_buffer_size);
-
+				_write = std::make_shared<Buffer<charT>>(write_buffer_size);
 				this->setp(_write->begin(), _write->begin() + _write->capacity());
 
 				return 0;

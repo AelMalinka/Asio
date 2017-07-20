@@ -7,6 +7,7 @@
 
 #	include <streambuf>
 #	include <list>
+#	include <memory>
 
 #	include "Exception.hh"
 #	include "Buffer.hh"
@@ -50,7 +51,7 @@
 					Stream &_stream;
 					std::list<Buffer<charT>> _buffers;
 					typename std::list<Buffer<charT>>::iterator _current;
-					Buffer<charT> *_write;
+					std::shared_ptr<Buffer<charT>> _write;
 					bool _is_seek;
 					static constexpr std::size_t write_buffer_size = ENTROPY_ASIO_STREAMBUFFER_WRITE_BUFFER_SIZE;
 			};
