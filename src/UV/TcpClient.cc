@@ -12,6 +12,8 @@ using Entropy::Asio::Exception;
 TcpClient::TcpClient(const string &host, const string &service)
 	: Stream(reinterpret_cast<uv_stream_t *>(&_handle)), _handle(), _info()
 {
+	_handle.data = this;
+
 	_info = make_shared<GetAddrInfo>(host, service, SOCK_STREAM, [this](auto &) {
 		this->InfoCb();
 	});
@@ -40,7 +42,6 @@ void TcpClient::ConnectCb()
 	_info.reset();
 
 	ReadStart();
-
 	onConnect();
 }
 
