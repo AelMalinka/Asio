@@ -164,10 +164,13 @@
 			int StreamBuffer<Stream, charT, traits>::sync()
 			{
 				_write->size() = this->pptr() - this->pbase();
-				_stream.Write(std::move(*_write));
 
-				_write = std::make_shared<Buffer<charT>>(write_buffer_size);
-				this->setp(_write->begin(), _write->begin() + _write->capacity());
+				if(_write->size() > 0) {
+					_stream.Write(std::move(*_write));
+
+					_write = std::make_shared<Buffer<charT>>(write_buffer_size);
+					this->setp(_write->begin(), _write->begin() + _write->capacity());
+				}
 
 				return 0;
 			}
