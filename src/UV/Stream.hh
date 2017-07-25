@@ -34,8 +34,7 @@
 					protected:
 						virtual void onData() = 0;
 						virtual void onError(const Exception &);
-						// 2017-06-29 AMR TODO: what are we doing when the read side closes?
-						virtual void onDone() {}
+						virtual void onEof() {}
 					private:
 						void ReadCb(const uv_buf_t *, const ssize_t);
 					private:

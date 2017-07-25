@@ -81,7 +81,7 @@ void _entropy_asio_uv_stream_read_cb(uv_stream_t *handle , ssize_t nread, const 
 {
 	Stream *stream = static_cast<Stream *>(handle->data);
 	if(nread == UV_EOF) {
-		stream->onDone();
+		stream->onEof();
 		delete [] buf->base;
 	} else if(nread < 0) {
 		delete [] buf->base;
