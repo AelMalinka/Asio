@@ -46,6 +46,9 @@
 					--_current;
 
 					this->setg(_current->begin(), _current->begin(), _current->end());
+
+					// 2017-07-26 AMR NOTE: clear eof/fail/bad bits (we have new data)
+					_stream.clear();
 				}
 			}
 
