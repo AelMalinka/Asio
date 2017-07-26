@@ -71,6 +71,7 @@ void Stream::onError(const Exception &e)
 void Stream::ReadCb(const uv_buf_t *buf, const ssize_t nread)
 {
 	_buffer.AddData(Buffer<char>(nread, buf->len, buf->base));
+	onData(*this);
 }
 
 void _entropy_asio_uv_stream_read_cb(uv_stream_t *handle , ssize_t nread, const uv_buf_t *buf)
