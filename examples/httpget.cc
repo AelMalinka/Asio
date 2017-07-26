@@ -85,7 +85,9 @@ void Client::onConnect()
 	*this << "GET / HTTP/1.1\r" << endl
 		<< "Host: " << _host << "\r" << endl
 		<< "User-Agent: Entropy Asio Example\r" << endl
-		<< "Accept: */*\r" << endl << "\r" << endl;
+		<< "Accept: */*\r" << endl
+		<< "Connection: close\r" << endl
+		<< "\r" << endl;
 }
 
 void Client::onData()
