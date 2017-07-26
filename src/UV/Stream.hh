@@ -33,7 +33,7 @@
 						virtual void ReadStart();
 						virtual void ReadStop();
 					protected:
-						virtual void onData() = 0;
+						virtual void onData(Stream &) = 0;
 						virtual void onError(const Exception &);
 						virtual void onEof();
 					private:
