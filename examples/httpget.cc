@@ -30,8 +30,8 @@ class Client :
 	public:
 		Client(const string &, const string &);
 	private:
-		void onConnect();
-		void onData();
+		void onConnect(Stream &);
+		void onData(Stream &);
 	private:
 		string _host;
 };
@@ -80,9 +80,9 @@ Client::Client(const string &host, const string &service)
 	: TcpClient(host, service), _host(host)
 {}
 
-void Client::onConnect()
+void Client::onConnect(Stream &s)
 {
-	*this << "GET / HTTP/1.1\r" << endl
+	s << "GET / HTTP/1.1\r" << endl
 		<< "Host: " << _host << "\r" << endl
 		<< "User-Agent: Entropy Asio Example\r" << endl
 		<< "Accept: */*\r" << endl
@@ -90,12 +90,12 @@ void Client::onConnect()
 		<< "\r" << endl;
 }
 
-void Client::onData()
+void Client::onData(Stream &s)
 {
-	while(!this->eof()) {
+	while(!s.eof()) {
 		string line;
 
-		std::getline(*this, line);
+		std::getline(s, line);
 		cout << line << endl;
 	}
 }
