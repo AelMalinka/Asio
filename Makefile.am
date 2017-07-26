@@ -26,12 +26,14 @@ libuvheaders_HEADERS = \
 	src/UV/Loop.impl.hh \
 	src/UV/GetAddrInfo.hh \
 	src/UV/Stream.hh \
+	src/UV/Tcp.hh \
 	src/UV/TcpClient.hh
 
 libentropy_asio_la_SOURCES += \
 	src/UV/Loop.cc \
 	src/UV/GetAddrInfo.cc \
 	src/UV/Stream.cc \
+	src/UV/Tcp.cc \
 	src/UV/TcpClient.cc
 endif
 
