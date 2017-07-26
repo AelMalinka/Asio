@@ -94,7 +94,7 @@ void Client::onData()
 		string line;
 
 		std::getline(*this, line);
-		cout << line << std::flush;
+		cout << line << endl;
 	}
 }
 
