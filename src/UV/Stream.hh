@@ -31,10 +31,11 @@
 						void Write(Buffer<char> &&);
 					protected:
 						virtual void ReadStart();
+						virtual void ReadStop();
 					protected:
 						virtual void onData() = 0;
 						virtual void onError(const Exception &);
-						virtual void onEof() {}
+						virtual void onEof();
 					private:
 						void ReadCb(const uv_buf_t *, const ssize_t);
 					private:

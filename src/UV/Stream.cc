@@ -25,25 +25,7 @@ Stream::Stream(uv_stream_t *h)
 	: basic_iostream<char>(&_buffer), _handle(h), _buffer(*this)
 {}
 
-Stream::~Stream()
-{
-	try
-	{
-		uv_shutdown_t *req = new uv_shutdown_t;
-		req->data = _handle;
-
-		ThrowIfError("Failed to stop reading stream", uv_read_stop(_handle));
-		ThrowIfError("Failed to stop writing stream", uv_shutdown(req, _handle, shutdown_cb));
-	}
-	catch(Exception &e)
-	{
-		ENTROPY_LOG(Log, Severity::Error) << "~Stream failed: " << e.what() << " (" << e.get<SystemError>() << ")";
-	}
-	catch(exception &e)
-	{
-		ENTROPY_LOG(Log, Severity::Error) << "~Stream failed: " << e.what();
-	}
-}
+Stream::~Stream() = default;
 
 void Stream::Write(Buffer<char> &&b)
 {
@@ -65,6 +47,20 @@ void Stream::Write(Buffer<char> &&b)
 void Stream::ReadStart()
 {
 	ThrowIfError("Failed to Start Read", uv_read_start(_handle, alloc_cb, _entropy_asio_uv_stream_read_cb));
+}
+
+void Stream::ReadStop()
+{
+	uv_shutdown_t *req = new uv_shutdown_t;
+	req->data = _handle;
+
+	ThrowIfError("Failed to stop reading stream", uv_read_stop(_handle));
+	ThrowIfError("Failed to stop writing stream", uv_shutdown(req, _handle, shutdown_cb));
+}
+
+void Stream::onEof()
+{
+	ReadStop();
 }
 
 void Stream::onError(const Exception &e)
@@ -117,9 +113,10 @@ void shutdown_cb(uv_shutdown_t *req, int status)
 	// 2017-06-29 AMR NOTE: Stream is reclaimed
 	ThrowIfError("Failed to stop writing stream", status); 
 	uv_close(reinterpret_cast<uv_handle_t *>(req->data), close_cb);
+
+	delete req;
 }
 
-void close_cb(uv_handle_t *handle)
+void close_cb(uv_handle_t *)
 {
-	delete handle;
 }
