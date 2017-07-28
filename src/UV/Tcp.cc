@@ -25,7 +25,7 @@ uv_tcp_t *Tcp::Handle()
 
 void Tcp::Added(Loop &loop)
 {
-	ThrowIfError("Failed to initialize Tcp Client", uv_tcp_init(loop.Handle(), Handle()));
+	ThrowIfError("Failed to initialize tcp object", uv_tcp_init(loop.Handle(), Handle()));
 
 	// 2017-07-21 AMR TODO: can we move this to constructor w/ virtual call in cb?
 	_info = make_shared<GetAddrInfo>(_host, _service, SOCK_STREAM, [this](auto &i) {
