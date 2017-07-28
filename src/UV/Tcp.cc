@@ -35,7 +35,6 @@ void Tcp::Added(Loop &loop)
 
 void Tcp::onEof()
 {
-	onDisconnect(*this);
-
 	Stream::onEof();
+	onDisconnect(*this);
 }
