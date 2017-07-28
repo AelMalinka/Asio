@@ -6,9 +6,11 @@
 using namespace Entropy::Asio::UV;
 using namespace std;
 
-Tcp::Tcp()
+Tcp::Tcp(Loop &loop)
 	: Stream(reinterpret_cast<uv_stream_t *>(&_handle)), _handle(), _info(), _host(), _service()
-{}
+{
+	ThrowIfError("Failed to initialzie tcp object", uv_tcp_init(loop.Handle(), &_handle));
+}
 
 Tcp::Tcp(const string &host, const string &service)
 	: Stream(reinterpret_cast<uv_stream_t *>(&_handle)), _handle(), _info(), _host(host), _service(service)

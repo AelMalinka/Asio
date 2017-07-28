@@ -18,7 +18,7 @@
 					public Stream
 				{
 					public:
-						Tcp();
+						Tcp(Loop &);
 						Tcp(const std::string &, const std::string &);
 						virtual ~Tcp();
 					protected:
