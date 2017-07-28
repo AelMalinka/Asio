@@ -27,25 +27,31 @@ libuvheaders_HEADERS = \
 	src/UV/GetAddrInfo.hh \
 	src/UV/Stream.hh \
 	src/UV/Tcp.hh \
-	src/UV/TcpClient.hh
+	src/UV/TcpClient.hh \
+	src/UV/TcpServer.hh
 
 libentropy_asio_la_SOURCES += \
 	src/UV/Loop.cc \
 	src/UV/GetAddrInfo.cc \
 	src/UV/Stream.cc \
 	src/UV/Tcp.cc \
-	src/UV/TcpClient.cc
+	src/UV/TcpClient.cc \
+	src/UV/TcpServer.cc
 endif
 
 noinst_PROGRAMS = \
 	getaddr \
-	httpget
+	httpget \
+	echo
 
 getaddr_SOURCES = examples/getaddr.cc
 getaddr_LDADD = libentropy-asio.la
 
 httpget_SOURCES = examples/httpget.cc
 httpget_LDADD = libentropy-asio.la
+
+echo_SOURCES = examples/echo.cc
+echo_LDADD = libentropy-asio.la
 
 check_PROGRAMS = \
 	ios-basic
