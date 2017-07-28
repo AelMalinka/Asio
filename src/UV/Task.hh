@@ -25,6 +25,4 @@
 		}
 	}
 
-#	include "Loop.hh"
-
 #endif
