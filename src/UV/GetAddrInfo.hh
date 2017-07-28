@@ -5,7 +5,7 @@
 #if !defined ENTROPY_ASIO_UV_GETADDRINFO_INC
 #	define ENTROPY_ASIO_UV_GETADDRINFO_INC
 
-#	include "Task.hh"
+#	include "Loop.hh"
 
 	extern "C" {
 		void _entropy_asio_uv_getaddrinfo_cb(uv_getaddrinfo_t *, int, struct addrinfo *);
