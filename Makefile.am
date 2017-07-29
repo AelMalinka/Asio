@@ -29,7 +29,9 @@ libuvheaders_HEADERS = \
 	src/UV/Tcp.hh \
 	src/UV/TcpClient.hh \
 	src/UV/TcpServer.hh \
-	src/UV/Signal.hh
+	src/UV/Signal.hh \
+	src/UV/Timer.hh \
+	src/UV/Timer.impl.hh
 
 libentropy_asio_la_SOURCES += \
 	src/UV/Loop.cc \
@@ -38,7 +40,8 @@ libentropy_asio_la_SOURCES += \
 	src/UV/Tcp.cc \
 	src/UV/TcpClient.cc \
 	src/UV/TcpServer.cc \
-	src/UV/Signal.cc
+	src/UV/Signal.cc \
+	src/UV/Timer.cc
 endif
 
 noinst_PROGRAMS = \
