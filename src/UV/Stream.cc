@@ -25,7 +25,15 @@ Stream::Stream(uv_stream_t *h)
 	: basic_iostream<char>(&_buffer), _handle(h), _buffer(*this)
 {}
 
-Stream::~Stream() = default;
+Stream::~Stream()
+{
+	try
+	{
+		ReadStop();
+	}
+	catch(exception &)
+	{}
+}
 
 void Stream::Write(Buffer<char> &&b)
 {
