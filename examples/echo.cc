@@ -59,6 +59,10 @@ int main(int ArgC, char *ArgV[])
 ::Application::Application(const int argc, char *argv[])
 	: Asio::Application(argc, argv), _usage(), _server()
 {
+	setSignal(SIGINT, [this]() {
+		Stop();
+	});
+
 	if(ArgC() != 1 && ArgC() != 2 && ArgC() != 3) {
 		_usage = make_shared<Usage>(ArgV()[0]);
 
