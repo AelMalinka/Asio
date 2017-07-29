@@ -6,6 +6,7 @@
 #	define ENTROPY_ASIO_LOOP_INC
 
 #	include "Task.hh"
+#	include <functional>
 
 	namespace Entropy
 	{
@@ -15,7 +16,9 @@
 			{
 				public:
 					virtual void Add(Task &) = 0;
+					virtual void Stop() = 0;
 					virtual void operator () () = 0;
+					virtual void setSignal(const int, const std::function<void()> &) = 0;
 			};
 		}
 	}

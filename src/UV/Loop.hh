@@ -6,8 +6,10 @@
 #	define ENTROPY_ASIO_UV_LOOP_INC
 
 #	include "../Loop.hh"
-#	include "Task.hh"
 #	include <uv.h>
+#	include <map>
+#	include <memory>
+#	include "Signal.hh"
 
 	namespace Entropy
 	{
@@ -27,10 +29,13 @@
 						Loop();
 						virtual ~Loop();
 						virtual void Add(Asio::Task &);
+						virtual void Stop();
 						virtual void operator () ();
+						virtual void setSignal(const int, const std::function<void()> &);
 						uv_loop_t *Handle();
 					private:
 						uv_loop_t _loop;
+						std::map<int, std::shared_ptr<Signal>> _signals;
 				};
 			}
 		}

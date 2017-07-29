@@ -28,7 +28,8 @@ libuvheaders_HEADERS = \
 	src/UV/Stream.hh \
 	src/UV/Tcp.hh \
 	src/UV/TcpClient.hh \
-	src/UV/TcpServer.hh
+	src/UV/TcpServer.hh \
+	src/UV/Signal.hh
 
 libentropy_asio_la_SOURCES += \
 	src/UV/Loop.cc \
@@ -36,7 +37,8 @@ libentropy_asio_la_SOURCES += \
 	src/UV/Stream.cc \
 	src/UV/Tcp.cc \
 	src/UV/TcpClient.cc \
-	src/UV/TcpServer.cc
+	src/UV/TcpServer.cc \
+	src/UV/Signal.cc
 endif
 
 noinst_PROGRAMS = \
@@ -54,9 +56,13 @@ echo_SOURCES = examples/echo.cc
 echo_LDADD = libentropy-asio.la
 
 check_PROGRAMS = \
-	ios-basic
+	ios-basic \
+	uv-signal
 
 ios_basic_SOURCES = test/ios/basic.cc
+
+uv_signal_SOURCES = test/uv/signal.cc
+uv_signal_LDADD = libentropy-asio.la
 
 if GTEST
 check_PROGRAMS += \

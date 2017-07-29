@@ -18,13 +18,14 @@
 			{
 				public:
 					Application();
-					Application(const std::shared_ptr<Loop> &);
 					Application(const int, char *[]);
 					Application(const int, char *[], const std::shared_ptr<Loop> &);
 					Application(const int, char *[], std::shared_ptr<Loop> &&);
 					virtual ~Application();
 					virtual void operator () ();
+					virtual void Stop();
 					virtual void Add(Task &);
+					virtual void setSignal(const int, const std::function<void()> &);
 				private:
 					std::shared_ptr<Loop> _loop;
 			};

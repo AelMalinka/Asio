@@ -21,8 +21,13 @@ Loop::Loop()
 
 Loop::~Loop()
 {
+	Stop();
+	uv_loop_close(&_loop);
+}
+
+void Loop::Stop()
+{
 	uv_stop(&_loop);
-	while(uv_loop_close(&_loop) == UV_EBUSY);
 }
 
 void Loop::Add(Entropy::Asio::Task &task)
@@ -43,6 +48,17 @@ void Loop::Add(Entropy::Asio::Task &task)
 void Loop::operator () ()
 {
 	uv_run(&_loop, UV_RUN_DEFAULT);
+}
+
+void Loop::setSignal(const int signum, const function<void()> &cb)
+{
+	if(_signals.find(signum) == _signals.end()) {
+		_signals.insert(make_pair(signum, make_shared<Signal>(signum, cb)));
+
+		Add(*_signals.find(signum)->second);
+	} else {
+		_signals.find(signum)->second->setCallback(cb);
+	}
 }
 
 uv_loop_t *Loop::Handle()

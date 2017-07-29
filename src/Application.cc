@@ -24,10 +24,6 @@ Application::Application()
 #	endif
 }
 
-Application::Application(const shared_ptr<Loop> &loop)
-	: Entropy::Application(), _loop(loop)
-{}
-
 Application::Application(const int argc, char *argv[])
 	: Entropy::Application(argc, argv), _loop()
 {
@@ -47,6 +43,11 @@ Application::Application(const int argc, char *argv[], shared_ptr<Loop> &&loop)
 
 Application::~Application() = default;
 
+void Application::Stop()
+{
+	_loop->Stop();
+}
+
 void Application::operator () ()
 {
 	if(!_loop)
@@ -58,4 +59,9 @@ void Application::operator () ()
 void Application::Add(Task &task)
 {
 	_loop->Add(task);
+}
+
+void Application::setSignal(const int signum, const function<void()> &cb)
+{
+	_loop->setSignal(signum, cb);
 }
