@@ -1,7 +1,7 @@
 ACLOCAL_AMFLAGS = -I m4
 AM_CXXFLAGS := -I$(srcdir)/src $(AM_CXXFLAGS)
 
-asioheadersdir = $(includedir)/Entropy/Asio
+asioheadersdir = $(includedir)/Entropy/Tethys
 asioheaders_HEADERS = \
 	src/Exception.hh \
 	src/Task.hh \
@@ -12,14 +12,14 @@ asioheaders_HEADERS = \
 	src/StreamBuffer.hh \
 	src/StreamBuffer.impl.hh
 
-lib_LTLIBRARIES = libentropy-asio.la
-libentropy_asio_la_SOURCES = \
+lib_LTLIBRARIES = libtethys.la
+libtethys_la_SOURCES = \
 	src/Logger.cc \
 	src/Task.cc \
 	src/Application.cc
 
 if LIBUV
-libuvheadersdir = $(includedir)/Entropy/Asio/UV
+libuvheadersdir = $(includedir)/Entropy/Tethys/UV
 libuvheaders_HEADERS = \
 	src/UV/Task.hh \
 	src/UV/Loop.hh \
@@ -33,7 +33,7 @@ libuvheaders_HEADERS = \
 	src/UV/Timer.hh \
 	src/UV/Timer.impl.hh
 
-libentropy_asio_la_SOURCES += \
+libtethys_la_SOURCES += \
 	src/UV/Loop.cc \
 	src/UV/GetAddrInfo.cc \
 	src/UV/Stream.cc \
@@ -50,13 +50,13 @@ noinst_PROGRAMS = \
 	echo
 
 getaddr_SOURCES = examples/getaddr.cc
-getaddr_LDADD = libentropy-asio.la
+getaddr_LDADD = libtethys.la
 
 httpget_SOURCES = examples/httpget.cc
-httpget_LDADD = libentropy-asio.la
+httpget_LDADD = libtethys.la
 
 echo_SOURCES = examples/echo.cc
-echo_LDADD = libentropy-asio.la
+echo_LDADD = libtethys.la
 
 check_PROGRAMS = \
 	ios-basic \
@@ -65,7 +65,7 @@ check_PROGRAMS = \
 ios_basic_SOURCES = test/ios/basic.cc
 
 uv_signal_SOURCES = test/uv/signal.cc
-uv_signal_LDADD = libentropy-asio.la
+uv_signal_LDADD = libtethys.la
 
 if GTEST
 check_PROGRAMS += \
@@ -74,7 +74,7 @@ check_PROGRAMS += \
 	ios-buffer
 
 # 2016-12-17 AMR FIXME: gtest_main multiple definitions of main for gmock_main
-gtestLDADD = $(GTEST_LIBS) -lgtest_main libentropy-asio.la
+gtestLDADD = $(GTEST_LIBS) -lgtest_main libtethys.la
 
 application_application_SOURCES = test/application/application.cc
 application_application_LDADD = $(gtestLDADD)
@@ -101,7 +101,7 @@ if GMOCK
 check_PROGRAMS += \
 	ios-stream-buffer
 
-gmockLDADD = $(GTEST_LIBS) $(GMOCK_LIBS) libentropy-asio.la
+gmockLDADD = $(GTEST_LIBS) $(GMOCK_LIBS) libtethys.la
 
 ios_stream_buffer_SOURCES = test/ios/stream-buffer.cc
 ios_stream_buffer_LDADD = $(gmockLDADD)

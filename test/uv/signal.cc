@@ -8,10 +8,10 @@
 #include "Application.hh"
 
 using namespace std;
-using namespace Entropy::Asio;
+using namespace Entropy::Tethys;
 
 class Application :
-	public Entropy::Asio::Application
+	public Entropy::Tethys::Application
 {
 	public:
 		Application(const int, char *[]);
@@ -34,7 +34,7 @@ int main(int ArgC, char *ArgV[])
 }
 
 ::Application::Application(const int ArgC, char *ArgV[])
-	: Entropy::Asio::Application(ArgC, ArgV)
+	: Entropy::Tethys::Application(ArgC, ArgV)
 {
 	setSignal(SIGINT, [this]() {
 		Stop();

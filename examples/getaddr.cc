@@ -12,10 +12,10 @@ using namespace std;
 using namespace Entropy;
 
 // 2017-03-23 AMR TODO: agnostic interface?
-using Entropy::Asio::UV::GetAddrInfo;
+using Entropy::Tethys::UV::GetAddrInfo;
 
 class Usage :
-	public Asio::Task
+	public Tethys::Task
 {
 	public:
 		Usage(const string &);
@@ -25,7 +25,7 @@ class Usage :
 };
 
 class Application :
-	public Asio::Application
+	public Tethys::Application
 {
 	public:
 		Application(int, char *[]);
@@ -53,7 +53,7 @@ int main(int ArgC, char *ArgV[])
 }
 
 ::Application::Application(int argc, char *argv[])
-	: Asio::Application(argc, argv), _addr(), _usage()
+	: Tethys::Application(argc, argv), _addr(), _usage()
 {
 	if(ArgC() != 3) {
 		_usage = make_shared<Usage>(ArgV()[0]);

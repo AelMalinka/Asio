@@ -2,15 +2,15 @@
 	Distributed under the terms of the GNU Affero General Public License v3
 */
 
-#if !defined ENTROPY_ASIO_UV_TCP_INC
-#	define ENTROPY_ASIO_UV_TCP_INC
+#if !defined ENTROPY_TETHYS_UV_TCP_INC
+#	define ENTROPY_TETHYS_UV_TCP_INC
 
 #	include "Stream.hh"
 #	include "GetAddrInfo.hh"
 
 	namespace Entropy
 	{
-		namespace Asio
+		namespace Tethys
 		{
 			namespace UV
 			{

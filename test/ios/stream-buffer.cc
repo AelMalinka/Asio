@@ -8,7 +8,7 @@
 
 #include <cstring>
 
-using namespace Entropy::Asio;
+using namespace Entropy::Tethys;
 using namespace testing;
 using namespace std;
 

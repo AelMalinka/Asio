@@ -2,8 +2,8 @@
 	Distributed under the terms of the GNU Affero General Public License v3
 */
 
-#if !defined ENTROPY_ASIO_APPLICATION_INC
-#	define ENTROPY_ASIO_APPLICATION_INC
+#if !defined ENTROPY_TETHYS_APPLICATION_INC
+#	define ENTROPY_TETHYS_APPLICATION_INC
 
 #	include <memory>
 #	include <Entropy/Application.hh>
@@ -11,7 +11,7 @@
 
 	namespace Entropy
 	{
-		namespace Asio
+		namespace Tethys
 		{
 			class Application
 				: public Entropy::Application

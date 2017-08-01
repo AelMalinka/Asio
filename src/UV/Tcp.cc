@@ -3,7 +3,7 @@
 
 #include "Tcp.hh"
 
-using namespace Entropy::Asio::UV;
+using namespace Entropy::Tethys::UV;
 using namespace std;
 
 Tcp::Tcp(Loop &loop)

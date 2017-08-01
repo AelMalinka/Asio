@@ -5,7 +5,7 @@
 #include "UV/GetAddrInfo.hh"
 #include <gtest/gtest.h>
 
-using namespace Entropy::Asio::UV;
+using namespace Entropy::Tethys::UV;
 using namespace testing;
 using namespace std;
 

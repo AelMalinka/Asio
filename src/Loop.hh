@@ -2,15 +2,15 @@
 	Distributed under the terms of the GNU Affero General Public License v3
 */
 
-#if !defined ENTROPY_ASIO_LOOP_INC
-#	define ENTROPY_ASIO_LOOP_INC
+#if !defined ENTROPY_TETHYS_LOOP_INC
+#	define ENTROPY_TETHYS_LOOP_INC
 
 #	include "Task.hh"
 #	include <functional>
 
 	namespace Entropy
 	{
-		namespace Asio
+		namespace Tethys
 		{
 			class Loop
 			{

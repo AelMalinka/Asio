@@ -2,14 +2,14 @@
 	Distributed under the terms of the GNU Affero General Public License v3
 */
 
-#if !defined ENTROPY_ASIO_UV_LOOP_IMPL
-#	define ENTROPY_ASIO_UV_LOOP_IMPL
+#if !defined ENTROPY_TETHYS_UV_LOOP_IMPL
+#	define ENTROPY_TETHYS_UV_LOOP_IMPL
 
 #	include "Loop.hh"
 
 	namespace Entropy
 	{
-		namespace Asio
+		namespace Tethys
 		{
 			namespace UV
 			{

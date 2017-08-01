@@ -6,7 +6,7 @@
 
 namespace Entropy
 {
-	namespace Asio
+	namespace Tethys
 	{
 		Entropy::Log::Logger Log("Asio");
 	}

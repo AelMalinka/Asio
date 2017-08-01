@@ -4,10 +4,10 @@
 
 #include "TcpClient.hh"
 
-using namespace Entropy::Asio::UV;
+using namespace Entropy::Tethys::UV;
 using namespace std;
 
-using Entropy::Asio::Exception;
+using Entropy::Tethys::Exception;
 
 TcpClient::TcpClient(const string &host, const string &service)
 	: Tcp(host, service)
@@ -23,7 +23,7 @@ void TcpClient::InfoCb(const GetAddrInfo &info)
 	req->data = this;
 
 	// 2017-06-29 AMR TODO: try multiple address?
-	ThrowIfError("Failed to connect", uv_tcp_connect(req, Handle(), info.Info()->ai_addr, _entropy_asio_uv_tcp_client_connect_cb));
+	ThrowIfError("Failed to connect", uv_tcp_connect(req, Handle(), info.Info()->ai_addr, _entropy_tethys_uv_tcp_client_connect_cb));
 }
 
 void TcpClient::ConnectCb()
@@ -32,7 +32,7 @@ void TcpClient::ConnectCb()
 	onConnect(*this);
 }
 
-void _entropy_asio_uv_tcp_client_connect_cb(uv_connect_t *req, int status)
+void _entropy_tethys_uv_tcp_client_connect_cb(uv_connect_t *req, int status)
 {
 	TcpClient *tcp = static_cast<TcpClient *>(req->data);
 

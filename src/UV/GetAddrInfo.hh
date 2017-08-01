@@ -2,18 +2,18 @@
 	Distributed under the terms of the GNU Affero General Public License v3
 */
 
-#if !defined ENTROPY_ASIO_UV_GETADDRINFO_INC
-#	define ENTROPY_ASIO_UV_GETADDRINFO_INC
+#if !defined ENTROPY_TETHYS_UV_GETADDRINFO_INC
+#	define ENTROPY_TETHYS_UV_GETADDRINFO_INC
 
 #	include "Loop.hh"
 
 	extern "C" {
-		void _entropy_asio_uv_getaddrinfo_cb(uv_getaddrinfo_t *, int, struct addrinfo *);
+		void _entropy_tethys_uv_getaddrinfo_cb(uv_getaddrinfo_t *, int, struct addrinfo *);
 	}
 
 	namespace Entropy
 	{
-		namespace Asio
+		namespace Tethys
 		{
 			namespace UV
 			{
@@ -35,7 +35,7 @@
 						std::string _host;
 						std::string _service;
 						struct addrinfo _hints;
-					friend void ::_entropy_asio_uv_getaddrinfo_cb(uv_getaddrinfo_t *, int, struct addrinfo *);
+					friend void ::_entropy_tethys_uv_getaddrinfo_cb(uv_getaddrinfo_t *, int, struct addrinfo *);
 				};
 			}
 		}

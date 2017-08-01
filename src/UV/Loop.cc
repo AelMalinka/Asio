@@ -4,17 +4,17 @@
 
 #include "Loop.hh"
 
-using namespace Entropy::Asio::UV;
+using namespace Entropy::Tethys::UV;
 using namespace std;
 
-using Entropy::Asio::Log;
+using Entropy::Tethys::Log;
 using Entropy::Severity;
 
 void work(uv_work_t *);
 void work_after(uv_work_t *, int);
 
 Loop::Loop()
-	: Entropy::Asio::Loop(), _loop()
+	: Entropy::Tethys::Loop(), _loop()
 {
 	uv_loop_init(&_loop);
 }
@@ -30,7 +30,7 @@ void Loop::Stop()
 	uv_stop(&_loop);
 }
 
-void Loop::Add(Entropy::Asio::Task &task)
+void Loop::Add(Entropy::Tethys::Task &task)
 {
 	try
 	{
@@ -68,7 +68,7 @@ uv_loop_t *Loop::Handle()
 
 void work(uv_work_t *req)
 {
-	auto &t = *static_cast<Entropy::Asio::Task *>(req->data);
+	auto &t = *static_cast<Entropy::Tethys::Task *>(req->data);
 
 	try
 	{
@@ -90,7 +90,7 @@ void work_after(uv_work_t *req, int status)
 
 namespace Entropy
 {
-	namespace Asio
+	namespace Tethys
 	{
 		namespace UV
 		{

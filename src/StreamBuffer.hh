@@ -2,8 +2,8 @@
 	Distributed under the terms of the GNU Affero General Public License v3
 */
 
-#if !defined ENTROPY_ASIO_STREAMBUFFER_INC
-#	define ENTROPY_ASIO_STREAMBUFFER_INC
+#if !defined ENTROPY_TETHYS_STREAMBUFFER_INC
+#	define ENTROPY_TETHYS_STREAMBUFFER_INC
 
 #	include <streambuf>
 #	include <list>
@@ -12,13 +12,13 @@
 #	include "Exception.hh"
 #	include "Buffer.hh"
 
-#	ifndef ENTROPY_ASIO_STREAMBUFFER_WRITE_BUFFER_SIZE
-#		define ENTROPY_ASIO_STREAMBUFFER_WRITE_BUFFER_SIZE 4096
+#	ifndef ENTROPY_TETHYS_STREAMBUFFER_WRITE_BUFFER_SIZE
+#		define ENTROPY_TETHYS_STREAMBUFFER_WRITE_BUFFER_SIZE 4096
 #	endif
 
 	namespace Entropy
 	{
-		namespace Asio
+		namespace Tethys
 		{
 			template<
 				typename Stream,
@@ -53,7 +53,7 @@
 					typename std::list<Buffer<charT>>::iterator _current;
 					std::shared_ptr<Buffer<charT>> _write;
 					bool _is_seek;
-					static constexpr std::size_t write_buffer_size = ENTROPY_ASIO_STREAMBUFFER_WRITE_BUFFER_SIZE;
+					static constexpr std::size_t write_buffer_size = ENTROPY_TETHYS_STREAMBUFFER_WRITE_BUFFER_SIZE;
 			};
 		}
 	}

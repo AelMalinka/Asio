@@ -2,14 +2,14 @@
 	Distributed under the terms of the GNU Affero General Public License v3
 */
 
-#if !defined ENTROPY_ASIO_BUFFER_IMPL
-#	define ENTROPY_ASIO_BUFFER_IMPL
+#if !defined ENTROPY_TETHYS_BUFFER_IMPL
+#	define ENTROPY_TETHYS_BUFFER_IMPL
 
 #	include <cstring>
 
 	namespace Entropy
 	{
-		namespace Asio
+		namespace Tethys
 		{
 			template<typename charT> Buffer<charT>::Buffer()
 				: _size(0), _capacity(0), _data(nullptr)

@@ -4,7 +4,7 @@
 
 #include "Task.hh"
 
-using namespace Entropy::Asio;
+using namespace Entropy::Tethys;
 using namespace std;
 
 Task::Task() = default;

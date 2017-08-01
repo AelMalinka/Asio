@@ -2,15 +2,15 @@
 	Distributed under the terms of the GNU Affero General Public License v3
 */
 
-#if !defined ENTROPY_ASIO_EXCEPTION
-#	define ENTROPY_ASIO_EXCEPTION
+#if !defined ENTROPY_TETHYS_EXCEPTION
+#	define ENTROPY_TETHYS_EXCEPTION
 
 #	include <Entropy/Exception.hh>
 #	include <Entropy/Log.hh>
 
 	namespace Entropy
 	{
-		namespace Asio
+		namespace Tethys
 		{
 			ENTROPY_EXCEPTION_BASE(Exception, "Base Asio Exception");
 

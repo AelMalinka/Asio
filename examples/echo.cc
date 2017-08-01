@@ -9,7 +9,7 @@
 
 using namespace std;
 using namespace Entropy;
-using namespace Entropy::Asio;
+using namespace Entropy::Tethys;
 
 class Usage :
 	public Task
@@ -31,7 +31,7 @@ class Server :
 };
 
 class Application :
-	public Asio::Application
+	public Tethys::Application
 {
 	public:
 		Application(const int, char *[]);
@@ -57,7 +57,7 @@ int main(int ArgC, char *ArgV[])
 }
 
 ::Application::Application(const int argc, char *argv[])
-	: Asio::Application(argc, argv), _usage(), _server()
+	: Tethys::Application(argc, argv), _usage(), _server()
 {
 	setSignal(SIGINT, [this]() {
 		Stop();

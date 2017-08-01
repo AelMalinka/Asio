@@ -5,11 +5,11 @@
 #include "Stream.hh"
 #include <utility>
 
-using namespace Entropy::Asio::UV;
+using namespace Entropy::Tethys::UV;
 using namespace std;
 
-using Entropy::Asio::Exception;
-using Entropy::Asio::Buffer;
+using Entropy::Tethys::Exception;
+using Entropy::Tethys::Buffer;
 
 struct write_cb_data {
 	Stream *stream;
@@ -49,12 +49,12 @@ void Stream::Write(Buffer<char> &&b)
 
 	req->data = data;
 
-	ThrowIfError("Failed to Write", uv_write(req, _handle, data->buffer, 1, _entropy_asio_uv_stream_write_cb));
+	ThrowIfError("Failed to Write", uv_write(req, _handle, data->buffer, 1, _entropy_tethys_uv_stream_write_cb));
 }
 
 void Stream::ReadStart()
 {
-	ThrowIfError("Failed to Start Read", uv_read_start(_handle, alloc_cb, _entropy_asio_uv_stream_read_cb));
+	ThrowIfError("Failed to Start Read", uv_read_start(_handle, alloc_cb, _entropy_tethys_uv_stream_read_cb));
 }
 
 void Stream::ReadStop()
@@ -82,7 +82,7 @@ void Stream::ReadCb(const uv_buf_t *buf, const ssize_t nread)
 	onData(*this);
 }
 
-void _entropy_asio_uv_stream_read_cb(uv_stream_t *handle , ssize_t nread, const uv_buf_t *buf)
+void _entropy_tethys_uv_stream_read_cb(uv_stream_t *handle , ssize_t nread, const uv_buf_t *buf)
 {
 	Stream *stream = static_cast<Stream *>(handle->data);
 	if(nread == UV_EOF) {
@@ -96,7 +96,7 @@ void _entropy_asio_uv_stream_read_cb(uv_stream_t *handle , ssize_t nread, const 
 	}
 }
 
-void _entropy_asio_uv_stream_write_cb(uv_write_t *req, int status)
+void _entropy_tethys_uv_stream_write_cb(uv_write_t *req, int status)
 {
 	write_cb_data *data = static_cast<write_cb_data *>(req->data);
 	Stream *stream = data->stream;

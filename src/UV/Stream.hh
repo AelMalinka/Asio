@@ -2,8 +2,8 @@
 	Distributed under the terms of the GNU Affero General Public License v3
 */
 
-#if !defined ENTROPY_ASIO_UV_STREAM_INC
-#	define ENTROPY_ASIO_UV_STREAM_INC
+#if !defined ENTROPY_TETHYS_UV_STREAM_INC
+#	define ENTROPY_TETHYS_UV_STREAM_INC
 
 #	include "../StreamBuffer.hh"
 #	include "Loop.hh"
@@ -11,13 +11,13 @@
 #	include <iostream>
 
 	extern "C" {
-		void _entropy_asio_uv_stream_read_cb(uv_stream_t *, ssize_t, const uv_buf_t *);
-		void _entropy_asio_uv_stream_write_cb(uv_write_t *, int);
+		void _entropy_tethys_uv_stream_read_cb(uv_stream_t *, ssize_t, const uv_buf_t *);
+		void _entropy_tethys_uv_stream_write_cb(uv_write_t *, int);
 	}
 
 	namespace Entropy
 	{
-		namespace Asio
+		namespace Tethys
 		{
 			namespace UV
 			{
@@ -41,8 +41,8 @@
 					private:
 						uv_stream_t *_handle;
 						StreamBuffer<Stream, char> _buffer;
-					friend void ::_entropy_asio_uv_stream_read_cb(uv_stream_t *, ssize_t, const uv_buf_t *);
-					friend void ::_entropy_asio_uv_stream_write_cb(uv_write_t *, int);
+					friend void ::_entropy_tethys_uv_stream_read_cb(uv_stream_t *, ssize_t, const uv_buf_t *);
+					friend void ::_entropy_tethys_uv_stream_write_cb(uv_write_t *, int);
 				};
 			}
 		}

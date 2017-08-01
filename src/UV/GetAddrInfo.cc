@@ -6,10 +6,10 @@
 
 #include <cstring>
 
-using namespace Entropy::Asio::UV;
+using namespace Entropy::Tethys::UV;
 using namespace std;
 
-using Entropy::Asio::Exception;
+using Entropy::Tethys::Exception;
 using Entropy::SystemError;
 using Entropy::SystemErrorCode;
 
@@ -31,7 +31,7 @@ GetAddrInfo::~GetAddrInfo()
 
 void GetAddrInfo::Added(Loop &loop)
 {
-	ThrowIfError("Failed to start GetAddrInfo", uv_getaddrinfo(loop.Handle(), &_req, _entropy_asio_uv_getaddrinfo_cb, _host.data(), _service.data(), &_hints));
+	ThrowIfError("Failed to start GetAddrInfo", uv_getaddrinfo(loop.Handle(), &_req, _entropy_tethys_uv_getaddrinfo_cb, _host.data(), _service.data(), &_hints));
 }
 
 void GetAddrInfo::callback(struct addrinfo *res)
@@ -45,7 +45,7 @@ const struct addrinfo *GetAddrInfo::Info() const
 	return _res;
 }
 
-void _entropy_asio_uv_getaddrinfo_cb(uv_getaddrinfo_t *req, int status, struct addrinfo *res)
+void _entropy_tethys_uv_getaddrinfo_cb(uv_getaddrinfo_t *req, int status, struct addrinfo *res)
 {
 	// 2017-03-23 AMR FIXME: which fucking cancel is which
 	if(status == UV_EAI_CANCELED) {

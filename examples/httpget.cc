@@ -10,9 +10,9 @@
 
 using namespace std;
 using namespace Entropy;
-using namespace Entropy::Asio;
+using namespace Entropy::Tethys;
 
-using Entropy::Asio::UV::TcpClient;
+using Entropy::Tethys::UV::TcpClient;
 
 class Usage :
 	public Task
@@ -37,7 +37,7 @@ class Client :
 };
 
 class Application :
-	public Asio::Application
+	public Tethys::Application
 {
 	public:
 		Application(int, char *[]);
@@ -63,7 +63,7 @@ int main(int ArgC, char *ArgV[])
 }
 
 ::Application::Application(int argc, char *argv[])
-	: Asio::Application(argc, argv), _usage(), _client()
+	: Tethys::Application(argc, argv), _usage(), _client()
 {
 	if(ArgC() != 3) {
 		_usage = make_shared<Usage>(ArgV()[0]);
@@ -84,7 +84,7 @@ void Client::onConnect(Stream &s)
 {
 	s << "GET / HTTP/1.1\r" << endl
 		<< "Host: " << _host << "\r" << endl
-		<< "User-Agent: Entropy Asio Example\r" << endl
+		<< "User-Agent: Entropy Tethys Example\r" << endl
 		<< "Accept: */*\r" << endl
 		<< "Connection: close\r" << endl
 		<< "\r" << endl;

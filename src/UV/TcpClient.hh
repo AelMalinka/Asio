@@ -2,18 +2,18 @@
 	Distributed under the terms of the GNU Affero General Public License v3
 */
 
-#if !defined ENTROPY_ASIO_UV_TCP_CLIENT_INC
-#	define ENTROPY_ASIO_UV_TCP_CLIENT_INC
+#if !defined ENTROPY_TETHYS_UV_TCP_CLIENT_INC
+#	define ENTROPY_TETHYS_UV_TCP_CLIENT_INC
 
 #	include "Tcp.hh"
 
 	extern "C" {
-		void _entropy_asio_uv_tcp_client_connect_cb(uv_connect_t *, int);
+		void _entropy_tethys_uv_tcp_client_connect_cb(uv_connect_t *, int);
 	}
 
 	namespace Entropy
 	{
-		namespace Asio
+		namespace Tethys
 		{
 			namespace UV
 			{
@@ -27,7 +27,7 @@
 						virtual void InfoCb(const GetAddrInfo &);
 					protected:
 						virtual void ConnectCb();
-					friend void ::_entropy_asio_uv_tcp_client_connect_cb(uv_connect_t *, int);
+					friend void ::_entropy_tethys_uv_tcp_client_connect_cb(uv_connect_t *, int);
 				};
 			}
 		}

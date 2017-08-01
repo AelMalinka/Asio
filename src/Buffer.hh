@@ -2,14 +2,14 @@
 	Distributed under the terms of the GNU Affero General Public License v3
 */
 
-#if !defined ENTROPY_ASIO_BUFFER_INC
-#	define ENTROPY_ASIO_BUFFER_INC
+#if !defined ENTROPY_TETHYS_BUFFER_INC
+#	define ENTROPY_TETHYS_BUFFER_INC
 
 #	include "Exception.hh"
 
 	namespace Entropy
 	{
-		namespace Asio
+		namespace Tethys
 		{
 			template<
 				typename charT = char

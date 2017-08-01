@@ -4,10 +4,10 @@
 
 #include "TcpServer.hh"
 
-using namespace Entropy::Asio::UV;
+using namespace Entropy::Tethys::UV;
 using namespace std;
 
-using Entropy::Asio::Exception;
+using Entropy::Tethys::Exception;
 
 TcpServer::TcpServer(const string &h, const string &s)
 	: Tcp(h, s), _loop(nullptr)
@@ -31,7 +31,7 @@ void TcpServer::InfoCb(const GetAddrInfo &info)
 	ThrowIfError("Failed to bind", uv_tcp_bind(Handle(), info.Info()->ai_addr, 0));
 	// 2017-07-22 AMR TODO: how many accept to backlog
 	// 2017-07-22 AMR TODO: move to stream?
-	ThrowIfError("Failed to listen", uv_listen(reinterpret_cast<uv_stream_t *>(Handle()), 128, _entropy_asio_uv_tcp_server_accept_cb));
+	ThrowIfError("Failed to listen", uv_listen(reinterpret_cast<uv_stream_t *>(Handle()), 128, _entropy_tethys_uv_tcp_server_accept_cb));
 }
 
 void TcpServer::onDisconnect(Stream &s)
@@ -77,7 +77,7 @@ void TcpServer::Client::onData(Stream &s)
 	_server.onData(s);
 }
 
-void _entropy_asio_uv_tcp_server_accept_cb(uv_stream_t *handle, int status)
+void _entropy_tethys_uv_tcp_server_accept_cb(uv_stream_t *handle, int status)
 {
 	TcpServer *tcp = static_cast<TcpServer *>(handle->data);
 

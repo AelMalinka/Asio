@@ -5,7 +5,7 @@
 #include "Application.hh"
 #include <gtest/gtest.h>
 
-using namespace Entropy::Asio;
+using namespace Entropy::Tethys;
 using namespace testing;
 using namespace std;
 

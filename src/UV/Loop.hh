@@ -2,8 +2,8 @@
 	Distributed under the terms of the GNU Affero General Public License v3
 */
 
-#if !defined ENTROPY_ASIO_UV_LOOP_INC
-#	define ENTROPY_ASIO_UV_LOOP_INC
+#if !defined ENTROPY_TETHYS_UV_LOOP_INC
+#	define ENTROPY_TETHYS_UV_LOOP_INC
 
 #	include "../Loop.hh"
 #	include <uv.h>
@@ -13,7 +13,7 @@
 
 	namespace Entropy
 	{
-		namespace Asio
+		namespace Tethys
 		{
 			namespace UV
 			{
@@ -23,12 +23,12 @@
 				typename ::Entropy::detail::WithErrorInfo<E>::type AttachUvInfo(const E &, const int);
 
 				class Loop :
-					public Asio::Loop
+					public Tethys::Loop
 				{
 					public:
 						Loop();
 						virtual ~Loop();
-						virtual void Add(Asio::Task &);
+						virtual void Add(Tethys::Task &);
 						virtual void Stop();
 						virtual void operator () ();
 						virtual void setSignal(const int, const std::function<void()> &);

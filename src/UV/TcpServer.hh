@@ -2,18 +2,18 @@
 	Distributed under the terms of the GNU Affero General Public License v3
 */
 
-#if !defined ENTROPY_ASIO_UV_TCP_SERVER_INC
-#	define ENTROPY_ASIO_UV_TCP_SERVER_INC
+#if !defined ENTROPY_TETHYS_UV_TCP_SERVER_INC
+#	define ENTROPY_TETHYS_UV_TCP_SERVER_INC
 
 #	include "Tcp.hh"
 
 	extern "C" {
-		void _entropy_asio_uv_tcp_server_accept_cb(uv_stream_t *, int);
+		void _entropy_tethys_uv_tcp_server_accept_cb(uv_stream_t *, int);
 	}
 
 	namespace Entropy
 	{
-		namespace Asio
+		namespace Tethys
 		{
 			namespace UV
 			{
@@ -34,7 +34,7 @@
 					private:
 						std::list<Client> _connections;
 						Loop *_loop;
-					friend void ::_entropy_asio_uv_tcp_server_accept_cb(uv_stream_t *, int);
+					friend void ::_entropy_tethys_uv_tcp_server_accept_cb(uv_stream_t *, int);
 					public:
 						class Client :
 							public Tcp

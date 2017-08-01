@@ -2,19 +2,19 @@
 	Distributed under the terms of the GNU Affero General Public License v3
 */
 
-#if !defined ENTROPY_ASIO_UV_TIMER_INC
-#	define ENTROPY_ASIO_UV_TIMER_INC
+#if !defined ENTROPY_TETHYS_UV_TIMER_INC
+#	define ENTROPY_TETHYS_UV_TIMER_INC
 
 #	include "Loop.hh"
 #	include <chrono>
 
 	extern "C" {
-		void _entropy_asio_uv_timer_cb(uv_timer_t *);
+		void _entropy_tethys_uv_timer_cb(uv_timer_t *);
 	}
 
 	namespace Entropy
 	{
-		namespace Asio
+		namespace Tethys
 		{
 			namespace UV
 			{
@@ -38,7 +38,7 @@
 						uv_timer_t _handle;
 						std::chrono::duration<std::uint64_t, std::ratio<1,1000>> _delay;
 						std::chrono::duration<std::uint64_t, std::ratio<1,1000>> _repeat;
-					friend void ::_entropy_asio_uv_timer_cb(uv_timer_t *);
+					friend void ::_entropy_tethys_uv_timer_cb(uv_timer_t *);
 				};
 			}
 		}

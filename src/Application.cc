@@ -12,7 +12,7 @@
 #	include "UV/Loop.hh"
 #endif
 
-using namespace Entropy::Asio;
+using namespace Entropy::Tethys;
 using namespace std;
 
 Application::Application()
