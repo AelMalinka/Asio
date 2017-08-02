@@ -10,9 +10,9 @@ AC_DEFUN([EX_WITH_GMOCK], [
 
 	AS_IF([test "x$with_gmock" != xno],
 		[
-			test "x$with_gmock" != xyes -a "x$with_gmock" != xcheck && LDFLAGS="${LDFLAGS} -L$with_gmock"
+			test "x$with_gmock" != xyes -a "x$with_gmock" != xcheck && LDFLAGS="${LDFLAGS} -L$with_gmock/lib" && GMOCK_CPPFLAGS="-I$with_gmock/include"
 			GMOCK_CPPFLAGS="$GTEST_CPPFLAGS"
-			GMOCK_LDFLAGS="$GTEST_LDFLAGS $GTEST_LIBS"
+			GMOCK_LDFLAGS="$GTEST_LDFLAGS"
 			EX_CHECK_LIBRARY([GMOCK], ["gmock/gmock.h"], [gmock], [], [
 				AS_IF([test "x$with_gmock" != xcheck], [
 					AC_MSG_FAILURE(["--with-gmock: gmock not found"])
