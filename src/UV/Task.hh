@@ -19,6 +19,9 @@
 					public Tethys::Task
 				{
 					public:
+						Task();
+						Task(const std::function<void()> &);
+						virtual ~Task();
 						virtual void Added(Loop &) = 0;
 				};
 			}

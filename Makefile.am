@@ -41,7 +41,8 @@ libtethys_la_SOURCES += \
 	src/UV/TcpClient.cc \
 	src/UV/TcpServer.cc \
 	src/UV/Signal.cc \
-	src/UV/Timer.cc
+	src/UV/Timer.cc \
+	src/UV/Task.cc
 endif
 
 noinst_PROGRAMS = \
