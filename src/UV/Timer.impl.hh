@@ -25,7 +25,7 @@
 
 				template<typename RepeatType>
 				Timer::Timer(const RepeatType &r, const std::function<void()> &cb)
-					: Timer(0, r, cb)
+					: Timer(RepeatType(0), r, cb)
 				{}
 
 				template<typename DelayType, typename RepeatType>
