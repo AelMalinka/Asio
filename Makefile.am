@@ -10,7 +10,8 @@ asioheaders_HEADERS = \
 	src/Buffer.hh \
 	src/Buffer.impl.hh \
 	src/StreamBuffer.hh \
-	src/StreamBuffer.impl.hh
+	src/StreamBuffer.impl.hh \
+	src/Timer.hh
 
 lib_LTLIBRARIES = libtethys.la
 libtethys_la_SOURCES = \
