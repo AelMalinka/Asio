@@ -23,6 +23,7 @@
 					_handle.data = this;
 				}
 
+				// 2017-08-15 AMR TODO: does this work
 				template<typename RepeatType>
 				Timer::Timer(const RepeatType &r, const std::function<void()> &cb)
 					: Timer(RepeatType(0), r, cb)

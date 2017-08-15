@@ -5,8 +5,9 @@
 #if !defined ENTROPY_TETHYS_UV_TIMER_INC
 #	define ENTROPY_TETHYS_UV_TIMER_INC
 
-#	include "Loop.hh"
+#	include <uv.h>
 #	include <chrono>
+#	include "Task.hh"
 
 	extern "C" {
 		void _entropy_tethys_uv_timer_cb(uv_timer_t *);
@@ -18,6 +19,8 @@
 		{
 			namespace UV
 			{
+				class Loop;
+
 				class Timer :
 					public Task
 				{
@@ -43,6 +46,8 @@
 			}
 		}
 	}
+
+#	include "Loop.hh"
 
 #	include "Timer.impl.hh"
 
