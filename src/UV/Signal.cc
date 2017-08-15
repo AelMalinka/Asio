@@ -15,7 +15,17 @@ Signal::Signal(const int s, const function<void()> &c)
 
 Signal::~Signal()
 {
-	uv_signal_stop(&_handle);
+	try
+	{
+		Stop();
+	}
+	catch(exception &e)
+	{}
+}
+
+void Signal::Stop()
+{
+	ThrowIfError("failed to stop signal", uv_signal_stop(&_handle));
 }
 
 void Signal::Added(Loop &loop)

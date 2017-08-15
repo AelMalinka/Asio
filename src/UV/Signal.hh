@@ -27,6 +27,7 @@
 					public:
 						Signal(const int, const std::function<void()> &);
 						virtual ~Signal();
+						virtual void Stop();
 						virtual void Added(Loop &);
 						virtual void setCallback(const std::function<void()> &);
 					protected:
