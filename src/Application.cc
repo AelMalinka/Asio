@@ -22,6 +22,13 @@ Application::Application()
 #	ifdef HAVE_LIBUV
 		_loop = make_shared<UV::Loop>();
 #	endif
+
+	setSignal(SIGINT, [this]() {
+		Stop();
+	});
+	setSignal(SIGTERM, [this]() {
+		Stop();
+	});
 }
 
 Application::Application(const int argc, char *argv[])
@@ -31,15 +38,36 @@ Application::Application(const int argc, char *argv[])
 #	ifdef HAVE_LIBUV
 		_loop = make_shared<UV::Loop>();
 #	endif
+
+	setSignal(SIGINT, [this]() {
+		Stop();
+	});
+	setSignal(SIGTERM, [this]() {
+		Stop();
+	});
 }
 
 Application::Application(const int argc, char *argv[], const shared_ptr<Loop> &loop)
 	: Entropy::Application(argc, argv), _loop(loop)
-{}
+{
+	setSignal(SIGINT, [this]() {
+		Stop();
+	});
+	setSignal(SIGTERM, [this]() {
+		Stop();
+	});
+}
 
 Application::Application(const int argc, char *argv[], shared_ptr<Loop> &&loop)
 	: Entropy::Application(argc, argv), _loop(move(loop))
-{}
+{
+	setSignal(SIGINT, [this]() {
+		Stop();
+	});
+	setSignal(SIGTERM, [this]() {
+		Stop();
+	});
+}
 
 Application::~Application() = default;
 
