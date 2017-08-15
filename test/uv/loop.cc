@@ -48,6 +48,14 @@ namespace {
 		EXPECT_FALSE(t);
 	}
 
+	TEST(UVLoop, JustSignal) {
+		Loop loop;
+		loop.setSignal(SIGINT, [&loop]() {
+		});
+
+		loop();
+	}
+
 	void TestTask::Added(Loop &loop)
 	{
 		uv_work_t *req = new uv_work_t;
