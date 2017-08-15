@@ -6,10 +6,10 @@
 #	define ENTROPY_TETHYS_UV_LOOP_INC
 
 #	include "../Loop.hh"
-#	include <uv.h>
 #	include <map>
 #	include <memory>
 #	include "Signal.hh"
+#	include "Timer.hh"
 
 	namespace Entropy
 	{
@@ -36,6 +36,7 @@
 					private:
 						uv_loop_t _loop;
 						std::map<int, std::shared_ptr<Signal>> _signals;
+						Timer _check_signals;
 				};
 			}
 		}

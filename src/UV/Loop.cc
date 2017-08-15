@@ -12,11 +12,21 @@ using Entropy::Severity;
 
 void work(uv_work_t *);
 void work_after(uv_work_t *, int);
+void timer(Loop &, map<int, shared_ptr<Signal>> &, Timer &);
+void walk(uv_handle_t *, void *);
 
-Loop::Loop()
-	: Entropy::Tethys::Loop(), _loop()
+Loop::Loop() :
+	Entropy::Tethys::Loop(),
+	_loop(),
+	_signals(),
+	_check_signals(
+		chrono::milliseconds(0),
+		chrono::milliseconds(100),
+		bind(timer, ref(*this), ref(_signals), ref(_check_signals))
+	)
 {
 	uv_loop_init(&_loop);
+	Add(_check_signals);
 }
 
 Loop::~Loop()
@@ -86,6 +96,37 @@ void work_after(uv_work_t *req, int status)
 		ENTROPY_LOG(Log, Severity::Error) << "Work failed: " << uv_strerror(status);
 
 	delete req;
+}
+
+struct data_t {
+	bool done;
+	Timer *timer;
+};
+
+void timer(Loop &loop, map<int, shared_ptr<Signal>> &signals, Timer &timer)
+{
+	data_t data;
+
+	data.done = true;
+	data.timer = &timer;
+
+	uv_walk(loop.Handle(), walk, &data);
+
+	if(data.done) {
+		signals.clear();
+		timer.Stop();
+	}
+}
+
+void walk(uv_handle_t *handle, void *d)
+{
+	data_t *data = reinterpret_cast<data_t *>(d);
+
+	if(handle->type != UV_SIGNAL) {
+		if(handle->type != UV_TIMER || handle->data != data->timer) {
+			data->done = false;
+		}
+	}
 }
 
 namespace Entropy
