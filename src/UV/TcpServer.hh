@@ -34,7 +34,6 @@
 					private:
 						std::list<Client> _connections;
 						Loop *_loop;
-					friend void ::_entropy_tethys_uv_tcp_server_accept_cb(uv_stream_t *, int);
 					public:
 						class Client :
 							public Tcp
@@ -49,6 +48,8 @@
 							private:
 								TcpServer &_server;
 						};
+					friend void ::_entropy_tethys_uv_tcp_server_accept_cb(uv_stream_t *, int);
+					friend Client;
 				};
 			}
 		}
