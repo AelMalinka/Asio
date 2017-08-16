@@ -7,6 +7,12 @@
 
 #	include <functional>
 #	include <uv.h>
+
+//	2017-08-15 AMR HACK: windows defines GetAddrInfo as GetAddrInfoA
+#	ifdef GetAddrInfo
+#		undef GetAddrInfo
+#	endif
+
 #	include "Task.hh"
 
 	extern "C" {
