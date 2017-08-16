@@ -14,7 +14,7 @@ Timer::~Timer()
 	{
 		Stop();
 	}
-	catch(exception &e)
+	catch(exception &)
 	{}
 }
 
