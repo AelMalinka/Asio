@@ -19,7 +19,7 @@ Signal::~Signal()
 	{
 		Stop();
 	}
-	catch(exception &e)
+	catch(exception &)
 	{}
 }
 
