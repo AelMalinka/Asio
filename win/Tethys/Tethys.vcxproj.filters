@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Implementation Files">
+      <UniqueIdentifier>{e5875eb6-aa39-47e3-8988-1a5b8d787312}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Implementation Files\UV">
+      <UniqueIdentifier>{c8765eac-742c-4826-b253-6a291ba18760}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\UV">
+      <UniqueIdentifier>{3ef7b4cd-19dd-4c77-bcb9-67bc2b646252}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UV">
+      <UniqueIdentifier>{eefde4a4-dccc-4148-8137-9e26908aeebc}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\Application.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Logger.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Task.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\UV\GetAddrInfo.cc">
+      <Filter>Source Files\UV</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\UV\Loop.cc">
+      <Filter>Source Files\UV</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\UV\Signal.cc">
+      <Filter>Source Files\UV</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\UV\Stream.cc">
+      <Filter>Source Files\UV</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\UV\Task.cc">
+      <Filter>Source Files\UV</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\UV\Tcp.cc">
+      <Filter>Source Files\UV</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\UV\TcpClient.cc">
+      <Filter>Source Files\UV</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\UV\TcpServer.cc">
+      <Filter>Source Files\UV</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\UV\Timer.cc">
+      <Filter>Source Files\UV</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\Application.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Buffer.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Exception.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Loop.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\StreamBuffer.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Task.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Timer.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Buffer.impl.hh">
+      <Filter>Implementation Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\StreamBuffer.impl.hh">
+      <Filter>Implementation Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\UV\Loop.impl.hh">
+      <Filter>Implementation Files\UV</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\UV\Timer.impl.hh">
+      <Filter>Implementation Files\UV</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\UV\GetAddrInfo.hh">
+      <Filter>Header Files\UV</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\UV\Loop.hh">
+      <Filter>Header Files\UV</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\UV\Signal.hh">
+      <Filter>Header Files\UV</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\UV\Stream.hh">
+      <Filter>Header Files\UV</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\UV\Task.hh">
+      <Filter>Header Files\UV</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\UV\Tcp.hh">
+      <Filter>Header Files\UV</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\UV\TcpClient.hh">
+      <Filter>Header Files\UV</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\UV\TcpServer.hh">
+      <Filter>Header Files\UV</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\UV\Timer.hh">
+      <Filter>Header Files\UV</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

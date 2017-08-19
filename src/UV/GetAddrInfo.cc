@@ -57,11 +57,10 @@ void _entropy_tethys_uv_getaddrinfo_cb(uv_getaddrinfo_t *req, int status, struct
 			ThrowIfError("GetAddrInfo failed", status);
 			reinterpret_cast<GetAddrInfo *>(req->data)->callback(res);
 		}
-		catch(...)
+		catch(exception &)
 		{
 			if(res != nullptr)
 				uv_freeaddrinfo(res);
-			throw;
 		}
 	}
 }
