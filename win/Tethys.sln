@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.8
+VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tethys", "Tethys\Tethys.vcxproj", "{23BEC3A9-1AD4-49FA-8D60-0A0FFFA64F17}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -9,6 +9,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tethys", "Tethys\Tethys.vcx
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Entropy", "..\..\Entropy\win\Entropy\Entropy.vcxproj", "{25B626B2-690C-4EEE-A3A9-2AA486E31542}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TethysTests", "TethysTests\TethysTests.vcxproj", "{2DCDCB44-79A0-4933-B7FD-4DB12349FE4E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{23BEC3A9-1AD4-49FA-8D60-0A0FFFA64F17} = {23BEC3A9-1AD4-49FA-8D60-0A0FFFA64F17}
+		{25B626B2-690C-4EEE-A3A9-2AA486E31542} = {25B626B2-690C-4EEE-A3A9-2AA486E31542}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,6 +40,14 @@ Global
 		{25B626B2-690C-4EEE-A3A9-2AA486E31542}.Release|x64.Build.0 = Release|x64
 		{25B626B2-690C-4EEE-A3A9-2AA486E31542}.Release|x86.ActiveCfg = Release|Win32
 		{25B626B2-690C-4EEE-A3A9-2AA486E31542}.Release|x86.Build.0 = Release|Win32
+		{2DCDCB44-79A0-4933-B7FD-4DB12349FE4E}.Debug|x64.ActiveCfg = Debug|x64
+		{2DCDCB44-79A0-4933-B7FD-4DB12349FE4E}.Debug|x64.Build.0 = Debug|x64
+		{2DCDCB44-79A0-4933-B7FD-4DB12349FE4E}.Debug|x86.ActiveCfg = Debug|Win32
+		{2DCDCB44-79A0-4933-B7FD-4DB12349FE4E}.Debug|x86.Build.0 = Debug|Win32
+		{2DCDCB44-79A0-4933-B7FD-4DB12349FE4E}.Release|x64.ActiveCfg = Release|x64
+		{2DCDCB44-79A0-4933-B7FD-4DB12349FE4E}.Release|x64.Build.0 = Release|x64
+		{2DCDCB44-79A0-4933-B7FD-4DB12349FE4E}.Release|x86.ActiveCfg = Release|Win32
+		{2DCDCB44-79A0-4933-B7FD-4DB12349FE4E}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
