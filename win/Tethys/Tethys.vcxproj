@@ -158,6 +158,11 @@
     <ClInclude Include="..\..\src\UV\Timer.hh" />
     <ClInclude Include="..\..\src\UV\Timer.impl.hh" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Entropy\win\Entropy\Entropy.vcxproj">
+      <Project>{25b626b2-690c-4eee-a3a9-2aa486e31542}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

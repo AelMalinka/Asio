@@ -1,35 +1,34 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="Application">
+      <UniqueIdentifier>{32dc12d0-a39c-48e3-b559-f8f943809977}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    <Filter Include="UV">
+      <UniqueIdentifier>{4c98a5d7-e4c6-465a-875b-5bdd5a74f56b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IOS">
+      <UniqueIdentifier>{3cfef441-1e16-42e3-98bc-9cacfec75b8f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\test\application\application.cc">
+      <Filter>Application</Filter>
     </ClCompile>
-    <ClCompile Include="application.cc">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\test\application\task.cc">
+      <Filter>Application</Filter>
     </ClCompile>
-    <ClCompile Include="ios.cc">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\test\ios\buffer.cc">
+      <Filter>IOS</Filter>
     </ClCompile>
-    <ClCompile Include="uv.cc">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\test\ios\stream-buffer.cc">
+      <Filter>IOS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\test\uv\addr.cc">
+      <Filter>UV</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\test\uv\loop.cc">
+      <Filter>UV</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
