@@ -4,7 +4,6 @@
 
 #include "StreamBuffer.hh"
 #include <gtest/gtest.h>
-#include <gmock/gmock.h>
 
 #include <cstring>
 
@@ -123,7 +122,8 @@ namespace {
 	template<typename charT>
 	void MockStream<charT>::Read(Buffer<charT> &&buff)
 	{
-		_buffer.AddData(move(buff));
+		// 2017-10-08 AMR NOTE: Visual Studio fails this SFINAE and attempts to use basic_iostream::move instead of std::move
+		_buffer.AddData(std::move(buff));
 	}
 
 	template<typename charT>
