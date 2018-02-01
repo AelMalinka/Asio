@@ -135,7 +135,11 @@ void walk(uv_handle_t *handle, void *d)
 	data_t *data = reinterpret_cast<data_t *>(d);
 
 	if(handle->type != UV_SIGNAL) {
-		if(handle->type != UV_TIMER && handle->data != data->timer) {
+		if(handle->type == UV_TIMER) {
+			if(handle->data != data->timer) {
+				data->done = false;
+			}
+		} else {
 			data->done = false;
 		}
 	}
