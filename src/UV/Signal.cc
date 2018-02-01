@@ -7,6 +7,9 @@
 using namespace Entropy::Tethys::UV;
 using namespace std;
 
+using Entropy::Tethys::Log;
+using Entropy::Severity;
+
 Signal::Signal(const int s, const function<void()> &c)
 	: _handle(), _signum(s), _cb(c)
 {
@@ -47,6 +50,8 @@ void Signal::SignalCb(const int signum)
 
 void _entropy_tethys_uv_signal_signal_cb(uv_signal_t *handle, int signum)
 {
+	ENTROPY_LOG(Log, Severity::Info) << "Received signal " << signum;
+
 	Signal *signal = static_cast<Signal *>(handle->data);
 	signal->SignalCb(signum);
 }

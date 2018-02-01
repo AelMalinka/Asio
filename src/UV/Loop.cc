@@ -62,6 +62,8 @@ void Loop::operator () ()
 
 void Loop::setSignal(const int signum, const function<void()> &cb)
 {
+	ENTROPY_LOG(Log, Severity::Debug) << "Setting signal " << signum;
+
 	if(_signals.find(signum) == _signals.end()) {
 		_signals.insert(make_pair(signum, make_shared<Signal>(signum, cb)));
 

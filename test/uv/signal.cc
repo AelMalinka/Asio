@@ -6,15 +6,22 @@
 #include <iostream>
 #include <signal.h>
 #include "Application.hh"
+#include "UV/Timer.hh"
+#include <boost/lexical_cast.hpp>
 
 using namespace std;
 using namespace Entropy::Tethys;
+
+using boost::lexical_cast;
 
 class Application :
 	public Entropy::Tethys::Application
 {
 	public:
 		Application(const int, char *[]);
+		bool fail;
+	private:
+		UV::Timer _t;
 };
 
 int main(int ArgC, char *ArgV[])
@@ -24,7 +31,7 @@ int main(int ArgC, char *ArgV[])
 		::Application app(ArgC, ArgV);
 		app();
 
-		return EXIT_SUCCESS;
+		return (app.fail ? EXIT_FAILURE : EXIT_SUCCESS);
 	}
 	catch(exception &e)
 	{
@@ -33,10 +40,21 @@ int main(int ArgC, char *ArgV[])
 	}
 }
 
-::Application::Application(const int ArgC, char *ArgV[])
-	: Entropy::Tethys::Application(ArgC, ArgV)
+::Application::Application(const int ArgC, char *ArgV[]) :
+	Entropy::Tethys::Application(ArgC, ArgV),
+	fail(true),
+	_t(chrono::seconds(0), chrono::seconds(1), [this](){})
 {
-	setSignal(SIGINT, [this]() {
+	auto signal = SIGINT;
+
+	if(ArgC == 2) {
+		signal = lexical_cast<decltype(signal)>(ArgV[1]);
+	}
+
+	setSignal(signal, [this]() {
+		fail = false;
 		Stop();
 	});
+
+	Add(_t);
 }
