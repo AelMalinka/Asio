@@ -95,6 +95,18 @@ void work_after(uv_work_t *req, int status)
 	if(status != 0)
 		ENTROPY_LOG(Log, Severity::Error) << "Work failed: " << uv_strerror(status);
 
+	auto &t = *static_cast<Entropy::Tethys::Task *>(req->data);
+
+	try
+	{
+		if(t.hasAfter())
+			t.After();
+	}
+	catch(exception &e)
+	{
+		Log << e;
+	}
+
 	delete req;
 }
 

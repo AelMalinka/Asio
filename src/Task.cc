@@ -13,10 +13,24 @@ Task::Task(Task &&) = default;
 Task::~Task() = default;
 
 Task::Task(const function<void()> &task)
-	: _task(task)
+	: _task(task), _after()
+{}
+
+Task::Task(const function<void()> &task, const function<void()> &after)
+	: _task(task), _after(after)
 {}
 
 void Task::operator () ()
 {
 	_task();
+}
+
+void Task::After()
+{
+	_after();
+}
+
+bool Task::hasAfter() const
+{
+	return _after.operator bool();
 }

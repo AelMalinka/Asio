@@ -25,4 +25,16 @@ namespace {
 		t();
 		EXPECT_FALSE(fail);
 	}
+
+	TEST(Task, After) {
+		bool fail = true;
+		Task t([](){}, [&fail](){
+			fail = false;
+		});
+
+		EXPECT_TRUE(fail);
+		EXPECT_TRUE(t.hasAfter());
+		t.After();
+		EXPECT_FALSE(fail);
+	}
 }

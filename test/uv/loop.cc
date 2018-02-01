@@ -39,6 +39,18 @@ namespace {
 		EXPECT_FALSE(fail);
 	}
 
+	TEST(UVLoop, TaskAfter) {
+		Loop loop;
+		bool fail = true;
+		Entropy::Tethys::Task t([](){}, [&fail]() {
+			fail = false;
+		});
+		loop.Add(t);
+
+		loop();
+		EXPECT_FALSE(fail);
+	}
+
 	TEST(UVLoop, UVTask) {
 		Loop loop;
 		TestTask t;
