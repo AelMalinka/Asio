@@ -27,8 +27,7 @@
 					public:
 						template<typename DelayType, typename RepeatType>
 						Timer(const DelayType &, const RepeatType &, const std::function<void()> &);
-						template<typename RepeatType>
-						Timer(const RepeatType &, const std::function<void()> &);
+						// 2018-02-01 AMR TODO: allow calling Timer(repeat, cb);
 						virtual ~Timer();
 						virtual void Added(Loop &);
 						virtual void Stop();
