@@ -61,13 +61,17 @@ echo_SOURCES = examples/echo.cc
 echo_LDADD = libtethys.la
 
 check_PROGRAMS = \
-	ios-basic \
-	uv-signal
+	ios-basic
 
 ios_basic_SOURCES = test/ios/basic.cc
 
+if LIBUV
+check_PROGRAMS += \
+	uv-signal
+
 uv_signal_SOURCES = test/uv/signal.cc
 uv_signal_LDADD = libtethys.la
+endif
 
 if GTEST
 check_PROGRAMS += \
