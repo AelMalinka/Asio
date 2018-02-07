@@ -94,10 +94,14 @@ ios_buffer_LDADD = $(gtestLDADD)
 if LIBUV
 check_PROGRAMS += \
 	uv-loop \
+	uv-timer \
 	uv-addr
 
 uv_loop_SOURCES = test/uv/loop.cc
 uv_loop_LDADD = $(gtestLDADD)
+
+uv_timer_SOURCES = test/uv/timer.cc
+uv_timer_LDADD = $(gtestLDADD)
 
 uv_addr_SOURCES = test/uv/addr.cc
 uv_addr_LDADD = $(gtestLDADD)
