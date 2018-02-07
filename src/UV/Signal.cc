@@ -35,6 +35,9 @@ void Signal::Added(Loop &loop)
 {
 	ThrowIfError("failed to initialize signal", uv_signal_init(loop.Handle(), &_handle));
 	ThrowIfError("failed to add signal to event loop", uv_signal_start(&_handle, _entropy_tethys_uv_signal_signal_cb, _signum));
+
+	// 2018-02-06 AMR NOTE: don't hold application open for signals
+	uv_unref(reinterpret_cast<uv_handle_t *>(&_handle));
 }
 
 void Signal::setCallback(const function<void()> &cb)
