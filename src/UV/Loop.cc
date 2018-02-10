@@ -72,11 +72,12 @@ uv_loop_t *Loop::Handle()
 
 void work(uv_work_t *req)
 {
-	auto &t = *static_cast<Entropy::Tethys::Task *>(req->data);
+	auto *t = static_cast<Entropy::Tethys::Task *>(req->data);
 
 	try
 	{
-		t();
+		if(t)
+			(*t)();
 	}
 	catch(exception &e)
 	{
@@ -89,12 +90,12 @@ void work_after(uv_work_t *req, int status)
 	if(status != 0)
 		ENTROPY_LOG(Log, Severity::Error) << "Work failed: " << uv_strerror(status);
 
-	auto &t = *static_cast<Entropy::Tethys::Task *>(req->data);
+	auto *t = static_cast<Entropy::Tethys::Task *>(req->data);
 
 	try
 	{
-		if(t.hasAfter())
-			t.After();
+		if(t && t->hasAfter())
+			t->After();
 	}
 	catch(exception &e)
 	{
