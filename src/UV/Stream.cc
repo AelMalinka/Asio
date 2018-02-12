@@ -31,8 +31,10 @@ Stream::~Stream()
 	{
 		ReadStop();
 	}
-	catch(exception &)
-	{}
+	catch(exception &e)
+	{
+		Log << e;
+	}
 }
 
 void Stream::Write(Buffer<char> &&b)
@@ -49,7 +51,16 @@ void Stream::Write(Buffer<char> &&b)
 
 	req->data = data;
 
-	ThrowIfError("Failed to Write", uv_write(req, _handle, data->buffer, 1, _entropy_tethys_uv_stream_write_cb));
+	try
+	{
+		ThrowIfError("Failed to Write", uv_write(req, _handle, data->buffer, 1, _entropy_tethys_uv_stream_write_cb));
+	}
+	catch(...)
+	{
+		delete data->buffer;
+		delete data;
+		throw;
+	}
 }
 
 void Stream::ReadStart()
@@ -62,8 +73,16 @@ void Stream::ReadStop()
 	uv_shutdown_t *req = new uv_shutdown_t;
 	req->data = _handle;
 
-	ThrowIfError("Failed to stop reading stream", uv_read_stop(_handle));
-	ThrowIfError("Failed to stop writing stream", uv_shutdown(req, _handle, shutdown_cb));
+	try
+	{
+		ThrowIfError("Failed to stop reading stream", uv_read_stop(_handle));
+		ThrowIfError("Failed to stop writing stream", uv_shutdown(req, _handle, shutdown_cb));
+	}
+	catch(...)
+	{
+		delete req;
+		throw;
+	}
 }
 
 void Stream::onEof()
@@ -119,6 +138,7 @@ void alloc_cb(uv_handle_t *, size_t suggested, uv_buf_t *buf)
 
 void shutdown_cb(uv_shutdown_t *req, int status)
 {
+	// 2018-02-12 AMR TODO: is this even remotely kosher?
 	// 2017-06-29 AMR NOTE: Stream is reclaimed
 	ThrowIfError("Failed to stop writing stream", status); 
 	uv_close(reinterpret_cast<uv_handle_t *>(req->data), close_cb);
@@ -127,5 +147,4 @@ void shutdown_cb(uv_shutdown_t *req, int status)
 }
 
 void close_cb(uv_handle_t *)
-{
-}
+{}
