@@ -15,11 +15,21 @@ asioheaders_HEADERS = \
 	src/StreamBuffer.impl.hh \
 	src/Timer.hh
 
+protocolheadersdir = $(includedir)/Entropy/Tethys/Protocol
+protocolheaders_HEADERS = \
+	src/Protocol/Exception.hh \
+	src/Protocol/Exception.impl.hh \
+	src/Protocol/Line.hh \
+	src/Protocol/Line.impl.hh
+
 lib_LTLIBRARIES = libtethys.la
 libtethys_la_SOURCES = \
 	src/Logger.cc \
 	src/Task.cc \
 	src/Application.cc
+
+noinst_HEADERS = \
+	test/Mock.hh
 
 if LIBUV
 libuvheadersdir = $(includedir)/Entropy/Tethys/UV
@@ -79,7 +89,9 @@ if GTEST
 check_PROGRAMS += \
 	application-application \
 	application-task \
-	ios-buffer
+	ios-buffer \
+	protocol-line-basic \
+	protocol-line
 
 # 2016-12-17 AMR FIXME: gtest_main multiple definitions of main for gmock_main
 gtestLDADD = $(GTEST_LIBS) -lgtest_main libtethys.la
@@ -93,6 +105,13 @@ application_task_LDADD = $(gtestLDADD)
 
 ios_buffer_SOURCES = test/ios/buffer.cc
 ios_buffer_LDADD = $(gtestLDADD)
+
+protocol_line_basic_SOURCES = test/protocol/basic.cc
+protocol_line_basic_CXXFLAGS = -DPROTOCOL=Line -DPROTOCOL_INCLUDE='"Protocol/Line.hh"' -DMOCK_FULL=MockApplication -DMOCK_BASE=MockApplicationOnlyLine $(AM_CXXFLAGS)
+protocol_line_basic_LDADD = $(gmockLDADD)
+
+protocol_line_SOURCES = test/protocol/line.cc
+protocol_line_LDADD = $(gmockLDADD)
 
 if LIBUV
 check_PROGRAMS += \
@@ -123,6 +142,7 @@ TESTSUITE = $(srcdir)/test/testsuite
 TESTSUITE_FILES = \
 	$(srcdir)/test/application.at \
 	$(srcdir)/test/ios.at \
+	$(srcdir)/test/protocol.at \
 	$(srcdir)/test/uv.at
 
 EXTRA_DIST = \

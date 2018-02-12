@@ -2,7 +2,7 @@
 	Distributed under the terms of the GNU Affero General Public License v3
 */
 
-#include "Stream.hh"
+#include "../Mock.hh"
 #include <gtest/gtest.h>
 
 #include <cstring>
@@ -12,19 +12,6 @@ using namespace testing;
 using namespace std;
 
 namespace {
-	template<typename charT = char>
-	class MockStream :
-		public Stream<charT>
-	{
-		public:
-			MockStream();
-			void Write(Buffer<charT> &&);
-			void onData(Stream<charT> &) {}
-			const basic_string<charT> &Data() const;
-		private:
-			basic_string<charT> _data;
-	};
-
 	TEST(StreamBuffer, Create) {
 		MockStream<> mock;
 	}
@@ -117,20 +104,4 @@ namespace {
 	}
 
 	// 2017-06-27 AMR TODO: test utf-32, maybe utf-16
-	template<typename charT>
-	void MockStream<charT>::Write(Buffer<charT> &&buff)
-	{
-		_data += string(buff.data(), buff.size());
-	}
-
-	template<typename charT>
-	const basic_string<charT> &MockStream<charT>::Data() const
-	{
-		return _data;
-	}
-
-	template<typename charT>
-	MockStream<charT>::MockStream() : 
-		Stream<charT>(*this)
-	{}
 }
