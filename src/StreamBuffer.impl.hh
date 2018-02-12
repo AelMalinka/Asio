@@ -14,8 +14,13 @@
 		namespace Tethys
 		{
 			template<typename Stream, typename charT, typename traits>
-			StreamBuffer<Stream, charT, traits>::StreamBuffer(Stream &s)
-				: std::basic_streambuf<charT, traits>(), _stream(s), _buffers(), _current(_buffers.end()), _write(), _is_seek(false)
+			StreamBuffer<Stream, charT, traits>::StreamBuffer(Stream &s) :
+				std::basic_streambuf<charT, traits>(),
+				_stream(s),
+				_buffers(),
+				_current(_buffers.end()),
+				_write(),
+				_is_seek(false)
 			{
 				_write = std::make_shared<Buffer<charT>>(write_buffer_size);
 				this->setp(_write->begin(), _write->begin() + _write->capacity());
