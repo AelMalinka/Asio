@@ -13,37 +13,41 @@
 	{
 		namespace Tethys
 		{
-			template<typename Stream, typename charT, typename traits>
-			StreamBuffer<Stream, charT, traits>::StreamBuffer(Stream &s) :
+			template<typename charT, typename traits>
+			template<typename Stream, typename>
+			StreamBuffer<charT, traits>::StreamBuffer(Stream &s) :
 				std::basic_streambuf<charT, traits>(),
-				_stream(s),
+				_write(std::bind(&Stream::Write, &s, std::placeholders::_1)),
+				_clear(std::bind(&Stream::clear, &s, std::placeholders::_1)),
 				_buffers(),
 				_current(_buffers.end()),
-				_write(),
+				_w_buff(),
 				_is_seek(false)
 			{
-				_write = std::make_shared<Buffer<charT>>(write_buffer_size);
-				this->setp(_write->begin(), _write->begin() + _write->capacity());
+				_w_buff = std::make_shared<Buffer<charT>>(write_buffer_size);
+				this->setp(_w_buff->begin(), _w_buff->begin() + _w_buff->capacity());
 			}
 
-			template<typename Stream, typename charT, typename traits> StreamBuffer<Stream, charT, traits>::~StreamBuffer() = default;
-
-			template<typename Stream, typename charT, typename traits>
-			std::streamsize StreamBuffer<Stream, charT, traits>::Available() const
+			template<typename charT, typename traits>
+			template<typename F1, typename F2, typename>
+			StreamBuffer<charT, traits>::StreamBuffer(const F1 &f1, const F2 &f2) :
+				std::basic_streambuf<charT, traits>(),
+				_write(f1),
+				_clear(f2),
+				_buffers(),
+				_current(_buffers.end()),
+				_w_buff(),
+				_is_seek(false)
 			{
-				using namespace std;
-
-				streamsize ret = 0;
-
-				for(auto &&b : _buffers) {
-					ret += b.size();
-				}
-
-				return ret;
+				_w_buff = std::make_shared<Buffer<charT>>(write_buffer_size);
+				this->setp(_w_buff->begin(), _w_buff->begin() + _w_buff->capacity());
 			}
 
-			template<typename Stream, typename charT, typename traits>
-			void StreamBuffer<Stream, charT, traits>::AddData(Buffer<charT> &&buffer)
+			template<typename charT, typename traits> StreamBuffer<charT, traits>::StreamBuffer(StreamBuffer<charT, traits> &&) = default;
+			template<typename charT, typename traits> StreamBuffer<charT, traits>::~StreamBuffer() = default;
+
+			template<typename charT, typename traits>
+			void StreamBuffer<charT, traits>::AddData(Buffer<charT> &&buffer)
 			{
 				_buffers.emplace_back(std::move(buffer));
 
@@ -51,20 +55,18 @@
 					--_current;
 
 					this->setg(_current->begin(), _current->begin(), _current->end());
-
-					// 2017-07-26 AMR NOTE: clear eof/fail/bad bits (we have new data)
-					_stream.clear();
+					_clear(std::ios::goodbit);
 				}
 			}
 
-			template<typename Stream, typename charT, typename traits>
-			typename StreamBuffer<Stream, charT, traits>::pos_type StreamBuffer<Stream, charT, traits>::seekpos(pos_type dist, std::ios_base::openmode mode)
+			template<typename charT, typename traits>
+			typename StreamBuffer<charT, traits>::pos_type StreamBuffer<charT, traits>::seekpos(pos_type dist, std::ios_base::openmode mode)
 			{
 				return seekoff(dist, std::ios_base::beg, mode);
 			}
 
-			template<typename Stream, typename charT, typename traits>
-			typename StreamBuffer<Stream, charT, traits>::pos_type StreamBuffer<Stream, charT, traits>::seekoff(off_type dist, std::ios_base::seekdir dir, std::ios_base::openmode mode)
+			template<typename charT, typename traits>
+			typename StreamBuffer<charT, traits>::pos_type StreamBuffer<charT, traits>::seekoff(off_type dist, std::ios_base::seekdir dir, std::ios_base::openmode mode)
 			{
 				if(mode & std::ios_base::out)
 					return typename traits::pos_type(typename traits::off_type(-1));
@@ -122,8 +124,8 @@
 				return ret;
 			}
 
-			template<typename Stream, typename charT, typename traits>
-			typename StreamBuffer<Stream, charT, traits>::int_type StreamBuffer<Stream, charT, traits>::underflow()
+			template<typename charT, typename traits>
+			typename StreamBuffer<charT, traits>::int_type StreamBuffer<charT, traits>::underflow()
 			{
 				if(_is_seek) {
 					_is_seek = false;
@@ -145,22 +147,30 @@
 				return traits::to_int_type(*this->gptr());
 			}
 
-			template<typename Stream, typename charT, typename traits>
-			std::streamsize StreamBuffer<Stream, charT, traits>::showmanyc()
+			template<typename charT, typename traits>
+			std::streamsize StreamBuffer<charT, traits>::showmanyc()
 			{
-				return Available();
+				using namespace std;
+
+				streamsize ret = 0;
+
+				for(auto &&b : _buffers) {
+					ret += b.size();
+				}
+
+				return ret;
 			}
 
-			template<typename Stream, typename charT, typename traits>
-			typename StreamBuffer<Stream, charT, traits>::int_type StreamBuffer<Stream, charT, traits>::overflow(int_type c)
+			template<typename charT, typename traits>
+			typename StreamBuffer<charT, traits>::int_type StreamBuffer<charT, traits>::overflow(int_type c)
 			{
 				ENTROPY_LOG(Log, Severity::Debug) << "Overflow";
 
-				_write->size() = this->pptr() - this->pbase();
-				_stream.Write(std::move(*_write));
+				_w_buff->size() = this->pptr() - this->pbase();
+				_write(std::move(*_w_buff));
 
-				_write = std::make_shared<Buffer<charT>>(write_buffer_size);
-				this->setp(_write->begin(), _write->begin() + _write->capacity());
+				_w_buff = std::make_shared<Buffer<charT>>(write_buffer_size);
+				this->setp(_w_buff->begin(), _w_buff->begin() + _w_buff->capacity());
 
 				*this->pptr() = c;
 				this->pbump(1);
@@ -168,16 +178,16 @@
 				return c;
 			}
 
-			template<typename Stream, typename charT, typename traits>
-			int StreamBuffer<Stream, charT, traits>::sync()
+			template<typename charT, typename traits>
+			int StreamBuffer<charT, traits>::sync()
 			{
-				_write->size() = this->pptr() - this->pbase();
+				_w_buff->size() = this->pptr() - this->pbase();
 
-				if(_write->size() > 0) {
-					_stream.Write(std::move(*_write));
+				if(_w_buff->size() > 0) {
+					_write(std::move(*_w_buff));
 
-					_write = std::make_shared<Buffer<charT>>(write_buffer_size);
-					this->setp(_write->begin(), _write->begin() + _write->capacity());
+					_w_buff = std::make_shared<Buffer<charT>>(write_buffer_size);
+					this->setp(_w_buff->begin(), _w_buff->begin() + _w_buff->capacity());
 				}
 
 				return 0;

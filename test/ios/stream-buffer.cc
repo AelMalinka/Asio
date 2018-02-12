@@ -2,7 +2,7 @@
 	Distributed under the terms of the GNU Affero General Public License v3
 */
 
-#include "StreamBuffer.hh"
+#include "Stream.hh"
 #include <gtest/gtest.h>
 
 #include <cstring>
@@ -14,15 +14,14 @@ using namespace std;
 namespace {
 	template<typename charT = char>
 	class MockStream :
-		public basic_iostream<charT>
+		public Stream<charT>
 	{
 		public:
 			MockStream();
-			void Read(Buffer<charT> &&);
 			void Write(Buffer<charT> &&);
+			void onData(Stream<charT> &) {}
 			const basic_string<charT> &Data() const;
 		private:
-			StreamBuffer<MockStream<charT>, charT> _buffer;
 			basic_string<charT> _data;
 	};
 
@@ -118,14 +117,6 @@ namespace {
 	}
 
 	// 2017-06-27 AMR TODO: test utf-32, maybe utf-16
-
-	template<typename charT>
-	void MockStream<charT>::Read(Buffer<charT> &&buff)
-	{
-		// 2017-10-08 AMR NOTE: Visual Studio fails this SFINAE and attempts to use basic_iostream::move instead of std::move
-		_buffer.AddData(std::move(buff));
-	}
-
 	template<typename charT>
 	void MockStream<charT>::Write(Buffer<charT> &&buff)
 	{
@@ -139,7 +130,7 @@ namespace {
 	}
 
 	template<typename charT>
-	MockStream<charT>::MockStream()
-		: basic_iostream<charT>(&_buffer), _buffer(*this)
+	MockStream<charT>::MockStream() : 
+		Stream<charT>(*this)
 	{}
 }

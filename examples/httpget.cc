@@ -31,7 +31,7 @@ class Client :
 		Client(const string &, const string &);
 	private:
 		void onConnect(Stream &);
-		void onData(Stream &);
+		void onData(Tethys::Stream<char> &);
 	private:
 		string _host;
 };
@@ -90,7 +90,7 @@ void Client::onConnect(Stream &s)
 		<< "\r" << endl;
 }
 
-void Client::onData(Stream &s)
+void Client::onData(Tethys::Stream<char> &s)
 {
 	while(!s.eof()) {
 		string line;

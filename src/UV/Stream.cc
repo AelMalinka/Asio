@@ -21,8 +21,9 @@ void alloc_cb(uv_handle_t *, size_t, uv_buf_t *);
 void shutdown_cb(uv_shutdown_t *, int);
 void close_cb(uv_handle_t *);
 
-Stream::Stream(uv_stream_t *h)
-	: basic_iostream<char>(&_buffer), _handle(h), _buffer(*this)
+Stream::Stream(uv_stream_t *h) :
+	Entropy::Tethys::Stream<char>(*this),
+	_handle(h)
 {}
 
 Stream::~Stream()
@@ -97,8 +98,7 @@ void Stream::onError(const Exception &e)
 
 void Stream::ReadCb(const uv_buf_t *buf, const ssize_t nread)
 {
-	_buffer.AddData(Buffer<char>(nread, buf->len, buf->base));
-	onData(*this);
+	Read(Buffer<char>(nread, buf->len, buf->base));
 }
 
 void _entropy_tethys_uv_stream_read_cb(uv_stream_t *handle , ssize_t nread, const uv_buf_t *buf)

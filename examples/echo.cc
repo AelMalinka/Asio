@@ -27,7 +27,7 @@ class Server :
 	public:
 		Server(const string &, const string &);
 	private:
-		void onData(Stream &);
+		void onData(Tethys::Stream<char> &);
 };
 
 class Application :
@@ -88,7 +88,7 @@ Server::Server(const string &host, const string &service)
 	: UV::TcpServer(host, service)
 {}
 
-void Server::onData(Stream &s)
+void Server::onData(Tethys::Stream<char> &s)
 {
 	while(!s.eof()) {
 		string line;

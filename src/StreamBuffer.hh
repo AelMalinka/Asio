@@ -8,6 +8,7 @@
 #	include <streambuf>
 #	include <list>
 #	include <memory>
+#	include <type_traits>
 
 #	include "Exception.hh"
 #	include "Buffer.hh"
@@ -21,7 +22,6 @@
 		namespace Tethys
 		{
 			template<
-				typename Stream,
 				typename charT = char,
 				typename traits = std::char_traits<charT>
 			>
@@ -36,9 +36,25 @@
 					typedef typename base::pos_type pos_type;
 					typedef typename base::off_type off_type;
 				public:
-					StreamBuffer(Stream &);
+					template<
+						typename Stream,
+						typename = typename std::enable_if<
+							std::is_class<Stream>::value
+						>::type
+					>
+					explicit StreamBuffer(Stream &);
+					template<
+						typename F1,
+						typename F2,
+						typename = typename std::enable_if<
+							std::is_function<F1>::value &&
+							std::is_function<F2>::value
+						>::type
+					>
+					explicit StreamBuffer(const F1 &, const F2 &);
+					StreamBuffer(const StreamBuffer<charT, traits> &) = delete;
+					StreamBuffer(StreamBuffer<charT, traits> &&);
 					~StreamBuffer();
-					std::streamsize Available() const;
 					void AddData(Buffer<charT> &&);
 				private:
 					pos_type seekpos(pos_type, std::ios_base::openmode = std::ios_base::in | std::ios_base::out);
@@ -48,10 +64,11 @@
 					int_type overflow(int_type = traits_type::eof());
 					int sync();
 				private:
-					Stream &_stream;
+					std::function<void(Buffer<charT> &&)> _write;
+					std::function<void(std::ios_base::iostate)> _clear;
 					std::list<Buffer<charT>> _buffers;
 					typename std::list<Buffer<charT>>::iterator _current;
-					std::shared_ptr<Buffer<charT>> _write;
+					std::shared_ptr<Buffer<charT>> _w_buff;
 					bool _is_seek;
 					static constexpr std::size_t write_buffer_size = ENTROPY_TETHYS_STREAMBUFFER_WRITE_BUFFER_SIZE;
 			};

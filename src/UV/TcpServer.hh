@@ -42,7 +42,7 @@
 								Client(TcpServer &, Loop &);
 							protected:
 								virtual void onDisconnect(Stream &);
-								virtual void onData(Stream &);
+								virtual void onData(Tethys::Stream<char> &);
 							private:
 								void InfoCb(const GetAddrInfo &) {}
 							private:

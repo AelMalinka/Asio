@@ -9,6 +9,8 @@ asioheaders_HEADERS = \
 	src/Application.hh \
 	src/Buffer.hh \
 	src/Buffer.impl.hh \
+	src/Stream.hh \
+	src/Stream.impl.hh \
 	src/StreamBuffer.hh \
 	src/StreamBuffer.impl.hh \
 	src/Timer.hh
@@ -81,6 +83,7 @@ check_PROGRAMS += \
 
 # 2016-12-17 AMR FIXME: gtest_main multiple definitions of main for gmock_main
 gtestLDADD = $(GTEST_LIBS) -lgtest_main libtethys.la
+gmockLDADD = $(GTEST_LIBS) $(GMOCK_LIBS) libtethys.la
 
 application_application_SOURCES = test/application/application.cc
 application_application_LDADD = $(gtestLDADD)
@@ -110,8 +113,6 @@ endif
 if GMOCK
 check_PROGRAMS += \
 	ios-stream-buffer
-
-gmockLDADD = $(GTEST_LIBS) $(GMOCK_LIBS) libtethys.la
 
 ios_stream_buffer_SOURCES = test/ios/stream-buffer.cc
 ios_stream_buffer_LDADD = $(gmockLDADD)

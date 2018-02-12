@@ -72,7 +72,7 @@ void TcpServer::Client::onDisconnect(Stream &s)
 	Tcp::onDisconnect(s);
 }
 
-void TcpServer::Client::onData(Stream &s)
+void TcpServer::Client::onData(Tethys::Stream<char> &s)
 {
 	_server.onData(s);
 }
