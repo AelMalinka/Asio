@@ -20,10 +20,18 @@ struct write_cb_data {
 void alloc_cb(uv_handle_t *, size_t, uv_buf_t *);
 void shutdown_cb(uv_shutdown_t *, int);
 void close_cb(uv_handle_t *);
+void write_cb(uv_write_t *, int);
 
-Stream::Stream(uv_stream_t *h) :
-	Entropy::Tethys::Stream<char>(*this),
-	_handle(h)
+Stream::Stream(
+	uv_stream_t *h,
+	const function<void(Entropy::Tethys::Stream<char> &)> &data,
+	const function<void(Stream &)> &eof,
+	const function<void(const Entropy::Exception &)> &error
+) :
+	Entropy::Tethys::Stream<char>(data),
+	_handle(h),
+	_on_eof(eof),
+	_on_error(error)
 {}
 
 Stream::~Stream()
@@ -54,7 +62,7 @@ void Stream::Write(Buffer<char> &&b)
 
 	try
 	{
-		ThrowIfError("Failed to Write", uv_write(req, _handle, data->buffer, 1, _entropy_tethys_uv_stream_write_cb));
+		ThrowIfError("Failed to Write", uv_write(req, _handle, data->buffer, 1, write_cb));
 	}
 	catch(...)
 	{
@@ -77,7 +85,18 @@ void Stream::ReadStop()
 	try
 	{
 		ThrowIfError("Failed to stop reading stream", uv_read_stop(_handle));
-		ThrowIfError("Failed to stop writing stream", uv_shutdown(req, _handle, shutdown_cb));
+		try
+		{
+			ThrowIfError("Failed to stop writing stream", uv_shutdown(req, _handle, shutdown_cb));
+		}
+		catch(Exception &e)
+		{
+			// 2018-02-13 AMR NOTE: don't throw if "fail" to shutdown because already shutdown
+			if(!e.has<SystemErrorCode>() || e.get<SystemErrorCode>().value() != 107)
+				throw e;
+			else
+				delete req;
+		}
 	}
 	catch(...)
 	{
@@ -86,14 +105,15 @@ void Stream::ReadStop()
 	}
 }
 
-void Stream::onEof()
+void Stream::EofCb()
 {
 	ReadStop();
+	_on_eof(*this);
 }
 
-void Stream::onError(const Exception &e)
+void Stream::ErrorCb(const Entropy::Exception &e)
 {
-	throw e;
+	_on_error(e);
 }
 
 void Stream::ReadCb(const uv_buf_t *buf, const ssize_t nread)
@@ -106,16 +126,16 @@ void _entropy_tethys_uv_stream_read_cb(uv_stream_t *handle , ssize_t nread, cons
 	Stream *stream = static_cast<Stream *>(handle->data);
 	if(nread == UV_EOF) {
 		delete [] buf->base;
-		stream->onEof();
+		stream->EofCb();
 	} else if(nread < 0) {
 		delete [] buf->base;
-		stream->onError(AttachUvInfo(Exception("Read Failed"), nread));
+		stream->ErrorCb(AttachUvInfo(Exception("Read Failed"), nread));
 	} else {
 		stream->ReadCb(buf, nread);
 	}
 }
 
-void _entropy_tethys_uv_stream_write_cb(uv_write_t *req, int status)
+void write_cb(uv_write_t *req, int status)
 {
 	write_cb_data *data = static_cast<write_cb_data *>(req->data);
 	Stream *stream = data->stream;
@@ -126,7 +146,7 @@ void _entropy_tethys_uv_stream_write_cb(uv_write_t *req, int status)
 	delete req;
 
 	if(status < 0) {
-		stream->onError(AttachUvInfo(Exception("Write Failed"), status));
+		stream->ErrorCb(AttachUvInfo(Exception("Write Failed"), status));
 	}
 }
 
@@ -138,9 +158,8 @@ void alloc_cb(uv_handle_t *, size_t suggested, uv_buf_t *buf)
 
 void shutdown_cb(uv_shutdown_t *req, int status)
 {
-	// 2018-02-12 AMR TODO: is this even remotely kosher?
-	// 2017-06-29 AMR NOTE: Stream is reclaimed
-	ThrowIfError("Failed to stop writing stream", status); 
+	// 2018-02-13 AMR TODO: is this even remotely kosher
+	ThrowIfError("Shutdown failed", status);
 	uv_close(reinterpret_cast<uv_handle_t *>(req->data), close_cb);
 
 	delete req;

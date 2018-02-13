@@ -43,7 +43,9 @@ libuvheaders_HEADERS = \
 	src/UV/Task.hh \
 	src/UV/Tcp.hh \
 	src/UV/TcpClient.hh \
+	src/UV/TcpClient.impl.hh \
 	src/UV/TcpServer.hh \
+	src/UV/TcpServer.impl.hh \
 	src/UV/Timer.hh \
 	src/UV/Timer.impl.hh
 

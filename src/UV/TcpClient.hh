@@ -7,10 +7,6 @@
 
 #	include "Tcp.hh"
 
-	extern "C" {
-		void _entropy_tethys_uv_tcp_client_connect_cb(uv_connect_t *, int);
-	}
-
 	namespace Entropy
 	{
 		namespace Tethys
@@ -21,16 +17,35 @@
 					public Tcp
 				{
 					public:
-						TcpClient(const std::string &, const std::string &);
+						TcpClient(
+							const std::string &,
+							const std::string &,
+							const std::function<void(Tethys::Stream<char> &)> &,
+							const std::function<void(Stream &)> &,
+							const std::function<void(const Entropy::Exception &)> &,
+							const std::function<void(Tcp &)> &,
+							const std::function<void(Tcp &)> &
+						);
+						template<typename Application,
+							typename = typename std::enable_if<
+								std::is_class<Application>::value
+							>::type
+						>
+						TcpClient(
+							const std::string &,
+							const std::string &,
+							Application &
+						);
 						virtual ~TcpClient();
-					protected:
-						virtual void InfoCb(const GetAddrInfo &);
-					protected:
-						virtual void ConnectCb();
-					friend void ::_entropy_tethys_uv_tcp_client_connect_cb(uv_connect_t *, int);
+						void InfoCb(const GetAddrInfo &);
+						void ConnectCb();
+					private:
+						std::function<void(Tcp &)> _on_con;
 				};
 			}
 		}
 	}
+
+#	include "TcpClient.impl.hh"
 
 #endif

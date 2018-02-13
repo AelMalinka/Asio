@@ -26,8 +26,11 @@ class Server :
 {
 	public:
 		Server(const string &, const string &);
-	private:
 		void onData(Tethys::Stream<char> &);
+		void onEof(UV::Stream &) {}
+		void onError(const Entropy::Exception &e) { throw e; }
+		void onDisconnect(const UV::Tcp &) {}
+		void onConnect(const UV::Tcp &) {}
 };
 
 class Application :
@@ -85,7 +88,7 @@ int main(int ArgC, char *ArgV[])
 }
 
 Server::Server(const string &host, const string &service)
-	: UV::TcpServer(host, service)
+	: UV::TcpServer(host, service, *this)
 {}
 
 void Server::onData(Tethys::Stream<char> &s)

@@ -12,7 +12,6 @@
 
 	extern "C" {
 		void _entropy_tethys_uv_stream_read_cb(uv_stream_t *, ssize_t, const uv_buf_t *);
-		void _entropy_tethys_uv_stream_write_cb(uv_write_t *, int);
 	}
 
 	namespace Entropy
@@ -26,22 +25,26 @@
 					public Task
 				{
 					public:
-						Stream(uv_stream_t *);
+						Stream(
+							uv_stream_t *,
+							const std::function<void(Tethys::Stream<char> &)> &,
+							const std::function<void(Stream &)> &,
+							const std::function<void(const Entropy::Exception &)> &
+						);
 						virtual ~Stream();
 						virtual void Write(Buffer<char> &&);
-						virtual void onData(Tethys::Stream<char> &) = 0;
+						virtual void EofCb();
+						virtual void ErrorCb(const Entropy::Exception &);
 					protected:
 						virtual void ReadStart();
 						virtual void ReadStop();
-					protected:
-						virtual void onError(const Exception &);
-						virtual void onEof();
 					private:
 						void ReadCb(const uv_buf_t *, const ssize_t);
 					private:
 						uv_stream_t *_handle;
+						std::function<void(Stream &)> _on_eof;
+						std::function<void(const Entropy::Exception &)> _on_error;
 					friend void ::_entropy_tethys_uv_stream_read_cb(uv_stream_t *, ssize_t, const uv_buf_t *);
-					friend void ::_entropy_tethys_uv_stream_write_cb(uv_write_t *, int);
 				};
 			}
 		}

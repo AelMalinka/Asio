@@ -29,9 +29,11 @@ class Client :
 {
 	public:
 		Client(const string &, const string &);
-	private:
-		void onConnect(Stream &);
+		void onConnect(UV::Stream &);
 		void onData(Tethys::Stream<char> &);
+		void onEof(UV::Stream &) {}
+		void onError(const Entropy::Exception &e) { throw e; }
+		void onDisconnect(UV::Tcp &) {}
 	private:
 		string _host;
 };
@@ -77,7 +79,7 @@ int main(int ArgC, char *ArgV[])
 }
 
 Client::Client(const string &host, const string &service)
-	: TcpClient(host, service), _host(host)
+	: TcpClient(host, service, *this), _host(host)
 {}
 
 void Client::onConnect(Stream &s)

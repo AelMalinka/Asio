@@ -7,10 +7,6 @@
 
 #	include "Tcp.hh"
 
-	extern "C" {
-		void _entropy_tethys_uv_tcp_server_accept_cb(uv_stream_t *, int);
-	}
-
 	namespace Entropy
 	{
 		namespace Tethys
@@ -23,36 +19,61 @@
 					public:
 						class Client;
 					public:
-						TcpServer(const std::string &, const std::string &);
+						TcpServer(
+							const std::string &,
+							const std::string &,
+							const std::function<void(Tethys::Stream<char> &)> &,
+							const std::function<void(Stream &)> &,
+							const std::function<void(const Entropy::Exception &)> &,
+							const std::function<void(Tcp &)> &,
+							const std::function<void(Tcp &)> &
+						);
+						template<typename Application,
+							typename = typename std::enable_if<
+								std::is_class<Application>::value
+							>::type
+						>
+						TcpServer(
+							const std::string &,
+							const std::string &,
+							Application &
+						);
 						virtual ~TcpServer();
 						virtual void Added(Loop &);
-					protected:
-						virtual void onDisconnect(Stream &); 
-					protected:
+						virtual void DisconnectCb(Tcp &); 
 						virtual void InfoCb(const GetAddrInfo &);
 						virtual void AcceptCb();
 					private:
 						std::list<Client> _connections;
 						Loop *_loop;
+						std::function<void(Tethys::Stream<char> &)> _on_data;
+						std::function<void(Stream &)> _on_eof;
+						std::function<void(const Entropy::Exception &)> _on_error;
+						std::function<void(Tcp &)> _on_dis;
+						std::function<void(Tcp &)> _on_con;
 					public:
 						class Client :
 							public Tcp
 						{
 							public:
-								Client(TcpServer &, Loop &);
-							protected:
-								virtual void onDisconnect(Stream &);
-								virtual void onData(Tethys::Stream<char> &);
-							private:
-								void InfoCb(const GetAddrInfo &) {}
+								Client(
+									TcpServer &,
+									Loop &,
+									const std::function<void(Tethys::Stream<char> &)> &,
+									const std::function<void(Stream &)> &,
+									const std::function<void(const Entropy::Exception &)> &,
+									const std::function<void(Tcp &)> &
+								);
 							private:
 								TcpServer &_server;
+								std::function<void(Tcp &)> _on_dis;
 						};
-					friend void ::_entropy_tethys_uv_tcp_server_accept_cb(uv_stream_t *, int);
 					friend Client;
 				};
 			}
 		}
 	}
+
+#	include "TcpServer.impl.hh"
 
 #endif

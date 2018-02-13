@@ -9,8 +9,27 @@ using namespace std;
 
 using Entropy::Tethys::Exception;
 
-TcpClient::TcpClient(const string &host, const string &service)
-	: Tcp(host, service)
+extern "C" void connect_cb(uv_connect_t *req, int status);
+
+TcpClient::TcpClient(
+	const string &host,
+	const string &service,
+	const std::function<void(Tethys::Stream<char> &)> &data,
+	const std::function<void(Stream &)> &eof,
+	const std::function<void(const Entropy::Exception &)> &error,
+	const std::function<void(Tcp &)> &dis,
+	const std::function<void(Tcp &)> &con
+) :
+	Tcp(
+		host,
+		service,
+		data,
+		eof,
+		error,
+		dis,
+		bind(&TcpClient::InfoCb, this, std::placeholders::_1)
+	),
+	_on_con(con)
 {
 	Handle()->data = this;
 }
@@ -22,17 +41,25 @@ void TcpClient::InfoCb(const GetAddrInfo &info)
 	uv_connect_t *req = new uv_connect_t;
 	req->data = this;
 
-	// 2017-06-29 AMR TODO: try multiple address?
-	ThrowIfError("Failed to connect", uv_tcp_connect(req, Handle(), info.Info()->ai_addr, _entropy_tethys_uv_tcp_client_connect_cb));
+	try
+	{
+		// 2017-06-29 AMR TODO: try multiple address?
+		ThrowIfError("Failed to connect", uv_tcp_connect(req, Handle(), info.Info()->ai_addr, connect_cb));
+	}
+	catch(...)
+	{
+		delete req;
+		throw;
+	}
 }
 
 void TcpClient::ConnectCb()
 {
 	ReadStart();
-	onConnect(*this);
+	_on_con(*this);
 }
 
-void _entropy_tethys_uv_tcp_client_connect_cb(uv_connect_t *req, int status)
+void connect_cb(uv_connect_t *req, int status)
 {
 	TcpClient *tcp = static_cast<TcpClient *>(req->data);
 
@@ -41,6 +68,6 @@ void _entropy_tethys_uv_tcp_client_connect_cb(uv_connect_t *req, int status)
 	if(status == 0) {
 		tcp->ConnectCb();
 	} else {
-		tcp->onError(AttachUvInfo(Exception("Connect Failed"), status));
+		tcp->ErrorCb(AttachUvInfo(Exception("Connect Failed"), status));
 	}
 }

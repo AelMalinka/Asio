@@ -18,19 +18,31 @@
 					public Stream
 				{
 					public:
-						Tcp(Loop &);
-						Tcp(const std::string &, const std::string &);
+						Tcp(
+							Loop &,
+							const std::function<void(Tethys::Stream<char> &)> &,
+							const std::function<void(Stream &)> &,
+							const std::function<void(const Entropy::Exception &)> &,
+							const std::function<void(Tcp &)> &
+						);
+						Tcp(
+							const std::string &,
+							const std::string &,
+							const std::function<void(Tethys::Stream<char> &)> &,
+							const std::function<void(Stream &)> &,
+							const std::function<void(const Entropy::Exception &)> &,
+							const std::function<void(Tcp &)> &,
+							const std::function<void(const GetAddrInfo &)> &
+						);
 						virtual ~Tcp();
+						virtual void Added(Loop &);
+						virtual void EofCb();
 					protected:
 						uv_tcp_t *Handle();
-						virtual void InfoCb(const GetAddrInfo &) = 0;
-						virtual void onEof();
-					protected:
-						virtual void Added(Loop &);
-						virtual void onConnect(Stream &) {}
-						virtual void onDisconnect(Stream &) {}
 					private:
 						uv_tcp_t _handle;
+						std::function<void(Tcp &)> _on_dis;
+						std::function<void(const GetAddrInfo &)> _on_info;
 						std::shared_ptr<GetAddrInfo> _info;
 						std::string _host;
 						std::string _service;
