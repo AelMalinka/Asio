@@ -18,6 +18,4 @@
 		}
 	}
 
-#	include "Exception.impl.hh"
-
 #endif

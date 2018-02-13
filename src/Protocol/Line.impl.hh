@@ -13,44 +13,17 @@
 		{
 			namespace Protocol
 			{
-				template<typename Application, typename Socket, typename charT>
-				Line<Application, Socket, charT>::Line(Application &app, const std::basic_string<charT> &delim)
-					: _app(app), _delim(delim)
+				template<typename App, typename Sock, typename charT>
+				Line<App, Sock, charT>::Line(App &app, const std::basic_string<charT> &delim)
+					: Application<App, Sock>(app), _delim(delim)
 				{}
 
-				template<typename Application, typename Socket, typename charT> Line<Application, Socket, charT>::Line(const Line<Application, Socket, charT> &) = default;
-				template<typename Application, typename Socket, typename charT> Line<Application, Socket, charT>::Line(Line<Application, Socket, charT> &&) = default;
-				template<typename Application, typename Socket, typename charT> Line<Application, Socket, charT>::~Line() = default;
+				template<typename App, typename Sock, typename charT> Line<App, Sock, charT>::Line(const Line<App, Sock, charT> &) = default;
+				template<typename App, typename Sock, typename charT> Line<App, Sock, charT>::Line(Line<App, Sock, charT> &&) = default;
+				template<typename App, typename Sock, typename charT> Line<App, Sock, charT>::~Line() = default;
 
-				template<typename Application, typename Socket, typename charT>
-				void Line<Application, Socket, charT>::onConnect(Socket &s)
-				{
-					detail::call_connect<Application, detail::has_connect<Application, void(Socket &s)>::value>::apply(App(), s);
-				}
-
-				template<typename Application, typename Socket, typename charT>
-				void Line<Application, Socket, charT>::onDisconnect(Socket &s)
-				{
-					detail::call_disconnect<Application, detail::has_disconnect<Application, void(Socket &s)>::value>::apply(App(), s);
-				}
-
-				template<typename Application, typename Socket, typename charT>
-				void Line<Application, Socket, charT>::onEof(Socket &s)
-				{
-					detail::call_eof<Application, detail::has_eof<Application, void(Socket &s)>::value>::apply(App(), s);
-				}
-
-				template<typename Application, typename Socket, typename charT>
-				void Line<Application, Socket, charT>::onError(const Entropy::Exception &e)
-				{
-					detail::call_error<Application, detail::has_error<Application, void(const Entropy::Exception &)>::value>::apply(App(), e);
-
-					if(!detail::has_error<Application, void(const Entropy::Exception &)>::value)
-						throw e;
-				}
-
-				template<typename Application, typename Socket, typename charT>
-				void Line<Application, Socket, charT>::onData(Socket &s)
+				template<typename App, typename Sock, typename charT>
+				void Line<App, Sock, charT>::onData(Sock &s)
 				{
 					using std::basic_string;
 
@@ -61,21 +34,21 @@
 						s.read(line.data(), pos);
 
 						line = line.substr(0, line.size() - _delim.size());
-						App().onLine(s, line);
+						this->getApplication().onLine(s, line);
 
 						pos = findLine(s);
 					}
 				}
 
-				template<typename Application, typename Socket, typename charT>
-				std::streamsize Line<Application, Socket, charT>::findLine(Socket &s)
+				template<typename App, typename Sock, typename charT>
+				std::streamsize Line<App, Sock, charT>::findLine(Sock &s)
 				{
 					auto x = 0u;
 					auto y = 0u;
 
 					auto start = s.tellg();
 
-					while(s.peek() != Socket::traits_type::eof()) {
+					while(s.peek() != Sock::traits_type::eof()) {
 						if(s.peek() == _delim[y]) {
 							if(y++ == _delim.size() - 1) {
 								s.seekg(start);
@@ -92,18 +65,6 @@
 					s.clear();
 					s.seekg(start);
 					return 0;
-				}
-
-				template<typename Application, typename Socket, typename charT>
-				Application &Line<Application, Socket, charT>::App()
-				{
-					return _app;
-				}
-
-				template<typename Application, typename Socket, typename charT>
-				const Application &Line<Application, Socket, charT>::App() const
-				{
-					return _app;
 				}
 			}
 		}

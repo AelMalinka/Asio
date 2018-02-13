@@ -17,8 +17,9 @@ asioheaders_HEADERS = \
 
 protocolheadersdir = $(includedir)/Entropy/Tethys/Protocol
 protocolheaders_HEADERS = \
+	src/Protocol/Application.hh \
+	src/Protocol/Application.impl.hh \
 	src/Protocol/Exception.hh \
-	src/Protocol/Exception.impl.hh \
 	src/Protocol/Line.hh \
 	src/Protocol/Line.impl.hh
 
@@ -90,6 +91,7 @@ check_PROGRAMS += \
 	application-application \
 	application-task \
 	ios-buffer \
+	protocol-application \
 	protocol-line-basic \
 	protocol-line
 
@@ -105,6 +107,10 @@ application_task_LDADD = $(gtestLDADD)
 
 ios_buffer_SOURCES = test/ios/buffer.cc
 ios_buffer_LDADD = $(gtestLDADD)
+
+protocol_application_SOURCES = test/protocol/basic.cc
+protocol_application_CXXFLAGS = -DPROTOCOL=Application -DPROTOCOL_INCLUDE='"Protocol/Application.hh"' -DMOCK_FULL=MockApplication -DMOCK_BASE=MockApplicationOnlyLine $(AM_CXXFLAGS)
+protocol_application_LDADD = $(gmockLDADD)
 
 protocol_line_basic_SOURCES = test/protocol/basic.cc
 protocol_line_basic_CXXFLAGS = -DPROTOCOL=Line -DPROTOCOL_INCLUDE='"Protocol/Line.hh"' -DMOCK_FULL=MockApplication -DMOCK_BASE=MockApplicationOnlyLine $(AM_CXXFLAGS)

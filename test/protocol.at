@@ -3,6 +3,11 @@
 
 AT_BANNER([Protocol Tests])
 
+AT_SETUP([Applicaiton Tests])
+AT_SKIP_IF([test -z $GTEST])
+AT_CHECK([protocol-application], [], [ignore], [ignore])
+AT_CLEANUP
+
 AT_SETUP([Line Tests])
 AT_SKIP_IF([test -z $GTEST])
 AT_CHECK([protocol-line], [], [ignore], [ignore])
