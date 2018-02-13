@@ -34,28 +34,28 @@ noinst_HEADERS = \
 if LIBUV
 libuvheadersdir = $(includedir)/Entropy/Tethys/UV
 libuvheaders_HEADERS = \
-	src/UV/Task.hh \
+	src/UV/GetAddrInfo.hh \
 	src/UV/Loop.hh \
 	src/UV/Loop.impl.hh \
-	src/UV/GetAddrInfo.hh \
+	src/UV/Signal.hh \
 	src/UV/Stream.hh \
+	src/UV/Task.hh \
 	src/UV/Tcp.hh \
 	src/UV/TcpClient.hh \
 	src/UV/TcpServer.hh \
-	src/UV/Signal.hh \
 	src/UV/Timer.hh \
 	src/UV/Timer.impl.hh
 
 libtethys_la_SOURCES += \
-	src/UV/Loop.cc \
 	src/UV/GetAddrInfo.cc \
+	src/UV/Loop.cc \
+	src/UV/Signal.cc \
 	src/UV/Stream.cc \
+	src/UV/Task.cc \
 	src/UV/Tcp.cc \
 	src/UV/TcpClient.cc \
 	src/UV/TcpServer.cc \
-	src/UV/Signal.cc \
-	src/UV/Timer.cc \
-	src/UV/Task.cc
+	src/UV/Timer.cc
 endif
 
 noinst_PROGRAMS = \
