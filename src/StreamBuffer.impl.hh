@@ -14,23 +14,10 @@
 		namespace Tethys
 		{
 			template<typename charT, typename traits>
-			template<typename Stream, typename>
-			StreamBuffer<charT, traits>::StreamBuffer(Stream &s) :
-				std::basic_streambuf<charT, traits>(),
-				_write(std::bind(&Stream::Write, &s, std::placeholders::_1)),
-				_clear(std::bind(&Stream::clear, &s, std::placeholders::_1)),
-				_buffers(),
-				_current(_buffers.end()),
-				_w_buff(),
-				_is_seek(false)
-			{
-				_w_buff = std::make_shared<Buffer<charT>>(write_buffer_size);
-				this->setp(_w_buff->begin(), _w_buff->begin() + _w_buff->capacity());
-			}
-
-			template<typename charT, typename traits>
-			template<typename F1, typename F2, typename>
-			StreamBuffer<charT, traits>::StreamBuffer(const F1 &f1, const F2 &f2) :
+			StreamBuffer<charT, traits>::StreamBuffer(
+				const std::function<void(Buffer<charT> &&)> &f1,
+				const std::function<void(std::ios_base::iostate)> &f2
+			) :
 				std::basic_streambuf<charT, traits>(),
 				_write(f1),
 				_clear(f2),
@@ -42,6 +29,15 @@
 				_w_buff = std::make_shared<Buffer<charT>>(write_buffer_size);
 				this->setp(_w_buff->begin(), _w_buff->begin() + _w_buff->capacity());
 			}
+
+			template<typename charT, typename traits>
+			template<typename Stream, typename>
+			StreamBuffer<charT, traits>::StreamBuffer(Stream &s) :
+				StreamBuffer<charT, traits>::StreamBuffer(
+					std::bind(&Stream::Write, &s, std::placeholders::_1),
+					std::bind(&Stream::clear, &s, std::placeholders::_1)
+				)
+			{}
 
 			template<typename charT, typename traits> StreamBuffer<charT, traits>::StreamBuffer(StreamBuffer<charT, traits> &&) = default;
 			template<typename charT, typename traits> StreamBuffer<charT, traits>::~StreamBuffer() = default;

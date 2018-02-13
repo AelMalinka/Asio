@@ -12,19 +12,18 @@
 		namespace Tethys
 		{
 			template<typename charT, typename traits>
-			template<typename Application, typename> 
-			Stream<charT, traits>::Stream(Application &app) :
-				std::basic_iostream<charT, traits>(&_buffer),
-				_buffer(*this),
-				_on_data(std::bind(&Application::onData, &app, std::placeholders::_1))
-			{}
-
-			template<typename charT, typename traits>
-			template<typename F1, typename>
-			Stream<charT, traits>::Stream(const F1 &f1) :
+			Stream<charT, traits>::Stream(const std::function<void(Stream<charT, traits> &)> &f1) :
 				std::basic_iostream<charT, traits>(&_buffer),
 				_buffer(*this),
 				_on_data(f1)
+			{}
+
+			template<typename charT, typename traits>
+			template<typename Application, typename>
+			Stream<charT, traits>::Stream(Application &app) :
+				Stream<charT, traits>::Stream(
+					std::bind(&Application::onData, &app, std::placeholders::_1)
+				)
 			{}
 
 			template<typename charT, typename traits> Stream<charT, traits>::Stream(Stream<charT, traits> &&) = default;

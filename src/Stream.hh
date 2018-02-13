@@ -19,6 +19,7 @@
 				public std::basic_iostream<charT>
 			{
 				public:
+					explicit Stream(const std::function<void(Stream<charT, traits> &)> &);
 					template<
 						typename Application,
 						typename = typename std::enable_if<
@@ -26,13 +27,6 @@
 						>::type
 					>
 					explicit Stream(Application &);
-					template<
-						typename F1,
-						typename = typename std::enable_if<
-							std::is_function<F1>::value
-						>::type
-					>
-					explicit Stream(const F1 &);
 					Stream(const Stream<charT, traits> &) = delete;
 					Stream(Stream<charT, traits> &&);
 					virtual ~Stream();

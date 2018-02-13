@@ -36,6 +36,7 @@
 					typedef typename base::pos_type pos_type;
 					typedef typename base::off_type off_type;
 				public:
+					StreamBuffer(const std::function<void(Buffer<charT> &&)> &, const std::function<void(std::ios_base::iostate)> &);
 					template<
 						typename Stream,
 						typename = typename std::enable_if<
@@ -43,15 +44,6 @@
 						>::type
 					>
 					explicit StreamBuffer(Stream &);
-					template<
-						typename F1,
-						typename F2,
-						typename = typename std::enable_if<
-							std::is_function<F1>::value &&
-							std::is_function<F2>::value
-						>::type
-					>
-					explicit StreamBuffer(const F1 &, const F2 &);
 					StreamBuffer(const StreamBuffer<charT, traits> &) = delete;
 					StreamBuffer(StreamBuffer<charT, traits> &&);
 					~StreamBuffer();
