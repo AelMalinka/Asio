@@ -13,20 +13,26 @@
 		{
 			namespace Protocol
 			{
-				template<typename App, typename Sock, typename charT = char>
+				template<
+					typename App,
+					typename Sock,
+					typename charT = char,
+					typename traits = std::char_traits<charT>,
+					typename Alloc = std::allocator<charT>
+				>
 				class Line :
 					public Application<App, Sock>
 				{
 					public:
-						explicit Line(App &, const std::basic_string<charT> & = "\r\n");
-						Line(const Line<App, Sock, charT> &);
-						Line(Line<App, Sock, charT> &&);
+						explicit Line(App &, const std::basic_string<charT, traits, Alloc> & = "\r\n");
+						Line(const Line<App, Sock, charT, traits, Alloc> &);
+						Line(Line<App, Sock, charT, traits, Alloc> &&);
 						virtual ~Line();
 						void onData(Sock &);
 					protected:
 						std::streamsize findLine(Sock &);
 					private:
-						std::string _delim;
+						std::basic_string<charT, traits, Alloc> _delim;
 				};
 			}
 		}

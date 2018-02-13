@@ -13,17 +13,22 @@
 		{
 			namespace Protocol
 			{
-				template<typename App, typename Sock, typename charT>
-				Line<App, Sock, charT>::Line(App &app, const std::basic_string<charT> &delim)
+				template<typename App, typename Sock, typename charT, typename traits, typename Alloc>
+				Line<App, Sock, charT, traits, Alloc>::Line(App &app, const std::basic_string<charT, traits, Alloc> &delim)
 					: Application<App, Sock>(app), _delim(delim)
 				{}
 
-				template<typename App, typename Sock, typename charT> Line<App, Sock, charT>::Line(const Line<App, Sock, charT> &) = default;
-				template<typename App, typename Sock, typename charT> Line<App, Sock, charT>::Line(Line<App, Sock, charT> &&) = default;
-				template<typename App, typename Sock, typename charT> Line<App, Sock, charT>::~Line() = default;
+				template<typename App, typename Sock, typename charT, typename traits, typename Alloc>
+				Line<App, Sock, charT, traits, Alloc>::Line(const Line<App, Sock, charT, traits, Alloc> &) = default;
 
-				template<typename App, typename Sock, typename charT>
-				void Line<App, Sock, charT>::onData(Sock &s)
+				template<typename App, typename Sock, typename charT, typename traits, typename Alloc>
+				Line<App, Sock, charT, traits, Alloc>::Line(Line<App, Sock, charT, traits, Alloc> &&) = default;
+
+				template<typename App, typename Sock, typename charT, typename traits, typename Alloc>
+				Line<App, Sock, charT, traits, Alloc>::~Line() = default;
+
+				template<typename App, typename Sock, typename charT, typename traits, typename Alloc>
+				void Line<App, Sock, charT, traits, Alloc>::onData(Sock &s)
 				{
 					using std::basic_string;
 
@@ -40,8 +45,8 @@
 					}
 				}
 
-				template<typename App, typename Sock, typename charT>
-				std::streamsize Line<App, Sock, charT>::findLine(Sock &s)
+				template<typename App, typename Sock, typename charT, typename traits, typename Alloc>
+				std::streamsize Line<App, Sock, charT, traits, Alloc>::findLine(Sock &s)
 				{
 					auto x = 0u;
 					auto y = 0u;
