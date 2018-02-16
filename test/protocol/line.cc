@@ -14,12 +14,12 @@ namespace {
 	TEST(Line, Instantiation) {
 		MockApplication app;
 		stringstream s;
-		Line<MockApplication, stringstream> l(app);
+		Line<MockApplication> l(app);
 	}
 
 	TEST(Line, Basic) {
 		MockApplication app;
-		Line<MockApplication, stringstream> l(app);
+		Line<MockApplication> l(app);
 
 		string s = "Hello World!\r\n"s;
 		stringstream sock(s);
@@ -33,7 +33,7 @@ namespace {
 	TEST(Line, SmallBuffer) {
 		MockApplication app;
 		stringstream sock;
-		Line<MockApplication, stringstream> l(app);
+		Line<MockApplication> l(app);
 
 		string s1 = "Hello"s;
 		string s2 = " "s;
@@ -56,7 +56,7 @@ namespace {
 	TEST(Line, MultipleLines) {
 		MockApplication app;
 		stringstream sock;
-		Line<MockApplication, stringstream> l(app);
+		Line<MockApplication> l(app);
 
 		string s1 = "Hello World!\r\nThis is a message!"s;
 		string s2 = "\r\nBecause Mehf\r\n"s;
@@ -82,12 +82,12 @@ namespace {
 		stringstream sock4;
 		stringstream sock5;
 		stringstream sock6;
-		Line<MockApplication, stringstream> l1(app, ":");
-		Line<MockApplication, stringstream> l2(app, "\r\n");
-		Line<MockApplication, stringstream> l3(app, "\r");
-		Line<MockApplication, stringstream> l4(app, "\n");
-		Line<MockApplication, stringstream> l5(app, "/");
-		Line<MockApplication, stringstream> l6(app, "/asdfasdf/");
+		Line<MockApplication> l1(app, ":");
+		Line<MockApplication> l2(app, "\r\n");
+		Line<MockApplication> l3(app, "\r");
+		Line<MockApplication> l4(app, "\n");
+		Line<MockApplication> l5(app, "/");
+		Line<MockApplication> l6(app, "/asdfasdf/");
 
 		string s1 = "Hello World!"s;
 		string s2 = "This is a Different Delimiter!"s;

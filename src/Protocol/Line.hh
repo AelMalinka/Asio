@@ -15,24 +15,33 @@
 			{
 				template<
 					typename App,
-					typename Sock,
 					typename charT = char,
-					typename traits = std::char_traits<charT>,
-					typename Alloc = std::allocator<charT>
+					typename traits = std::char_traits<charT>
 				>
-				class Line :
-					public Application<App, Sock>
+				class Line
 				{
 					public:
-						explicit Line(App &, const std::basic_string<charT, traits, Alloc> & = "\r\n");
-						Line(const Line<App, Sock, charT, traits, Alloc> &);
-						Line(Line<App, Sock, charT, traits, Alloc> &&);
-						virtual ~Line();
+						typedef charT char_type;
+						typedef traits traits_type;
+						typedef std::basic_string<char_type, traits_type> string_type;
+					public:
+						// 2018-02-15 AMR TODO: does this work on wide and/or utf strings, if not fix
+						explicit Line(App &, const string_type & = "\r\n");
+						template<typename Sock>
+						void onConnect(Sock &);
+						template<typename Sock>
+						void onDisconnect(Sock &);
+						template<typename Sock>
+						void onEof(Sock &);
+						template<typename Sock>
 						void onData(Sock &);
+						void onError(const Entropy::Exception &);
 					protected:
+						template<typename Sock>
 						std::streamsize findLine(Sock &);
 					private:
-						std::basic_string<charT, traits, Alloc> _delim;
+						Application<App> _application;
+						string_type _delim;
 				};
 			}
 		}

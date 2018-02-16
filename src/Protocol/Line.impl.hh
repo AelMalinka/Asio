@@ -13,40 +13,62 @@
 		{
 			namespace Protocol
 			{
-				template<typename App, typename Sock, typename charT, typename traits, typename Alloc>
-				Line<App, Sock, charT, traits, Alloc>::Line(App &app, const std::basic_string<charT, traits, Alloc> &delim)
-					: Application<App, Sock>(app), _delim(delim)
+				template<typename App, typename charT, typename traits>
+				Line<App, charT, traits>::Line(App &app, const string_type &delim)
+					: _application(app), _delim(delim)
 				{}
 
-				template<typename App, typename Sock, typename charT, typename traits, typename Alloc>
-				Line<App, Sock, charT, traits, Alloc>::Line(const Line<App, Sock, charT, traits, Alloc> &) = default;
+				template<typename App, typename charT, typename traits>
+				template<typename Sock>
+				void Line<App, charT, traits>::onConnect(Sock &s)
+				{
+					_application.onConnect(s);
+				}
 
-				template<typename App, typename Sock, typename charT, typename traits, typename Alloc>
-				Line<App, Sock, charT, traits, Alloc>::Line(Line<App, Sock, charT, traits, Alloc> &&) = default;
+				template<typename App, typename charT, typename traits>
+				template<typename Sock>
+				void Line<App, charT, traits>::onDisconnect(Sock &s)
+				{
+					_application.onDisconnect(s);
+				}
 
-				template<typename App, typename Sock, typename charT, typename traits, typename Alloc>
-				Line<App, Sock, charT, traits, Alloc>::~Line() = default;
+				template<typename App, typename charT, typename traits>
+				template<typename Sock>
+				void Line<App, charT, traits>::onEof(Sock &s)
+				{
+					_application.onEof(s);
+				}
 
-				template<typename App, typename Sock, typename charT, typename traits, typename Alloc>
-				void Line<App, Sock, charT, traits, Alloc>::onData(Sock &s)
+				template<typename App, typename charT, typename traits>
+				void Line<App, charT, traits>::onError(const Entropy::Exception &e)
+				{
+					_application.onError(e);
+				}
+
+				template<typename App, typename charT, typename traits>
+				template<typename Sock>
+				void Line<App, charT, traits>::onData(Sock &s)
 				{
 					using std::basic_string;
 
 					std::streamsize pos = findLine(s);
 
 					while(pos) {
-						basic_string<charT> line(pos, 0);
+						string_type line(pos, 0);
+						auto at = s.tellg();
 						s.read(line.data(), pos);
 
 						line = line.substr(0, line.size() - _delim.size());
-						this->getApplication().onLine(s, line);
+						ENTROPY_LOG(Log, Severity::Debug) << " start: " << at << " at: " << s.tellg() << " next: " << static_cast<char>(s.peek()) << " left: " << s.rdbuf()->in_avail() << " got: '" << line << "'";
+						_application.getApplication().onLine(s, std::move(line));
 
 						pos = findLine(s);
 					}
 				}
 
-				template<typename App, typename Sock, typename charT, typename traits, typename Alloc>
-				std::streamsize Line<App, Sock, charT, traits, Alloc>::findLine(Sock &s)
+				template<typename App, typename charT, typename traits>
+				template<typename Sock>
+				std::streamsize Line<App, charT, traits>::findLine(Sock &s)
 				{
 					auto x = 0u;
 					auto y = 0u;
@@ -74,6 +96,5 @@
 			}
 		}
 	}
-
 
 #endif

@@ -10,83 +10,102 @@ using namespace std;
 using namespace Entropy::Tethys::Protocol;
 using namespace testing;
 
+#define TEST_BEGIN try {
+#define TEST_END } catch(exception &e) { FAIL() << e; }
+
 namespace {
 	TEST(PROTOCOL, Instantiation) {
-		MOCK_FULL app;
-		PROTOCOL<MOCK_FULL, stringstream> l(app);
+		TEST_BEGIN
+			MOCK_FULL app;
+			PROTOCOL<MOCK_FULL> l(app);
+		TEST_END
 	}
 
 	TEST(PROTOCOL, onConnect) {
-		MOCK_FULL app;
-		PROTOCOL<MOCK_FULL, stringstream> l(app);
-		stringstream sock;
+		TEST_BEGIN
+			MOCK_FULL app;
+			PROTOCOL<MOCK_FULL> l(app);
+			stringstream sock;
 
-		EXPECT_CALL(app, onConnect(_))
-			.Times(1);
+			EXPECT_CALL(app, onConnect(_))
+				.Times(1);
 
-		l.onConnect(sock);
+			l.onConnect(sock);
+		TEST_END
 	}
 
 	TEST(PROTOCOL, onConnectNoConnect) {
-		StrictMock<MOCK_BASE> app;
-		PROTOCOL<MOCK_BASE, stringstream> l(app);
-		stringstream sock;
+		TEST_BEGIN
+			StrictMock<MOCK_BASE> app;
+			PROTOCOL<MOCK_BASE> l(app);
+			stringstream sock;
 
-		l.onConnect(sock);
+			l.onConnect(sock);
+		TEST_END
 	}
 
 	TEST(PROTOCOL, onDisconnect) {
-		MOCK_FULL app;
-		PROTOCOL<MOCK_FULL, stringstream> l(app);
-		stringstream sock;
+		TEST_BEGIN
+			MOCK_FULL app;
+			PROTOCOL<MOCK_FULL> l(app);
+			stringstream sock;
 
-		EXPECT_CALL(app, onDisconnect(_))
-			.Times(1);
+			EXPECT_CALL(app, onDisconnect(_))
+				.Times(1);
 
-		l.onDisconnect(sock);
+			l.onDisconnect(sock);
+		TEST_END
 	}
 
 	TEST(PROTOCOL, onDisconnectNoDisconnect) {
-		StrictMock<MOCK_BASE> app;
-		PROTOCOL<MOCK_BASE, stringstream> l(app);
-		stringstream sock;
+		TEST_BEGIN
+			StrictMock<MOCK_BASE> app;
+			PROTOCOL<MOCK_BASE> l(app);
+			stringstream sock;
 
-		l.onDisconnect(sock);
+			l.onDisconnect(sock);
+		TEST_END
 	}
 
 	TEST(PROTOCOL, onEof) {
-		MOCK_FULL app;
-		PROTOCOL<MOCK_FULL, stringstream> l(app);
-		stringstream sock;
+		TEST_BEGIN
+			MOCK_FULL app;
+			PROTOCOL<MOCK_FULL> l(app);
+			stringstream sock;
 
-		EXPECT_CALL(app, onEof(_))
-			.Times(1);
+			EXPECT_CALL(app, onEof(_))
+				.Times(1);
 
-		l.onEof(sock);
+			l.onEof(sock);
+		TEST_END
 	}
 
 	TEST(PROTOCOL, onEofNoEof) {
-		StrictMock<MOCK_BASE> app;
-		PROTOCOL<MOCK_BASE, stringstream> l(app);
-		stringstream sock;
+		TEST_BEGIN
+			StrictMock<MOCK_BASE> app;
+			PROTOCOL<MOCK_BASE> l(app);
+			stringstream sock;
 
-		l.onDisconnect(sock);
+			l.onDisconnect(sock);
+		TEST_END
 	}
 
 	TEST(PROTOCOL, onError) {
-		MOCK_FULL app;
-		PROTOCOL<MOCK_FULL, stringstream> l(app);
-		Exception err("This is an error");
+		TEST_BEGIN
+			MOCK_FULL app;
+			PROTOCOL<MOCK_FULL> l(app);
+			Exception err("This is an error");
 
-		EXPECT_CALL(app, onError(_))
-			.Times(1);
+			EXPECT_CALL(app, onError(_))
+				.Times(1);
 
-		l.onError(err);
+			l.onError(err);
+		TEST_END
 	}
 
 	TEST(PROTOCOL, onErrorNoError) {
 		StrictMock<MOCK_BASE> app;
-		PROTOCOL<MOCK_BASE, stringstream> l(app);
+		PROTOCOL<MOCK_BASE> l(app);
 		Exception err("This is an error");
 
 		// 2018-02-10 AMR NOTE: possibly loses type

@@ -171,35 +171,34 @@
 					};
 				}
 
-				template<typename App, typename Sock>
-				Application<App, Sock>::Application(App &app) :
-					_app(app)
+				template<typename App>
+				Application<App>::Application(App &app) :
+					_app(&app)
 				{}
 
-				template<typename App, typename Sock> Application<App, Sock>::Application(const Application<App, Sock> &) = default;
-				template<typename App, typename Sock> Application<App, Sock>::Application(Application<App, Sock> &&) = default;
-				template<typename App, typename Sock> Application<App, Sock>::~Application() = default;
-
-				template<typename App, typename Sock>
-				void Application<App, Sock>::onConnect(Sock &s)
+				template<typename App>
+				template<typename Sock>
+				void Application<App>::onConnect(Sock &s)
 				{
 					detail::call_connect<App, detail::has_connect<App, void(Sock &s)>::value>::apply(getApplication(), s);
 				}
 
-				template<typename App, typename Sock>
-				void Application<App, Sock>::onDisconnect(Sock &s)
+				template<typename App>
+				template<typename Sock>
+				void Application<App>::onDisconnect(Sock &s)
 				{
 					detail::call_disconnect<App, detail::has_disconnect<App, void(Sock &s)>::value>::apply(getApplication(), s);
 				}
 
-				template<typename App, typename Sock>
-				void Application<App, Sock>::onEof(Sock &s)
+				template<typename App>
+				template<typename Sock>
+				void Application<App>::onEof(Sock &s)
 				{
 					detail::call_eof<App, detail::has_eof<App, void(Sock &s)>::value>::apply(getApplication(), s);
 				}
 
-				template<typename App, typename Sock>
-				void Application<App, Sock>::onError(const Entropy::Exception &e)
+				template<typename App>
+				void Application<App>::onError(const Entropy::Exception &e)
 				{
 					detail::call_error<App, detail::has_error<App, void(const Entropy::Exception &)>::value>::apply(getApplication(), e);
 
@@ -207,24 +206,26 @@
 						throw e;
 				}
 
-				template<typename App, typename Sock>
-				void Application<App, Sock>::onData(Sock &s)
+				template<typename App>
+				template<typename Sock>
+				void Application<App>::onData(Sock &s)
 				{
 					detail::call_data<App, detail::has_data<App, void(Sock &s)>::value>::apply(getApplication(), s);
 				}
 
-				template<typename App, typename Sock>
-				App &Application<App, Sock>::getApplication()
+				template<typename App>
+				App &Application<App>::getApplication()
 				{
-					return _app;
+					return *_app;
 				}
 
-				template<typename App, typename Sock>
-				const App &Application<App, Sock>::getApplication() const
+				template<typename App>
+				const App &Application<App>::getApplication() const
 				{
-					return _app;
+					return *_app;
 				}
 			}
 		}
 	}
+
 #endif

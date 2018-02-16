@@ -13,25 +13,24 @@
 		{
 			namespace Protocol
 			{
-				// 2018-02-13 AMR TODO: determine performance cost of virtual here
-				template<typename App, typename Sock>
+				template<typename App>
 				class Application
 				{
 					public:
 						explicit Application(App &);
-						Application(const Application<App, Sock> &);
-						Application(Application<App, Sock> &&);
-						virtual ~Application();
-						virtual void onConnect(Sock &);
-						virtual void onDisconnect(Sock &);
-						virtual void onEof(Sock &);
-						virtual void onError(const Entropy::Exception &);
-						virtual void onData(Sock &);
-					protected:
+						template<typename Sock>
+						void onConnect(Sock &);
+						template<typename Sock>
+						void onDisconnect(Sock &);
+						template<typename Sock>
+						void onEof(Sock &);
+						template<typename Sock>
+						void onData(Sock &);
+						void onError(const Entropy::Exception &);
 						App &getApplication();
 						const App &getApplication() const;
 					private:
-						App &_app;
+						App *_app;
 				};
 			}
 		}
