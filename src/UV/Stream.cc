@@ -118,6 +118,7 @@ void Stream::ErrorCb(const Entropy::Exception &e)
 
 void Stream::ReadCb(const uv_buf_t *buf, const ssize_t nread)
 {
+	ENTROPY_LOG(Log, Severity::Debug) << nread << " bytes from peer: '" << buf->base << "'";
 	Read(Buffer<char>(nread, buf->len, buf->base));
 }
 
