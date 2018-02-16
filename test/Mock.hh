@@ -8,6 +8,9 @@
 #	include <gmock/gmock.h>
 #	include "Stream.hh"
 
+//	2018-02-14 AMR TODO: clean this up
+#	include "Protocol/HttpMessage.hh"
+
 	namespace {
 		template<typename charT = char>
 		class MockStream :
@@ -29,11 +32,13 @@
 				MOCK_METHOD1(onEof, void(std::stringstream &));
 				MOCK_METHOD2(onLine, void(std::stringstream &, const std::string &));
 				MOCK_METHOD1(onError, void(const Entropy::Exception &));
+				MOCK_METHOD2(onMessage, void(std::stringstream &, const Entropy::Tethys::Protocol::HttpMessage<> &));
 		};
 
-		class MockApplicationOnlyLine {
+		class MockApplicationEmpty {
 			public:
 				MOCK_METHOD2(onLine, void(std::stringstream &, const std::string &));
+				MOCK_METHOD2(onMessage, void(std::stringstream &, const Entropy::Tethys::Protocol::HttpMessage<> &));
 		};
 
 		template<typename charT>

@@ -1,5 +1,8 @@
+# Copyright 2016 (c) Michael Thomas (malinka) <malinka@entropy-development.com>
+# Distributed under the terms of the GNU Affero General Public License v3
+
 ACLOCAL_AMFLAGS = -I m4
-AM_CXXFLAGS := -I$(srcdir)/src $(AM_CXXFLAGS)
+AM_CPPFLAGS = -I$(srcdir)/src
 
 asioheadersdir = $(includedir)/Entropy/Tethys
 asioheaders_HEADERS = \
@@ -111,11 +114,11 @@ ios_buffer_SOURCES = test/ios/buffer.cc
 ios_buffer_LDADD = $(gtestLDADD)
 
 protocol_application_SOURCES = test/protocol/basic.cc
-protocol_application_CXXFLAGS = -DPROTOCOL=Application -DPROTOCOL_INCLUDE='"Protocol/Application.hh"' -DMOCK_FULL=MockApplication -DMOCK_BASE=MockApplicationOnlyLine $(AM_CXXFLAGS)
+protocol_application_CXXFLAGS = -DPROTOCOL=Application -DPROTOCOL_INCLUDE='"Protocol/Application.hh"' -DMOCK_FULL=MockApplication -DMOCK_BASE=MockApplicationEmpty $(AM_CXXFLAGS)
 protocol_application_LDADD = $(gmockLDADD)
 
 protocol_line_basic_SOURCES = test/protocol/basic.cc
-protocol_line_basic_CXXFLAGS = -DPROTOCOL=Line -DPROTOCOL_INCLUDE='"Protocol/Line.hh"' -DMOCK_FULL=MockApplication -DMOCK_BASE=MockApplicationOnlyLine $(AM_CXXFLAGS)
+protocol_line_basic_CXXFLAGS = -DPROTOCOL=Line -DPROTOCOL_INCLUDE='"Protocol/Line.hh"' -DMOCK_FULL=MockApplication -DMOCK_BASE=MockApplicationEmpty $(AM_CXXFLAGS)
 protocol_line_basic_LDADD = $(gmockLDADD)
 
 protocol_line_SOURCES = test/protocol/line.cc
