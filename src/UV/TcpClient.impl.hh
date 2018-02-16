@@ -22,11 +22,11 @@
 					TcpClient::TcpClient(
 						h,
 						p,
-						std::bind(&Application::onData, &a, std::placeholders::_1),
-						std::bind(&Application::onEof, &a, std::placeholders::_1),
-						std::bind(&Application::onError, &a, std::placeholders::_1),
-						std::bind(&Application::onDisconnect, &a, std::placeholders::_1),
-						std::bind(&Application::onConnect, &a, std::placeholders::_1)
+						[&a](auto &s) { a.onData(s); },
+						[&a](auto &s) { a.onEof(s); },
+						[&a](auto &e) { a.onError(e); },
+						[&a](auto &s) { a.onDisconnect(s); },
+						[&a](auto &s) { a.onConnect(s); }
 					)
 				{}
 			}
