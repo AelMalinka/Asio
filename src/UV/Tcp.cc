@@ -54,6 +54,16 @@ Tcp::Tcp(
 
 Tcp::~Tcp() = default;
 
+const string &Tcp::Host() const
+{
+	return _host;
+}
+
+const string &Tcp::Service() const
+{
+	return _service;
+}
+
 uv_tcp_t *Tcp::Handle()
 {
 	return &_handle;

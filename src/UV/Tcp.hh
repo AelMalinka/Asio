@@ -37,6 +37,8 @@
 						virtual ~Tcp();
 						virtual void Added(Loop &);
 						virtual void EofCb();
+						const std::string &Host() const;
+						const std::string &Service() const;
 					protected:
 						uv_tcp_t *Handle();
 					private:
