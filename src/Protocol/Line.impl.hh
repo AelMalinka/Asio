@@ -13,6 +13,42 @@
 		{
 			namespace Protocol
 			{
+				namespace detail
+				{
+					template<typename T, typename F, typename = void>
+					struct has_expects_line : std::false_type{};
+
+					template<typename T, typename R, typename ...A>
+					struct has_expects_line<T, R(A...),
+						typename std::enable_if<
+							std::is_same<R, void>::value ||
+							std::is_convertible<decltype(
+								std::declval<T>().expectsLine(std::declval<A>()...)
+							), R>::value
+						>::type
+					> : std::true_type {};
+
+					template<typename A, bool has>
+					struct call_expects_line
+					{
+						template<typename ...Params>
+						static auto apply(A &a, Params && ...params)
+						{
+							return a.expectsLine(std::forward<Params>(params)...);
+						}
+					};
+
+					template<typename A>
+					struct call_expects_line<A, false>
+					{
+						template<typename ...Params>
+						static auto apply(A &, Params && ...)
+						{
+							return true;
+						}
+					};
+				}
+
 				template<typename App, typename charT, typename traits>
 				Line<App, charT, traits>::Line(App &app, const string_type &delim)
 					: _application(app), _delim(delim)
@@ -53,13 +89,11 @@
 
 					std::streamsize pos = findLine(s);
 
-					while(pos) {
+					while(expectsLine() && pos) {
 						string_type line(pos, 0);
-						auto at = s.tellg();
 						s.read(line.data(), pos);
 
 						line = line.substr(0, line.size() - _delim.size());
-						ENTROPY_LOG(Log, Severity::Debug) << " start: " << at << " at: " << s.tellg() << " next: " << static_cast<char>(s.peek()) << " left: " << s.rdbuf()->in_avail() << " got: '" << line << "'";
 						_application.getApplication().onLine(s, std::move(line));
 
 						pos = findLine(s);
@@ -92,6 +126,12 @@
 					s.clear();
 					s.seekg(start);
 					return 0;
+				}
+
+				template<typename App, typename charT, typename traits>
+				bool Line<App, charT, traits>::expectsLine()
+				{
+					return detail::call_expects_line<App, detail::has_expects_line<App, bool()>::value>::apply(_application.getApplication());
 				}
 			}
 		}

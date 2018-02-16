@@ -39,6 +39,7 @@
 					protected:
 						template<typename Sock>
 						std::streamsize findLine(Sock &);
+						bool expectsLine();
 					private:
 						Application<App> _application;
 						string_type _delim;
