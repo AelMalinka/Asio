@@ -16,14 +16,45 @@ namespace {
 		MockStream<> mock;
 	}
 
+	TEST(StreamBuffer, ReadOne) {
+		MockStream<> mock;
+		const char *data =
+			"Hello World!\n"		//12
+			"Goodbye World!\n"		//27
+			"ThisIsALongString"		//44
+			"ThatWillDefinitely"	//62
+			"BeOnMultipleBuffers"	//81
+		;
+		Buffer<> buff(256);
+		strcpy(buff.data(), data);
+		buff.size() = strlen(data);
+		mock.Read(move(buff));
+
+		string hello,goodbye,rest;
+		string chunk(17, 0);
+		getline(mock, hello);
+		EXPECT_EQ(mock.tellg(), 13);
+		getline(mock, goodbye);
+		EXPECT_EQ(mock.tellg(), 28);
+		mock.read(chunk.data(), 17);
+		EXPECT_EQ(mock.tellg(), 45);
+		mock >> rest;
+		EXPECT_EQ(mock.tellg(), -1);
+
+		EXPECT_EQ(hello, "Hello World!"s);
+		EXPECT_EQ(goodbye, "Goodbye World!"s);
+		EXPECT_EQ(chunk, "ThisIsALongString"s);
+		EXPECT_EQ(rest, "ThatWillDefinitelyBeOnMultipleBuffers"s);
+	}
+
 	TEST(StreamBuffer, Read) {
 		MockStream<> mock;
 		const char *data[] = {
-			"Hello World!\n",
-			"Goodbye World!\n",
-			"ThisIsALongString",
-			"ThatWillDefinitely",
-			"BeOnMultipleBuffers"
+			"Hello World!\n",		//12
+			"Goodbye World!\n",		//27
+			"ThisIsALongString",	//44
+			"ThatWillDefinitely",	//62
+			"BeOnMultipleBuffers"	//81
 		};
 
 		for(auto x = 0; x < 5; x++) {
@@ -34,13 +65,20 @@ namespace {
 		}
 
 		string hello,goodbye,rest;
+		string chunk(17, 0);
 		getline(mock, hello);
+		EXPECT_EQ(mock.tellg(), 13);
 		getline(mock, goodbye);
+		EXPECT_EQ(mock.tellg(), 28);
+		mock.read(chunk.data(), 17);
+		EXPECT_EQ(mock.tellg(), 45);
 		mock >> rest;
+		EXPECT_EQ(mock.tellg(), -1);
 
 		EXPECT_EQ(hello, "Hello World!"s);
 		EXPECT_EQ(goodbye, "Goodbye World!"s);
-		EXPECT_EQ(rest, "ThisIsALongStringThatWillDefinitelyBeOnMultipleBuffers"s);
+		EXPECT_EQ(chunk, "ThisIsALongString"s);
+		EXPECT_EQ(rest, "ThatWillDefinitelyBeOnMultipleBuffers"s);
 	}
 
 	TEST(StreamBuffer, Write) {
