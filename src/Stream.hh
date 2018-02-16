@@ -18,6 +18,14 @@
 			class Stream :
 				public std::basic_iostream<charT>
 			{
+				private:
+					typedef StreamBuffer<charT, traits> buffer_type;
+				public:
+					typedef charT char_type;
+					typedef typename buffer_type::int_type int_type;
+					typedef typename buffer_type::traits_type traits_type;
+					typedef typename buffer_type::pos_type pos_type;
+					typedef typename buffer_type::off_type off_type;
 				public:
 					explicit Stream(const std::function<void(Stream<charT, traits> &)> &);
 					template<

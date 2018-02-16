@@ -45,6 +45,7 @@
 			template<typename charT, typename traits>
 			void StreamBuffer<charT, traits>::AddData(Buffer<charT> &&buffer)
 			{
+				ENTROPY_LOG(Log, Severity::Debug) << "Add Data";
 				_buffers.emplace_back(std::move(buffer));
 
 				if(_current == _buffers.end()) {
@@ -115,7 +116,8 @@
 					ret += j.size();
 				}
 
-				ret += dist;
+				// 2018-02-16 AMR NOTE: apparently we get called w/ dist == 0, looking for curent position
+				ret += (pos - _current->begin());
 
 				return ret;
 			}
@@ -177,6 +179,8 @@
 			template<typename charT, typename traits>
 			int StreamBuffer<charT, traits>::sync()
 			{
+				ENTROPY_LOG(Log, Severity::Debug) << "Sync";
+
 				_w_buff->size() = this->pptr() - this->pbase();
 
 				if(_w_buff->size() > 0) {

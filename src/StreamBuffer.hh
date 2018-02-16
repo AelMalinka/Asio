@@ -31,6 +31,7 @@
 				private:
 					typedef std::basic_streambuf<charT, traits> base;
 				public:
+					typedef charT char_type;
 					typedef typename base::int_type int_type;
 					typedef typename base::traits_type traits_type;
 					typedef typename base::pos_type pos_type;
