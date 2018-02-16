@@ -23,6 +23,10 @@ protocolheaders_HEADERS = \
 	src/Protocol/Application.hh \
 	src/Protocol/Application.impl.hh \
 	src/Protocol/Exception.hh \
+	src/Protocol/Http.hh \
+	src/Protocol/Http.impl.hh \
+	src/Protocol/HttpMessage.hh \
+	src/Protocol/HttpMessage.impl.hh \
 	src/Protocol/Line.hh \
 	src/Protocol/Line.impl.hh
 
@@ -98,7 +102,9 @@ check_PROGRAMS += \
 	ios-buffer \
 	protocol-application \
 	protocol-line-basic \
-	protocol-line
+	protocol-line \
+	protocol-http-basic \
+	protocol-http
 
 # 2016-12-17 AMR FIXME: gtest_main multiple definitions of main for gmock_main
 gtestLDADD = $(GTEST_LIBS) -lgtest_main libtethys.la
@@ -123,6 +129,13 @@ protocol_line_basic_LDADD = $(gmockLDADD)
 
 protocol_line_SOURCES = test/protocol/line.cc
 protocol_line_LDADD = $(gmockLDADD)
+
+protocol_http_basic_SOURCES = test/protocol/basic.cc
+protocol_http_basic_CXXFLAGS = -DPROTOCOL=Http -DPROTOCOL_INCLUDE='"Protocol/Http.hh"' -DMOCK_FULL=MockApplication -DMOCK_BASE=MockApplicationEmpty $(AM_CXXFLAGS)
+protocol_http_basic_LDADD = $(gmockLDADD)
+
+protocol_http_SOURCES = test/protocol/http.cc
+protocol_http_LDADD = $(gmockLDADD)
 
 if LIBUV
 check_PROGRAMS += \

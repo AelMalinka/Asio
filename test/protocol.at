@@ -17,3 +17,13 @@ AT_SETUP([Line Tests (Basic)])
 AT_SKIP_IF([test -z $GTEST])
 AT_CHECK([protocol-line-basic], [], [ignore], [ignore])
 AT_CLEANUP
+
+AT_SETUP([Http Tests])
+AT_SKIP_IF([test -z $GTEST])
+AT_CHECK([protocol-http], [], [ignore], [ignore])
+AT_CLEANUP
+
+AT_SETUP([Http Tests (Basic)])
+AT_SKIP_IF([test -z $GTEST])
+AT_CHECK([protocol-http-basic], [], [ignore], [ignore])
+AT_CLEANUP

@@ -7,12 +7,15 @@
 #include <string>
 #include "Application.hh"
 #include "UV/TcpClient.hh"
+#include "Protocol/Http.hh"
 
 using namespace std;
 using namespace Entropy;
 using namespace Entropy::Tethys;
+using namespace Entropy::Tethys::Protocol;
 
 using Entropy::Tethys::UV::TcpClient;
+using Entropy::Tethys::UV::Tcp;
 
 class Usage :
 	public Task
@@ -24,26 +27,15 @@ class Usage :
 		string _name;
 };
 
-class Client :
-	public TcpClient
-{
-	public:
-		Client(const string &, const string &);
-		void onConnect(UV::Stream &);
-		void onData(Tethys::Stream<char> &);
-		void onEof(UV::Stream &) {}
-		void onError(const Entropy::Exception &e) { throw e; }
-		void onDisconnect(UV::Tcp &) {}
-	private:
-		string _host;
-};
-
 class Application :
 	public Tethys::Application
 {
 	public:
 		Application(int, char *[]);
+		void onConnect(Tcp &);
+		void onMessage(Stream<> &, HttpMessage<> &&);
 	private:
+		Http<::Application> _protocol;
 		shared_ptr<Usage> _usage;
 		shared_ptr<TcpClient> _client;
 };
@@ -65,41 +57,38 @@ int main(int ArgC, char *ArgV[])
 }
 
 ::Application::Application(int argc, char *argv[])
-	: Tethys::Application(argc, argv), _usage(), _client()
+	: Tethys::Application(argc, argv), _protocol(*this), _usage(), _client()
 {
 	if(ArgC() != 3) {
 		_usage = make_shared<Usage>(ArgV()[0]);
 
 		Add(*_usage);
 	} else {
-		_client = make_shared<Client>(ArgV()[1], ArgV()[2]);
+		_client = make_shared<TcpClient>(ArgV()[1], ArgV()[2], _protocol);
 
 		Add(*_client);
 	}
 }
 
-Client::Client(const string &host, const string &service)
-	: TcpClient(host, service, *this), _host(host)
-{}
-
-void Client::onConnect(Stream &s)
+void ::Application::onConnect(Tcp &s)
 {
-	s << "GET / HTTP/1.1\r" << endl
-		<< "Host: " << _host << "\r" << endl
-		<< "User-Agent: Entropy Tethys Example\r" << endl
-		<< "Accept: */*\r" << endl
-		<< "Connection: close\r" << endl
-		<< "\r" << endl;
+	HttpMessage<> m("GET / HTTP/1.1");
+
+	m.Headers()["Host"] = s.Host();
+	m.Headers()["Accept"] = "*/*";
+	m.Headers()["Connection"] = "close";
+
+	s << m;
 }
 
-void Client::onData(Tethys::Stream<char> &s)
+void ::Application::onMessage(Stream<> &, HttpMessage<> &&m)
 {
-	while(!s.eof()) {
-		string line;
-
-		std::getline(s, line);
-		cout << line << endl;
+	cout << m.Start() << endl;
+	for(auto &p : m.Headers()) {
+		cout << p.first << ": " << p.second << endl;
 	}
+
+	cout << endl << m.Body() << endl;
 }
 
 Usage::Usage(const string &name)
