@@ -118,7 +118,7 @@ void Stream::ErrorCb(const Entropy::Exception &e)
 
 void Stream::ReadCb(const uv_buf_t *buf, const ssize_t nread)
 {
-	ENTROPY_LOG(Log, Severity::Debug) << nread << " bytes from peer: '" << buf->base << "'";
+	ENTROPY_LOG(Log, Severity::Debug) << nread << " bytes from peer";
 	Read(Buffer<char>(nread, buf->len, buf->base));
 }
 
@@ -153,6 +153,7 @@ void write_cb(uv_write_t *req, int status)
 
 void alloc_cb(uv_handle_t *, size_t suggested, uv_buf_t *buf)
 {
+	// 2018-02-16 AMR TODO: re-use old unfilled buffers
 	buf->base = new char[suggested];
 	buf->len = suggested;
 }
