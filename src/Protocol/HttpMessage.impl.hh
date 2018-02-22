@@ -108,7 +108,7 @@
 					: base(), _start_pieces()
 				{
 					// 2018-02-16 AMR TODO: optimization
-					boost::split(_start_pieces, start, boost::is_any_of(" "));
+					boost::split(_start_pieces, start, boost::is_any_of(string_type(1, ' ')));
 					if(
 						_start_pieces.size() < 3 ||
 						_start_pieces[0] == "" ||
@@ -122,7 +122,7 @@
 						auto i = _start_pieces.begin();
 						i += 3;
 						while(i != _start_pieces.end()) {
-							_start_pieces[2] += " " + std::move(*i++);
+							_start_pieces[2] += string_type(1, ' ') + std::move(*i++);
 						}
 
 						_start_pieces.resize(3);
@@ -135,10 +135,9 @@
 				template<typename stringT>
 				typename HttpMessage<stringT>::string_type HttpMessage<stringT>::Start() const
 				{
-					// 2018-02-21 AMR NOTE: space is ascii 32
 					return
-						Pieces()[0] + string_type(1, 32) +
-						Pieces()[1] + string_type(1, 32) +
+						Pieces()[0] + string_type(1, ' ') +
+						Pieces()[1] + string_type(1, ' ') +
 						Pieces()[2]
 					;
 				}

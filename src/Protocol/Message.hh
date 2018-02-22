@@ -14,7 +14,7 @@
 			namespace Protocol
 			{
 				// 2018-02-21 AMR NOTE: RFC 5322
-				// 2018-02-21 AMR TODO: support folding per §2.2.3
+				// 2018-02-22 AMR TODO: Line Length Limits, §2.1.1 vs 7230 §3.2.5
 				template<
 					typename stringT = std::string
 				>
@@ -42,6 +42,7 @@
 						const container_type &Headers() const;
 					private:
 						container_type _headers;
+						typename container_type::iterator _last;
 						string_type _body;
 						bool _has_body;
 						typedef typename ::boost::error_info<struct tag_HeaderLineInfo, string_type> HeaderLineInfo;

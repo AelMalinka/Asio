@@ -27,6 +27,7 @@
 				// 2018-02-21 AMR TODO: Header types
 				// 2018-02-21 AMR TODO: cacheing
 				// 2018-02-22 AMR TODO: cookies?
+				// 2018-02-22 AMR TODO: support §3.2.4 rejection of folding (optionally?)
 				template<
 					typename stringT = std::string
 				>

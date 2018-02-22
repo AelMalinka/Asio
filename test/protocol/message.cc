@@ -35,6 +35,25 @@ namespace {
 		EXPECT_FALSE(m.hasBody());
 	}
 
+	TEST(Message, HeaderFolded) {
+		M<> m1;
+		M<> m2;
+		stringstream s;
+
+		m1.addHeader("Header: Value"s);
+		m1.addHeader(" on multiple lines"s);
+		m2.addHeader("Header: Value\r\n\ton multiple lines");
+		s << m1 << m2;
+
+		EXPECT_EQ(s.str(), "Header: Value on multiple lines\r\n\r\nHeader: Value on multiple lines\r\n\r\n"s);
+		EXPECT_EQ(m1.Headers().size(), 1ul);
+		EXPECT_EQ(m2.Headers().size(), 1ul);
+		EXPECT_EQ(m1.Headers()["Header"], "Value on multiple lines"s);
+		EXPECT_EQ(m2.Headers()["Header"], "Value on multiple lines"s);
+		EXPECT_FALSE(m1.hasBody());
+		EXPECT_FALSE(m2.hasBody());
+	}
+
 	TEST(Message, BasicBody) {
 		M<> m;
 		stringstream s;
