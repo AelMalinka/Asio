@@ -84,6 +84,8 @@ int main(int ArgC, char *ArgV[])
 			t.resize(4);
 		}
 
+		if(t.size() == 3) t.resize(4);
+
 		if(t.size() != 4 || t[0] != "http:" || t[1] != "") {
 			_usage = make_shared<Usage>(ArgV()[0]);
 
