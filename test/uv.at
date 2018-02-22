@@ -9,6 +9,7 @@ AT_SKIP_IF([test -z $GTEST])
 AT_CHECK([uv-loop], [], [ignore], [ignore])
 AT_CLEANUP
 
+# 2018-02-22 AMR TODO: cleanup (sometimes leaves stale processes)
 AT_SETUP([Signal Tests])
 AT_SKIP_IF([test -z $LIBUV])
 AT_CHECK([uv-signal & pid=$! ; sleep 1s ; kill -INT $pid], [], [ignore], [ignore])
