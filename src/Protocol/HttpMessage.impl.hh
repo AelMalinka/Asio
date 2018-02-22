@@ -66,8 +66,8 @@
 					}
 				}
 
-				template<typename charT, typename traits>
-				HttpMessage<charT, traits>::HttpMessage(const string_type &url, const string_type &method, const string_type &version)
+				template<typename stringT>
+				HttpMessage<stringT>::HttpMessage(const string_type &url, const string_type &method, const string_type &version)
 					: base(), _start_pieces()
 				{
 					_start_pieces.resize(3);
@@ -77,8 +77,8 @@
 					_start_pieces[2] = version;
 				}
 
-				template<typename charT, typename traits>
-				HttpMessage<charT, traits>::HttpMessage(unsigned code, const string_type &message, const string_type &version)
+				template<typename stringT>
+				HttpMessage<stringT>::HttpMessage(unsigned code, const string_type &message, const string_type &version)
 					: base(), _start_pieces()
 				{
 					_start_pieces.resize(3);
@@ -87,9 +87,9 @@
 
 					try
 					{
-						_start_pieces[1] = ::boost::lexical_cast<string_type>(code);
+						_start_pieces[1] = boost::lexical_cast<string_type>(code);
 					}
-					catch(::boost::bad_lexical_cast &)
+					catch(boost::bad_lexical_cast &)
 					{
 						ENTROPY_THROW(Exception("Failed to convert Code to string") <<
 							CodeInfo(code)
@@ -103,12 +103,12 @@
 					}
 				}
 
-				template<typename charT, typename traits>
-				HttpMessage<charT, traits>::HttpMessage(string_type &&start, const detail::line_t &)
+				template<typename stringT>
+				HttpMessage<stringT>::HttpMessage(string_type &&start, const detail::line_t &)
 					: base(), _start_pieces()
 				{
 					// 2018-02-16 AMR TODO: optimization
-					::boost::split(_start_pieces, start, ::boost::is_any_of(" "));
+					boost::split(_start_pieces, start, boost::is_any_of(" "));
 					if(
 						_start_pieces.size() < 3 ||
 						_start_pieces[0] == "" ||
@@ -129,8 +129,11 @@
 					}
 				}
 
-				template<typename charT, typename traits>
-				typename HttpMessage<charT, traits>::string_type HttpMessage<charT, traits>::Start() const
+				template<typename stringT> HttpMessage<stringT>::HttpMessage(const HttpMessage<stringT> &) = default;
+				template<typename stringT> HttpMessage<stringT>::HttpMessage(HttpMessage<stringT> &&) = default;
+
+				template<typename stringT>
+				typename HttpMessage<stringT>::string_type HttpMessage<stringT>::Start() const
 				{
 					// 2018-02-21 AMR NOTE: space is ascii 32
 					return
@@ -140,8 +143,8 @@
 					;
 				}
 
-				template<typename charT, typename traits>
-				bool HttpMessage<charT, traits>::isRequest() const
+				template<typename stringT>
+				bool HttpMessage<stringT>::isRequest() const
 				{
 					for(auto &&m : _methods) {
 						if(m == Pieces()[0])
@@ -151,14 +154,14 @@
 					return false;
 				}
 
-				template<typename charT, typename traits>
-				bool HttpMessage<charT, traits>::isResponse() const
+				template<typename stringT>
+				bool HttpMessage<stringT>::isResponse() const
 				{
 					return !isRequest();
 				}
 
-				template<typename charT, typename traits>
-				bool HttpMessage<charT, traits>::expectsBody() const
+				template<typename stringT>
+				bool HttpMessage<stringT>::expectsBody() const
 				{
 					using namespace std;
 
@@ -170,14 +173,14 @@
 					}
 				}
 
-				template<typename charT, typename traits>
-				unsigned HttpMessage<charT, traits>::Status() const
+				template<typename stringT>
+				unsigned HttpMessage<stringT>::Status() const
 				{
 					try
 					{
-						return ::boost::lexical_cast<unsigned>(StatusCode());
+						return boost::lexical_cast<unsigned>(StatusCode());
 					}
-					catch(::boost::bad_lexical_cast &)
+					catch(boost::bad_lexical_cast &)
 					{
 						ENTROPY_THROW(Exception("Failed to convert StatusCode to unsigned") <<
 							StatusCodeInfo(StatusCode())
@@ -185,11 +188,11 @@
 					}
 				}
 
-				template<typename charT, typename traits>
-				float HttpMessage<charT, traits>::Version() const
+				template<typename stringT>
+				float HttpMessage<stringT>::Version() const
 				{
 					using namespace std;
-					using namespace ::boost;
+					using namespace boost;
 
 					vector<string_type> v;
 
@@ -197,9 +200,9 @@
 
 					try
 					{
-						return ::boost::lexical_cast<float>(v[1]);
+						return lexical_cast<float>(v[1]);
 					}
-					catch(::boost::bad_lexical_cast &)
+					catch(bad_lexical_cast &)
 					{
 						ENTROPY_THROW(Exception("Failed to convert Version to float") <<
 							VersionCodeInfo(VersionCode())
@@ -207,8 +210,8 @@
 					}
 				}
 
-				template<typename charT, typename traits>
-				typename HttpMessage<charT, traits>::string_type &HttpMessage<charT, traits>::Method()
+				template<typename stringT>
+				typename HttpMessage<stringT>::string_type &HttpMessage<stringT>::Method()
 				{
 					if(!isRequest())
 						ENTROPY_THROW(Exception("HttpMessage is not a request"));
@@ -216,8 +219,8 @@
 					return Pieces()[0];
 				}
 
-				template<typename charT, typename traits>
-				typename HttpMessage<charT, traits>::string_type &HttpMessage<charT, traits>::Url()
+				template<typename stringT>
+				typename HttpMessage<stringT>::string_type &HttpMessage<stringT>::Url()
 				{
 					if(!isRequest())
 						ENTROPY_THROW(Exception("HttpMessage is not a request"));
@@ -225,8 +228,8 @@
 					return Pieces()[1];
 				}
 
-				template<typename charT, typename traits>
-				typename HttpMessage<charT, traits>::string_type &HttpMessage<charT, traits>::VersionCode()
+				template<typename stringT>
+				typename HttpMessage<stringT>::string_type &HttpMessage<stringT>::VersionCode()
 				{
 					if(isRequest())
 						return Pieces()[2];
@@ -234,8 +237,8 @@
 						return Pieces()[0];
 				}
 
-				template<typename charT, typename traits>
-				const typename HttpMessage<charT, traits>::string_type &HttpMessage<charT, traits>::Method() const
+				template<typename stringT>
+				const typename HttpMessage<stringT>::string_type &HttpMessage<stringT>::Method() const
 				{
 					if(!isRequest())
 						ENTROPY_THROW(Exception("HttpMessage is not a request"));
@@ -243,8 +246,8 @@
 					return Pieces()[0];
 				}
 
-				template<typename charT, typename traits>
-				const typename HttpMessage<charT, traits>::string_type &HttpMessage<charT, traits>::Url() const
+				template<typename stringT>
+				const typename HttpMessage<stringT>::string_type &HttpMessage<stringT>::Url() const
 				{
 					if(!isRequest())
 						ENTROPY_THROW(Exception("HttpMessage is not a request"));
@@ -252,8 +255,8 @@
 					return Pieces()[1];
 				}
 
-				template<typename charT, typename traits>
-				const typename HttpMessage<charT, traits>::string_type &HttpMessage<charT, traits>::VersionCode() const
+				template<typename stringT>
+				const typename HttpMessage<stringT>::string_type &HttpMessage<stringT>::VersionCode() const
 				{
 					if(isRequest())
 						return Pieces()[2];
@@ -261,8 +264,8 @@
 						return Pieces()[0];
 				}
 
-				template<typename charT, typename traits>
-				typename HttpMessage<charT, traits>::string_type &HttpMessage<charT, traits>::StatusCode()
+				template<typename stringT>
+				typename HttpMessage<stringT>::string_type &HttpMessage<stringT>::StatusCode()
 				{
 					if(isRequest())
 						ENTROPY_THROW(Exception("HttpMessage is a request"));
@@ -270,8 +273,8 @@
 					return Pieces()[1];
 				}
 
-				template<typename charT, typename traits>
-				typename HttpMessage<charT, traits>::string_type &HttpMessage<charT, traits>::StatusMessage()
+				template<typename stringT>
+				typename HttpMessage<stringT>::string_type &HttpMessage<stringT>::StatusMessage()
 				{
 					if(isRequest())
 						ENTROPY_THROW(Exception("HttpMessage is a request"));
@@ -279,8 +282,8 @@
 					return Pieces()[2];
 				}
 
-				template<typename charT, typename traits>
-				const typename HttpMessage<charT, traits>::string_type &HttpMessage<charT, traits>::StatusCode() const
+				template<typename stringT>
+				const typename HttpMessage<stringT>::string_type &HttpMessage<stringT>::StatusCode() const
 				{
 					if(isRequest())
 						ENTROPY_THROW(Exception("HttpMessage is a request"));
@@ -288,8 +291,8 @@
 					return Pieces()[1];
 				}
 
-				template<typename charT, typename traits>
-				const typename HttpMessage<charT, traits>::string_type &HttpMessage<charT, traits>::StatusMessage() const
+				template<typename stringT>
+				const typename HttpMessage<stringT>::string_type &HttpMessage<stringT>::StatusMessage() const
 				{
 					if(isRequest())
 						ENTROPY_THROW(Exception("HttpMessage is a request"));
@@ -297,14 +300,14 @@
 					return Pieces()[2];
 				}
 
-				template<typename charT, typename traits>
-				typename HttpMessage<charT, traits>::container_type &HttpMessage<charT, traits>::Pieces()
+				template<typename stringT>
+				typename HttpMessage<stringT>::container_type &HttpMessage<stringT>::Pieces()
 				{
 					return _start_pieces;
 				}
 
-				template<typename charT, typename traits>
-				const typename HttpMessage<charT, traits>::container_type &HttpMessage<charT, traits>::Pieces() const
+				template<typename stringT>
+				const typename HttpMessage<stringT>::container_type &HttpMessage<stringT>::Pieces() const
 				{
 					return _start_pieces;
 				}
@@ -312,13 +315,13 @@
 		}
 	}
 
-	template<typename charT, typename traits>
-	std::basic_ostream<charT, traits> &operator << (std::basic_ostream<charT, traits> &o, const Entropy::Tethys::Protocol::HttpMessage<charT, traits> &m)
+	template<typename charT, typename traits, typename stringT>
+	std::basic_ostream<charT, traits> &operator << (std::basic_ostream<charT, traits> &o, const Entropy::Tethys::Protocol::HttpMessage<stringT> &m)
 	{
 		using Entropy::Tethys::Protocol::Message;
 
 		o << m.Start() << "\r\n";
-		return operator << (o, static_cast<const Message<charT, traits> &>(m));
+		return operator << (o, static_cast<const Message<stringT> &>(m));
 	}
 
 #endif

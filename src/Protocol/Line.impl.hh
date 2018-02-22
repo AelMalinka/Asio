@@ -49,44 +49,42 @@
 					};
 				}
 
-				template<typename App, typename charT, typename traits>
-				Line<App, charT, traits>::Line(App &app, const string_type &delim)
+				template<typename App, typename stringT>
+				Line<App, stringT>::Line(App &app, const string_type &delim)
 					: _application(app), _delim(delim)
 				{}
 
-				template<typename App, typename charT, typename traits>
+				template<typename App, typename stringT>
 				template<typename Sock>
-				void Line<App, charT, traits>::onConnect(Sock &s)
+				void Line<App, stringT>::onConnect(Sock &s)
 				{
 					_application.onConnect(s);
 				}
 
-				template<typename App, typename charT, typename traits>
+				template<typename App, typename stringT>
 				template<typename Sock>
-				void Line<App, charT, traits>::onDisconnect(Sock &s)
+				void Line<App, stringT>::onDisconnect(Sock &s)
 				{
 					_application.onDisconnect(s);
 				}
 
-				template<typename App, typename charT, typename traits>
+				template<typename App, typename stringT>
 				template<typename Sock>
-				void Line<App, charT, traits>::onEof(Sock &s)
+				void Line<App, stringT>::onEof(Sock &s)
 				{
 					_application.onEof(s);
 				}
 
-				template<typename App, typename charT, typename traits>
-				void Line<App, charT, traits>::onError(const Entropy::Exception &e)
+				template<typename App, typename stringT>
+				void Line<App, stringT>::onError(const Entropy::Exception &e)
 				{
 					_application.onError(e);
 				}
 
-				template<typename App, typename charT, typename traits>
+				template<typename App, typename stringT>
 				template<typename Sock>
-				void Line<App, charT, traits>::onData(Sock &s)
+				void Line<App, stringT>::onData(Sock &s)
 				{
-					using std::basic_string;
-
 					std::streamsize pos = findLine(s);
 
 					while(expectsLine() && pos) {
@@ -100,9 +98,9 @@
 					}
 				}
 
-				template<typename App, typename charT, typename traits>
+				template<typename App, typename stringT>
 				template<typename Sock>
-				std::streamsize Line<App, charT, traits>::findLine(Sock &s)
+				std::streamsize Line<App, stringT>::findLine(Sock &s)
 				{
 					auto x = 0u;
 					auto y = 0u;
@@ -128,8 +126,8 @@
 					return 0;
 				}
 
-				template<typename App, typename charT, typename traits>
-				bool Line<App, charT, traits>::expectsLine()
+				template<typename App, typename stringT>
+				bool Line<App, stringT>::expectsLine()
 				{
 					return detail::call_expects_line<App, detail::has_expects_line<App, bool()>::value>::apply(_application.getApplication());
 				}

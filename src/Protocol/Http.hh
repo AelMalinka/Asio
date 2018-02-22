@@ -19,15 +19,14 @@
 				// 2018-02-21 AMR NOTE: RFC 7230-7235
 				template<
 					typename App,
-					typename charT = char,
-					typename traits = std::char_traits<charT>
+					typename stringT = std::string
 				>
 				class Http
 				{
 					public:
-						typedef charT char_type;
-						typedef traits traits_type;
-						typedef std::basic_string<char_type, traits_type> string_type;
+						typedef stringT string_type;
+						typedef typename string_type::value_type char_type;
+						typedef typename string_type::traits_type traits_type;
 					public:
 						explicit Http(App &);
 						template<typename Sock>
@@ -43,9 +42,9 @@
 						void onError(const Entropy::Exception &);
 						bool expectsLine();
 					private:
-						Line<Http<App, char_type, traits_type>, char_type, traits_type> _line;
+						Line<Http<App, string_type>, string_type> _line;
 						Application<App> _application;
-						std::shared_ptr<HttpMessage<char_type, traits_type>> _message;
+						std::shared_ptr<HttpMessage<string_type>> _message;
 						bool _is_body;
 				};
 			}

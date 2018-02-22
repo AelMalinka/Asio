@@ -28,14 +28,13 @@
 				// 2018-02-21 AMR TODO: cacheing
 				// 2018-02-22 AMR TODO: cookies?
 				template<
-					typename charT = char,
-					typename traits = std::char_traits<charT>
+					typename stringT = std::string
 				>
 				class HttpMessage :
-					public Message<charT, traits>
+					public Message<stringT>
 				{
 					public:
-						typedef Message<charT, traits> base;
+						typedef Message<stringT> base;
 						typedef typename base::string_type string_type;
 					private:
 						typedef std::vector<string_type> container_type;
@@ -44,6 +43,8 @@
 						explicit HttpMessage(const string_type &, const string_type & = "GET", const string_type & = "HTTP/1.1");
 						explicit HttpMessage(unsigned, const string_type & = "", const string_type & = "HTTP/1.1");
 						explicit HttpMessage(string_type &&, const detail::line_t &);
+						HttpMessage(const HttpMessage<stringT> &);
+						HttpMessage(HttpMessage<stringT> &&);
 						string_type Start() const;
 						bool isRequest() const;
 						bool isResponse() const;
@@ -87,8 +88,8 @@
 		}
 	}
 
-	template<typename charT = char, typename traits = std::char_traits<charT>>
-	std::basic_ostream<charT, traits> &operator << (std::basic_ostream<charT, traits> &, const Entropy::Tethys::Protocol::HttpMessage<charT, traits> &);
+	template<typename charT = char, typename traits = std::char_traits<charT>, typename stringT = std::basic_string<charT, traits>>
+	std::basic_ostream<charT, traits> &operator << (std::basic_ostream<charT, traits> &, const Entropy::Tethys::Protocol::HttpMessage<stringT> &);
 
 #	include "HttpMessage.impl.hh"
 

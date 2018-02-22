@@ -9,8 +9,8 @@
 using namespace std;
 using namespace testing;
 
-template<typename charT = char, typename traits = char_traits<charT>>
-using M = Entropy::Tethys::Protocol::Message<charT, traits>;
+template<typename stringT = string>
+using M = Entropy::Tethys::Protocol::Message<stringT>;
 
 namespace {
 	TEST(Message, Instantiation) {

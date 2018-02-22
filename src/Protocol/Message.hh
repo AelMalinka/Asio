@@ -14,26 +14,23 @@
 			namespace Protocol
 			{
 				// 2018-02-21 AMR NOTE: RFC 5322
-				// 2018-02-19 AMR TODO: should we have string_type as a parameter
 				// 2018-02-21 AMR TODO: support folding per §2.2.3
-				// 2018-02-21 AMR TODO: should we use spirit for parseing these?
 				template<
-					typename charT = char,
-					typename traits = std::char_traits<charT>
+					typename stringT = std::string
 				>
 				class Message
 				{
 					public:
-						typedef charT char_type;
-						typedef traits traits_type;
-						typedef std::basic_string<char_type, traits_type> string_type;
-						typedef std::basic_istream<char_type, traits_type> sock_type;
+						typedef stringT string_type;
+						typedef typename string_type::value_type char_type;
+						typedef typename string_type::traits_type traits_type;
 					private:
+						typedef std::basic_istream<char_type, traits_type> sock_type;
 						typedef std::unordered_map<string_type, string_type> container_type;
 					public:
 						Message();
-						Message(const Message<charT, traits> &);
-						Message(Message<charT, traits> &&);
+						Message(const Message<stringT> &);
+						Message(Message<stringT> &&);
 						virtual ~Message();
 						virtual void addHeader(string_type &&);
 						virtual void addBody(string_type &&);
@@ -53,8 +50,8 @@
 		}
 	}
 
-	template<typename charT = char, typename traits = std::char_traits<charT>>
-	std::basic_ostream<charT, traits> &operator << (std::basic_ostream<charT, traits> &, const Entropy::Tethys::Protocol::Message<charT, traits> &);
+	template<typename charT = char, typename traits = std::char_traits<charT>, typename stringT = std::basic_string<charT, traits>>
+	std::basic_ostream<charT, traits> &operator << (std::basic_ostream<charT, traits> &, const Entropy::Tethys::Protocol::Message<stringT> &);
 
 #	include "Message.impl.hh"
 

@@ -15,15 +15,14 @@
 			{
 				template<
 					typename App,
-					typename charT = char,
-					typename traits = std::char_traits<charT>
+					typename stringT = std::string
 				>
 				class Line
 				{
 					public:
-						typedef charT char_type;
-						typedef traits traits_type;
-						typedef std::basic_string<char_type, traits_type> string_type;
+						typedef stringT string_type;
+						typedef typename string_type::value_type char_type;
+						typedef typename string_type::traits_type traits_type;
 					public:
 						// 2018-02-15 AMR TODO: does this work on wide and/or utf strings, if not fix
 						explicit Line(App &, const string_type & = "\r\n");

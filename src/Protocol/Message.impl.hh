@@ -15,17 +15,17 @@
 		{
 			namespace Protocol
 			{
-				template<typename charT, typename traits>
-				Message<charT, traits>::Message()
+				template<typename stringT>
+				Message<stringT>::Message()
 					: _headers(), _body(), _has_body(false)
 				{}
 
-				template<typename charT, typename traits> Message<charT, traits>::Message(const Message<charT, traits> &) = default;
-				template<typename charT, typename traits> Message<charT, traits>::Message(Message<charT, traits> &&) = default;
-				template<typename charT, typename traits> Message<charT, traits>::~Message() = default;
+				template<typename stringT> Message<stringT>::Message(const Message<stringT> &) = default;
+				template<typename stringT> Message<stringT>::Message(Message<stringT> &&) = default;
+				template<typename stringT> Message<stringT>::~Message() = default;
 
-				template<typename charT, typename traits>
-				void Message<charT, traits>::addHeader(string_type &&line)
+				template<typename stringT>
+				void Message<stringT>::addHeader(string_type &&line)
 				{
 					// 2018-02-16 AMR TODO: optimization
 					std::vector<string_type> pieces;
@@ -34,7 +34,7 @@
 					if(
 						pieces.size() < 2 ||
 						pieces[0] == "" || pieces[1] == "" ||
-						std::isspace(pieces[0][0])
+						::std::isspace(pieces[0][0])
 					) {
 						ENTROPY_THROW(Exception("Malformed Header in Message") <<
 							HeaderLineInfo(line)
@@ -57,7 +57,7 @@
 						// 2018-02-19 AMR TODO: check standard
 						// 2018-02-21 AMR TODO: should this be here or in HttpMessage overload
 						if(pieces[0] == "Content-Length") {
-							_body.reserve(boost::lexical_cast<std::size_t>(pieces[1]));
+							_body.reserve(boost::lexical_cast<typename string_type::size_type>(pieces[1]));
 							ENTROPY_LOG(Log, Severity::Debug) << "body capacity set to " << _body.capacity();
 						}
 					}
@@ -69,15 +69,15 @@
 					Headers()[std::move(pieces[0])] = std::move(pieces[1]);
 				}
 
-				template<typename charT, typename traits>
-				void Message<charT, traits>::addBody(string_type &&s)
+				template<typename stringT>
+				void Message<stringT>::addBody(string_type &&s)
 				{
 					_has_body = true;
 					_body = std::move(s);
 				}
 
-				template<typename charT, typename traits>
-				void Message<charT, traits>::addBody(std::basic_istream<charT, traits> &s)
+				template<typename stringT>
+				void Message<stringT>::addBody(sock_type &s)
 				{
 					_has_body = true;
 
@@ -98,32 +98,32 @@
 					s.read(Body().data() + osz, sz);
 				}
 
-				template<typename charT, typename traits>
-				bool Message<charT, traits>::hasBody() const
+				template<typename stringT>
+				bool Message<stringT>::hasBody() const
 				{
 					return _has_body;
 				}
 
-				template<typename charT, typename traits>
-				typename Message<charT, traits>::string_type &Message<charT, traits>::Body()
+				template<typename stringT>
+				stringT &Message<stringT>::Body()
 				{
 					return _body;
 				}
 
-				template<typename charT, typename traits>
-				const typename Message<charT, traits>::string_type &Message<charT, traits>::Body() const
+				template<typename stringT>
+				const stringT &Message<stringT>::Body() const
 				{
 					return _body;
 				}
 
-				template<typename charT, typename traits>
-				typename Message<charT, traits>::container_type &Message<charT, traits>::Headers()
+				template<typename stringT>
+				typename Message<stringT>::container_type &Message<stringT>::Headers()
 				{
 					return _headers;
 				}
 
-				template<typename charT, typename traits>
-				const typename Message<charT, traits>::container_type &Message<charT, traits>::Headers() const
+				template<typename stringT>
+				const typename Message<stringT>::container_type &Message<stringT>::Headers() const
 				{
 					return _headers;
 				}
@@ -131,8 +131,8 @@
 		}
 	}
 
-	template<typename charT, typename traits>
-	std::basic_ostream<charT, traits> &operator << (std::basic_ostream<charT, traits> &o, const Entropy::Tethys::Protocol::Message<charT, traits> &m)
+	template<typename charT, typename traits, typename stringT>
+	std::basic_ostream<charT, traits> &operator << (std::basic_ostream<charT, traits> &o, const Entropy::Tethys::Protocol::Message<stringT> &m)
 	{
 		for(auto &&p : m.Headers())
 			o << p.first << ": " << p.second << "\r\n";
