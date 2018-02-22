@@ -28,13 +28,16 @@ protocolheaders_HEADERS = \
 	src/Protocol/HttpMessage.hh \
 	src/Protocol/HttpMessage.impl.hh \
 	src/Protocol/Line.hh \
-	src/Protocol/Line.impl.hh
+	src/Protocol/Line.impl.hh \
+	src/Protocol/Message.hh \
+	src/Protocol/Message.impl.hh
 
 lib_LTLIBRARIES = libtethys.la
 libtethys_la_SOURCES = \
+	src/Protocol/HttpMessage.cc \
+	src/Application.cc \
 	src/Logger.cc \
-	src/Task.cc \
-	src/Application.cc
+	src/Task.cc
 
 noinst_HEADERS = \
 	test/Mock.hh
@@ -100,6 +103,8 @@ check_PROGRAMS += \
 	application-application \
 	application-task \
 	ios-buffer \
+	protocol-message \
+	protocol-http-message \
 	protocol-application \
 	protocol-line-basic \
 	protocol-line \
@@ -118,6 +123,12 @@ application_task_LDADD = $(gtestLDADD)
 
 ios_buffer_SOURCES = test/ios/buffer.cc
 ios_buffer_LDADD = $(gtestLDADD)
+
+protocol_message_SOURCES = test/protocol/message.cc
+protocol_message_LDADD = $(gtestLDADD)
+
+protocol_http_message_SOURCES = test/protocol/http-message.cc
+protocol_http_message_LDADD = $(gtestLDADD)
 
 protocol_application_SOURCES = test/protocol/basic.cc
 protocol_application_CXXFLAGS = -DPROTOCOL=Application -DPROTOCOL_INCLUDE='"Protocol/Application.hh"' -DMOCK_FULL=MockApplication -DMOCK_BASE=MockApplicationEmpty $(AM_CXXFLAGS)

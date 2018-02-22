@@ -5,6 +5,9 @@
 #if !defined ENTROPY_TETHYS_PROTOCOL_HTTPMESSAGE_INC
 #	define ENTROPY_TETHYS_PROTOCOL_HTTPMESSAGE_INC
 
+#	include "Message.hh"
+//	2018-02-21 AMR TODO: cleanup
+#	include <experimental/array>
 
 	namespace Entropy
 	{
@@ -12,34 +15,74 @@
 		{
 			namespace Protocol
 			{
+				namespace detail
+				{
+					using std::experimental::make_array;
+
+					struct line_t {};
+				}
+
+				// 2018-02-22 AMR TODO: default user-agent
+				// 2018-02-21 AMR TODO: HTTP/2
+				// 2018-02-21 AMR TODO: Header types
+				// 2018-02-21 AMR TODO: cacheing
+				// 2018-02-22 AMR TODO: cookies?
 				template<
 					typename charT = char,
 					typename traits = std::char_traits<charT>
 				>
-				class HttpMessage
+				class HttpMessage :
+					public Message<charT, traits>
 				{
 					public:
-						typedef charT char_type;
-						typedef traits traits_type;
-						typedef std::basic_string<char_type, traits_type> string_type;
-					public:
-						explicit HttpMessage(string_type &&);
-						virtual ~HttpMessage();
-						operator string_type() const;
-						void addHeader(string_type &&);
-						void addBody(std::basic_istream<charT, traits> &);
-						std::unordered_map<string_type, string_type> &Headers();
-						const std::unordered_map<string_type, string_type> &Headers() const;
-						const string_type &Start() const;
-						const string_type &Body() const;
-						bool expectsBody() const;
-						const string_type &Method() const;
+						typedef Message<charT, traits> base;
+						typedef typename base::string_type string_type;
 					private:
-						string_type _start;
-						std::unordered_map<string_type, string_type> _headers;
-						string_type _body;
-						std::vector<string_type> _start_pieces;
+						typedef std::vector<string_type> container_type;
+					public:
+						// 2018-02-21 AMR TODO: this probably doesn't work when charT != char
+						explicit HttpMessage(const string_type &, const string_type & = "GET", const string_type & = "HTTP/1.1");
+						explicit HttpMessage(unsigned, const string_type & = "", const string_type & = "HTTP/1.1");
+						explicit HttpMessage(string_type &&, const detail::line_t &);
+						string_type Start() const;
+						bool isRequest() const;
+						bool isResponse() const;
+						bool expectsBody() const;
+						unsigned Status() const;
+						float Version() const;
+						string_type &Method();
+						string_type &Url();
+						string_type &VersionCode();
+						const string_type &Method() const;
+						const string_type &Url() const;
+						const string_type &VersionCode() const;
+						string_type &StatusCode();
+						string_type &StatusMessage();
+						const string_type &StatusCode() const;
+						const string_type &StatusMessage() const;
+					protected:
+						container_type &Pieces();
+						const container_type &Pieces() const;
+					private:
+						container_type _start_pieces;
+						// 2018-02-21 AMR TODO: this probably doesn't work when charT != char
+						static constexpr decltype(auto) _methods = detail::make_array(
+							"GET",
+							"HEAD",
+							"POST",
+							"PUT",
+							"DELETE",
+							"CONNECT",
+							"OPTIONS",
+							"TRACE"
+						);
+						typedef ::boost::error_info<struct tag_CodeInfo, unsigned> CodeInfo;
+						typedef typename ::boost::error_info<struct tag_VersionCodeInfo, string_type> VersionCodeInfo;
+						typedef typename ::boost::error_info<struct tag_StatusCodeInfo, string_type> StatusCodeInfo;
+						typedef typename ::boost::error_info<struct tag_StartLineInfo, string_type> StartLineInfo;
 				};
+
+				extern detail::line_t ParserLine;
 			}
 		}
 	}

@@ -87,7 +87,7 @@
 				{
 					// 2018-02-15 AMR NOTE: onLine will not get called if _is_body
 					if(!_message) {
-						_message = std::make_shared<HttpMessage<char_type, traits_type>>(std::move(line));
+						_message = std::make_shared<HttpMessage<char_type, traits_type>>(std::move(line), ParserLine);
 					} else if(line != "") {
 						_message->addHeader(std::move(line));
 					} else if(_message->expectsBody()) {

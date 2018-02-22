@@ -9,7 +9,6 @@
 #	include "HttpMessage.hh"
 
 #	include <unordered_map>
-#	include <experimental/array>
 
 	namespace Entropy
 	{
@@ -17,6 +16,7 @@
 		{
 			namespace Protocol
 			{
+				// 2018-02-21 AMR NOTE: RFC 7230-7235
 				template<
 					typename App,
 					typename charT = char,

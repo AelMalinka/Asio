@@ -3,6 +3,16 @@
 
 AT_BANNER([Protocol Tests])
 
+AT_SETUP([Message Tests])
+AT_SKIP_IF([test -z $GTEST])
+AT_CHECK([protocol-message], [], [ignore], [ignore])
+AT_CLEANUP
+
+AT_SETUP([Http Message Tests])
+AT_SKIP_IF([test -z $GTEST])
+AT_CHECK([protocol-http-message], [], [ignore], [ignore])
+AT_CLEANUP
+
 AT_SETUP([Applicaiton Tests])
 AT_SKIP_IF([test -z $GTEST])
 AT_CHECK([protocol-application], [], [ignore], [ignore])
