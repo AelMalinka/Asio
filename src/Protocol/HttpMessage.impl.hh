@@ -165,11 +165,11 @@
 					using namespace std;
 
 					// 2018-02-15 AMR TODO: improve expected body handling
-					if(isRequest()) {
-						return Method() != "GET"s;
-					} else {
-						return Status() != 304;
-					}
+					return
+						this->hasHeader("Content-Type") ||
+						this->hasHeader("Content-Length") ||
+						this->hasHeader("Transfer-Encoding")
+					;
 				}
 
 				template<typename stringT>

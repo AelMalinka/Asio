@@ -17,6 +17,7 @@
 			namespace Protocol
 			{
 				// 2018-02-21 AMR NOTE: RFC 7230-7235
+				// 2018-03-04 AMR TODO: support request/response based body expectation see §3.3.3
 				template<
 					typename App,
 					typename stringT = std::string

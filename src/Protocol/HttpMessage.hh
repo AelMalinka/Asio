@@ -40,7 +40,7 @@
 					private:
 						typedef std::vector<string_type> container_type;
 					public:
-						// 2018-02-21 AMR TODO: this probably doesn't work when charT != char
+						// 2018-02-21 AMR TODO: this probably doesn't work when char_type != char
 						explicit HttpMessage(const string_type &, const string_type & = "GET", const string_type & = "HTTP/1.1");
 						explicit HttpMessage(unsigned, const string_type & = "", const string_type & = "HTTP/1.1");
 						explicit HttpMessage(string_type &&, const detail::line_t &);

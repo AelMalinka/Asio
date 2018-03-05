@@ -15,6 +15,8 @@
 			{
 				// 2018-02-21 AMR NOTE: RFC 5322
 				// 2018-02-22 AMR TODO: Line Length Limits, §2.1.1 vs 7230 §3.2.5
+				// 2018-02-28 AMR TODO: control header order
+				// 2018-02-28 AMR TODO: support multiple headers
 				template<
 					typename stringT = std::string
 				>
@@ -33,13 +35,16 @@
 						Message(Message<stringT> &&);
 						virtual ~Message();
 						virtual void addHeader(string_type &&);
+						// 2018-03-04 AMR TODO: do we want const string_type & overloads?
+						virtual void setBody(string_type && = "");
 						virtual void addBody(string_type &&);
 						virtual void addBody(sock_type &);
+						bool hasHeader(const string_type &) const;
+						container_type &Headers();
+						const container_type &Headers() const;
 						bool hasBody() const;
 						string_type &Body();
 						const string_type &Body() const;
-						container_type &Headers();
-						const container_type &Headers() const;
 					private:
 						container_type _headers;
 						typename container_type::iterator _last;

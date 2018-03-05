@@ -77,6 +77,7 @@
 							// 2018-02-19 AMR NOTE: some include the \r\n and some don't
 							// 2018-02-19 AMR TODO: check standard
 							// 2018-02-21 AMR TODO: should this be here or in HttpMessage overload
+							// 2018-03-04 AMR TODO: RFC 7230 §3.3.3 transfer encoding
 							if(pieces[0] == "Content-Length") {
 								_body.reserve(boost::lexical_cast<typename string_type::size_type>(pieces[1]));
 								ENTROPY_LOG(Log, Severity::Debug) << "body capacity set to " << _body.capacity();
@@ -93,10 +94,17 @@
 				}
 
 				template<typename stringT>
+				void Message<stringT>::setBody(string_type &&s)
+				{
+					_has_body = s != "";
+					_body = std::move(s);
+				}
+
+				template<typename stringT>
 				void Message<stringT>::addBody(string_type &&s)
 				{
 					_has_body = true;
-					_body = std::move(s);
+					_body += std::move(s);
 				}
 
 				template<typename stringT>
@@ -122,6 +130,24 @@
 				}
 
 				template<typename stringT>
+				bool Message<stringT>::hasHeader(const string_type &header) const
+				{
+					return _headers.find(header) != _headers.end();
+				}
+
+				template<typename stringT>
+				typename Message<stringT>::container_type &Message<stringT>::Headers()
+				{
+					return _headers;
+				}
+
+				template<typename stringT>
+				const typename Message<stringT>::container_type &Message<stringT>::Headers() const
+				{
+					return _headers;
+				}
+
+				template<typename stringT>
 				bool Message<stringT>::hasBody() const
 				{
 					return _has_body;
@@ -137,18 +163,6 @@
 				const stringT &Message<stringT>::Body() const
 				{
 					return _body;
-				}
-
-				template<typename stringT>
-				typename Message<stringT>::container_type &Message<stringT>::Headers()
-				{
-					return _headers;
-				}
-
-				template<typename stringT>
-				const typename Message<stringT>::container_type &Message<stringT>::Headers() const
-				{
-					return _headers;
 				}
 			}
 		}
