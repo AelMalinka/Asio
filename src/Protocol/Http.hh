@@ -8,8 +8,6 @@
 #	include "Line.hh"
 #	include "HttpMessage.hh"
 
-#	include <unordered_map>
-
 	namespace Entropy
 	{
 		namespace Tethys
@@ -51,7 +49,6 @@
 			}
 		}
 	}
-
 
 #	include "Http.impl.hh"
 
