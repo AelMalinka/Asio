@@ -12,10 +12,10 @@ AT_CLEANUP
 # 2018-02-22 AMR TODO: cleanup (sometimes leaves stale processes)
 AT_SETUP([Signal Tests])
 AT_SKIP_IF([test -z $LIBUV])
-AT_CHECK([uv-signal & pid=$! ; sleep 1s ; kill -INT $pid], [], [ignore], [ignore])
-AT_CHECK([uv-signal 15 & pid=$! ; sleep 1s ; kill -TERM $pid], [], [ignore], [ignore])
-AT_CHECK([uv-signal 10 & pid=$! ; sleep 1s ; kill -USR1 $pid], [], [ignore], [ignore])
-AT_CHECK([uv-signal 12 & pid=$! ; sleep 1s ; kill -USR2 $pid], [], [ignore], [ignore])
+dnl AT_CHECK([uv-signal & pid=$! ; sleep 1s ; kill -INT $pid], [], [ignore], [ignore])
+dnl AT_CHECK([uv-signal 15 & pid=$! ; sleep 1s ; kill -TERM $pid], [], [ignore], [ignore])
+dnl AT_CHECK([uv-signal 10 & pid=$! ; sleep 1s ; kill -USR1 $pid], [], [ignore], [ignore])
+dnl AT_CHECK([uv-signal 12 & pid=$! ; sleep 1s ; kill -USR2 $pid], [], [ignore], [ignore])
 AT_CLEANUP
 
 AT_SETUP([Timer Tests])
