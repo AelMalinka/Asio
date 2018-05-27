@@ -24,6 +24,9 @@ AC_PROG_CXX
 AC_LANG_PUSH([C++])
 
 EX_BASE_FLAGS
+AC_CHECK_HEADERS([boost/algorithm/string.hpp \
+	boost/algorithm/string/trim_all.hpp
+])
 
 EX_WITH_LIBUV
 [LIBS="$LIBUV_LIBS $LIBS"]
