@@ -21,9 +21,10 @@ AX_PTHREAD
 [CXXFLAGS="$PTHREAD_CFLAGS $CXXFLAGS"]
 
 AC_PROG_CXX
+EX_BASE_FLAGS
+
 AC_LANG_PUSH([C++])
 
-EX_BASE_FLAGS
 AC_CHECK_HEADERS([boost/algorithm/string.hpp \
 	boost/algorithm/string/trim_all.hpp
 ])

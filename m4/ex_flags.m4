@@ -2,13 +2,17 @@ dnl Copyright 2013 (c) Michael Thomas (malinka) <malinka@entropy-development.com
 dnl Distributed under the terms of the GNU General Public License v3
 
 AC_DEFUN([EX_BASE_FLAGS], [
-	dnl 2016-09-25 AMR TODO: test for C++17 support
-	dnl 2016-09-25 AMR TODO: current gcc version does not completely support C++17
-	AX_APPEND_COMPILE_FLAGS([-std=c++17])
+	AC_LANG_PUSH([C])
+	AX_APPEND_COMPILE_FLAGS([-std=c11], [CFLAGS])
+	AC_LANG_POP([C])
+
+	AC_LANG_PUSH([C++])
+	AX_APPEND_COMPILE_FLAGS([-std=c++17], [CXXFLAGS])
+	AC_LANG_POP([C++])
 ])
 
 AC_DEFUN([EX_FLAGS], [
-	AX_APPEND_COMPILE_FLAGS([-Wall -Wextra -pedantic], [CXXFLAGS])
+	AX_APPEND_COMPILE_FLAGS([-Wall -Wextra -pedantic])
 	AC_ARG_ENABLE([debug],
 		[AS_HELP_STRING([--enable-debug],
 			[adjust flags to enable debug settings]
